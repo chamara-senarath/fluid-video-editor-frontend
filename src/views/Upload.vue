@@ -26,7 +26,7 @@
 
     <v-stepper-items>
       <v-stepper-content step="1">
-        <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+        <VideoUpload></VideoUpload>
         <v-layout justify-end>
           <v-btn color="primary" @click="clickNext">
             Next
@@ -35,7 +35,7 @@
       </v-stepper-content>
 
       <v-stepper-content step="2">
-        <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+        <v-card class="mb-12" color="grey lighten-1" height="400px"></v-card>
 
         <v-layout>
           <v-layout justify-start>
@@ -51,7 +51,7 @@
         </v-layout>
       </v-stepper-content>
       <v-stepper-content step="3">
-        <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+        <v-card class="mb-12" color="grey lighten-1" height="400px"></v-card>
 
         <v-layout>
           <v-layout justify-start>
@@ -66,7 +66,7 @@
           </v-layout>
         </v-layout> </v-stepper-content
       ><v-stepper-content step="4">
-        <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+        <v-card class="mb-12" color="grey lighten-1" height="400px"></v-card>
 
         <v-layout>
           <v-layout justify-start>
@@ -85,7 +85,11 @@
   </v-stepper>
 </template>
 <script>
+import VideoUpload from "@/components/VideoUpload";
 export default {
+  components: {
+    VideoUpload
+  },
   data() {
     return {
       stepperCount: 0
