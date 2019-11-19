@@ -35,7 +35,7 @@
       </v-stepper-content>
 
       <v-stepper-content step="2">
-        <v-card class="mb-12" color="grey lighten-1" height="400px"></v-card>
+        <SplashEditor></SplashEditor>
 
         <v-layout>
           <v-layout justify-start>
@@ -86,9 +86,12 @@
 </template>
 <script>
 import VideoUpload from "@/components/VideoUpload";
+import SplashEditor from "@/components/SplashEditor";
+
 export default {
   components: {
-    VideoUpload
+    VideoUpload,
+    SplashEditor
   },
   data() {
     return {
