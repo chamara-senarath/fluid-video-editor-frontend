@@ -7,7 +7,7 @@
         >Close</v-btn
       >
     </v-snackbar>
-    <v-card class="mb-12" color="blue lighten-4" height="400px">
+    <v-card class="mb-12" outlined height="400px">
       <v-card-title>
         <v-layout align-center justify-center>
           <v-form ref="form">
@@ -87,6 +87,9 @@ export default {
       if (!this.$refs.form.validate()) {
         return;
       }
+    },
+    validate() {
+      return true; //TODO implement validation
     }
   }
 };

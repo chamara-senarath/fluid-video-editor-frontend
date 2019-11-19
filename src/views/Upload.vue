@@ -26,7 +26,7 @@
 
     <v-stepper-items>
       <v-stepper-content step="1">
-        <VideoUpload></VideoUpload>
+        <VideoUpload ref="videoUpload"></VideoUpload>
         <v-layout justify-end>
           <v-btn color="primary" @click="clickNext">
             Next
@@ -35,7 +35,7 @@
       </v-stepper-content>
 
       <v-stepper-content step="2">
-        <SplashEditor></SplashEditor>
+        <SplashEditor ref="splashEditor"></SplashEditor>
 
         <v-layout>
           <v-layout justify-start>
@@ -44,7 +44,7 @@
             </v-btn>
           </v-layout>
           <v-layout justify-end>
-            <v-btn color="primary" @click="clickNext">
+            <v-btn color="primary" @click="clickNext(2)">
               Next
             </v-btn>
           </v-layout>
@@ -66,7 +66,7 @@
           </v-layout>
         </v-layout> </v-stepper-content
       ><v-stepper-content step="4">
-        <v-card class="mb-12" color="grey lighten-1" height="400px"></v-card>
+        <v-card class="mb-12" outlined height="400px"></v-card>
 
         <v-layout>
           <v-layout justify-start>
@@ -95,11 +95,23 @@ export default {
   },
   data() {
     return {
-      stepperCount: 0
+      stepperCount: 1
     };
   },
   methods: {
-    clickNext() {
+    clickNext(stepper) {
+      if (stepper == 1) {
+        let validate = this.$refs.videoUpload.validate();
+        if (!validate) {
+          return;
+        }
+      }
+      if (stepper == 2) {
+        let validate = this.$refs.splashEditor.validate();
+        if (!validate) {
+          return;
+        }
+      }
       if (this.stepperCount < 4) {
         this.stepperCount += 1;
       }

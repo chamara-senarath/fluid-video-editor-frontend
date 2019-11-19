@@ -63,9 +63,9 @@
 <script>
 import Moveable from "vue-moveable";
 import { Frame } from "scenejs";
+import { mapMutations } from "vuex";
 
 export default {
-  name: "app",
   components: {
     Moveable
   },
@@ -80,6 +80,7 @@ export default {
     canvasData: null
   }),
   methods: {
+    ...mapMutations(["setSplashScreenObject"]),
     handleDrag({ target, left, top }) {
       this.$frame.set("left", `${left}px`);
       this.$frame.set("top", `${top}px`);
@@ -105,6 +106,13 @@ export default {
         type: "dataURL"
       };
       this.canvasData = await this.$html2canvas(canvas, options);
+    },
+    validate() {
+      this.canvasToData().then(() => {
+        this.setSplashScreenObject(this.canvasData);
+      });
+
+      return false;
     }
   },
   mounted() {
