@@ -1,9 +1,57 @@
 <template>
-  <v-card class="mb-12" color="grey lighten-1" height="400px">
-    <Moveable class="moveable" v-bind="moveable" @drag="handleDrag">
-      <span>Vue Moveable</span>
-    </Moveable>
-  </v-card>
+  <v-layout row>
+    <v-flex>
+      <div ref="canvas">
+        <v-card
+          class="mb-12"
+          outlined
+          elevation="4"
+          width="1280px"
+          height="720px"
+        >
+          <v-container>
+            <v-layout>
+              <Moveable
+                v-for="title in titleList"
+                :key="title.id"
+                class="moveable"
+                v-bind="moveable"
+                @drag="handleDrag"
+              >
+                <span>{{ title.text }}</span>
+              </Moveable>
+            </v-layout>
+          </v-container>
+        </v-card>
+      </div>
+    </v-flex>
+    <v-flex>
+      <v-layout v-for="title in titleList" :key="title.id" row align-center>
+        <v-flex>
+          <v-text-field
+            color="green darken-3"
+            prepend-icon="fa fa-edit"
+            label="Text"
+            v-model="title.text"
+          ></v-text-field>
+        </v-flex>
+        <v-flex>
+          <v-btn
+            @click="deleteTitle(title.id)"
+            dark
+            color="red darken-3"
+            class="mx-2"
+            fab
+            small
+            ><v-icon small dark>fa fa-trash-alt</v-icon></v-btn
+          >
+        </v-flex>
+      </v-layout>
+      <v-btn dark color="green darken-3" block @click="addNewTitle"
+        >Add New Title <v-icon right>fa fa-plus</v-icon></v-btn
+      >
+    </v-flex>
+  </v-layout>
 </template>
 <script>
 import Moveable from "vue-moveable";
@@ -15,10 +63,14 @@ export default {
     Moveable
   },
   data: () => ({
+    text: null,
+    titleList: [],
+
     moveable: {
       draggable: true,
       throttleDrag: 1
-    }
+    },
+    canvasData: null
   }),
   methods: {
     handleDrag({ target, left, top }) {
@@ -28,26 +80,30 @@ export default {
     },
     setTransform(target) {
       target.style.cssText = this.$frame.toCSS();
-    }
-  },
-  watch: {
-    currentState(newState) {
-      this.clearAllStates();
-      this.moveable[newState] = true;
+    },
+    addNewTitle() {
+      let id = Math.floor(Date.now() / 1000);
+      let title = {
+        id: id,
+        text: "Enter your text here"
+      };
+      this.titleList.push(title);
+    },
+    deleteTitle(id) {
+      this.titleList = this.titleList.filter(title => title.id != id);
+    },
+    async canvasToData() {
+      const canvas = this.$refs.canvas;
+      const options = {
+        type: "dataURL"
+      };
+      this.canvasData = await this.$html2canvas(canvas, options);
     }
   },
   mounted() {
     this.$frame = new Frame({
-      width: "300px",
-      height: "200px",
       left: "0px",
-      top: "0px",
-      transform: {
-        rotate: "0deg",
-        scaleX: 1,
-        scaleY: 1,
-        matrix3d: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-      }
+      top: "0px"
     });
   }
 };
@@ -56,8 +112,6 @@ export default {
 <style lang="scss">
 .moveable {
   position: relative;
-  width: 300px;
-  height: 200px;
   text-align: center;
   font-size: 40px;
   margin: 0 auto;
