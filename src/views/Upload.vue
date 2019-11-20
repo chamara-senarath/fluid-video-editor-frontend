@@ -51,7 +51,7 @@
         </v-layout>
       </v-stepper-content>
       <v-stepper-content step="3">
-        <v-card class="mb-12" color="grey lighten-1" height="400px"></v-card>
+        <ChapterMarks ref="chapterMarks"></ChapterMarks>
 
         <v-layout>
           <v-layout justify-start>
@@ -87,11 +87,13 @@
 <script>
 import VideoUpload from "@/components/VideoUpload";
 import SplashEditor from "@/components/SplashEditor";
+import ChapterMarks from "@/components/ChapterMarks";
 
 export default {
   components: {
     VideoUpload,
-    SplashEditor
+    SplashEditor,
+    ChapterMarks
   },
   data() {
     return {

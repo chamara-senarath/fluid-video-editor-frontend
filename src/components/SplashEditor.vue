@@ -1,15 +1,9 @@
 <template>
   <v-container fluid>
     <v-layout row>
-      <v-flex>
+      <v-flex md10>
         <div ref="canvas">
-          <v-card
-            class="mb-12"
-            outlined
-            elevation="4"
-            width="1280px"
-            height="720px"
-          >
+          <v-card outlined elevation="4" width="1280px" height="720px">
             <v-container>
               <v-layout>
                 <Moveable
@@ -27,10 +21,16 @@
         </div>
       </v-flex>
 
-      <v-flex>
+      <v-flex md2>
         <v-layout column align-center>
-          <v-layout v-for="title in titleList" :key="title.id" row align-center>
-            <v-flex>
+          <v-layout
+            v-for="title in titleList"
+            :key="title.id"
+            row
+            align-center
+            justify-space-around
+          >
+            <v-flex md8>
               <v-text-field
                 color="green darken-3"
                 prepend-icon="fa fa-edit"
@@ -38,7 +38,7 @@
                 v-model="title.text"
               ></v-text-field>
             </v-flex>
-            <v-flex>
+            <v-flex md2>
               <v-btn
                 @click="deleteTitle(title.id)"
                 dark
@@ -118,12 +118,12 @@ export default {
     },
     validate() {
       //TODO Validate this
-      this.canvasToData().then(() => {
-        this.setSplashScreenObject({
-          data: this.canvasData,
-          duration: this.duration
-        });
-      });
+      // this.canvasToData().then(() => {
+      //   this.setSplashScreenObject({
+      //     data: this.canvasData,
+      //     duration: this.duration
+      //   });
+      // });
       return true;
     }
   },

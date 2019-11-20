@@ -4,8 +4,10 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import VueHtml2Canvas from "vue-html2canvas";
+import VuePlyr from "vue-plyr";
 
 Vue.use(VueHtml2Canvas);
+Vue.use(VuePlyr);
 Vue.config.productionTip = false;
 
 new Vue({
