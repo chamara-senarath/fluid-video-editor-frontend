@@ -55,6 +55,14 @@
               >Add New Title <v-icon right>fa fa-plus</v-icon></v-btn
             >
           </v-layout>
+          <v-layout mt-5>
+            <v-text-field
+              label="Duration"
+              suffix="seconds"
+              v-model="duration"
+              type="number"
+            ></v-text-field>
+          </v-layout>
         </v-layout>
       </v-flex>
     </v-layout>
@@ -77,7 +85,8 @@ export default {
       draggable: true,
       throttleDrag: 1
     },
-    canvasData: null
+    canvasData: null,
+    duration: 0
   }),
   methods: {
     ...mapMutations(["setSplashScreenObject"]),
@@ -108,11 +117,14 @@ export default {
       this.canvasData = await this.$html2canvas(canvas, options);
     },
     validate() {
+      //TODO Validate this
       this.canvasToData().then(() => {
-        this.setSplashScreenObject(this.canvasData);
+        this.setSplashScreenObject({
+          data: this.canvasData,
+          duration: this.duration
+        });
       });
-
-      return false;
+      return true;
     }
   },
   mounted() {
