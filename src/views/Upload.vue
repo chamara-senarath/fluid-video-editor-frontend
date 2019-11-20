@@ -60,13 +60,13 @@
             </v-btn>
           </v-layout>
           <v-layout justify-end>
-            <v-btn color="primary" @click="clickNext">
+            <v-btn color="primary" @click="clickNext(3)">
               Next
             </v-btn>
           </v-layout>
         </v-layout> </v-stepper-content
       ><v-stepper-content step="4">
-        <v-card class="mb-12" outlined height="400px"></v-card>
+        <Publish v-if="stepperCount == 4" ref="publish"></Publish>
 
         <v-layout>
           <v-layout justify-start>
@@ -88,12 +88,14 @@
 import VideoUpload from "@/components/VideoUpload";
 import SplashEditor from "@/components/SplashEditor";
 import ChapterMarks from "@/components/ChapterMarks";
+import Publish from "@/components/Publish";
 
 export default {
   components: {
     VideoUpload,
     SplashEditor,
-    ChapterMarks
+    ChapterMarks,
+    Publish
   },
   data() {
     return {
@@ -110,6 +112,12 @@ export default {
       }
       if (stepper == 2) {
         let validate = this.$refs.splashEditor.validate();
+        if (!validate) {
+          return;
+        }
+      }
+      if (stepper == 3) {
+        let validate = this.$refs.chapterMarks.validate();
         if (!validate) {
           return;
         }

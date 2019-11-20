@@ -3,9 +3,7 @@
     <v-layout row justify-space-around>
       <v-flex md8>
         <vue-plyr ref="player">
-          <video
-            poster="https://img.pngio.com/watercolor-splash-png-hd-vector-clipart-psd-peoplepngcom-splash-png-4600_2636.png"
-          >
+          <video>
             <source
               src="https://www.w3schools.com/html/mov_bbb.mp4"
               type="video/mp4"
@@ -65,6 +63,8 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 export default {
   data() {
     return {
@@ -78,21 +78,46 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["setChapterMarks"]),
+    create_UUID() {
+      var dt = new Date().getTime();
+      var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+        /[xy]/g,
+        function(c) {
+          var r = (dt + Math.random() * 16) % 16 | 0;
+          dt = Math.floor(dt / 16);
+          return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
+        }
+      );
+      return uuid;
+    },
     addChapterMark() {
       this.player.pause();
       this.chapterMark.startTime = this.player.currentTime;
-      let id = Math.floor(Date.now() / 1000);
+      let id = this.create_UUID();
       let chapterMark = {
         id: id,
         startTime: this.chapterMark.startTime,
         text: this.chapterMark.text
       };
-      this.chapterMarkList.push(chapterMark);
+      let chapterMarkExist = false;
+      this.chapterMarkList.forEach(chapterMark => {
+        if (chapterMark.startTime == this.chapterMark.startTime) {
+          chapterMarkExist = true;
+        }
+      });
+      if (!chapterMarkExist) {
+        this.chapterMarkList.push(chapterMark);
+      }
     },
     deleteChapterMark(id) {
       this.chapterMarkList = this.chapterMarkList.filter(
         chapterMark => chapterMark.id != id
       );
+    },
+    validate() {
+      this.setChapterMarks(this.chapterMarkList);
+      return true;
     }
   },
   mounted() {

@@ -23,6 +23,14 @@
 
       <v-flex md2>
         <v-layout column align-center>
+          <v-layout mb-10>
+            <v-text-field
+              label="Duration"
+              suffix="seconds"
+              v-model="duration"
+              type="number"
+            ></v-text-field>
+          </v-layout>
           <v-layout
             v-for="title in titleList"
             :key="title.id"
@@ -55,14 +63,6 @@
               >Add New Title <v-icon right>fa fa-plus</v-icon></v-btn
             >
           </v-layout>
-          <v-layout mt-5>
-            <v-text-field
-              label="Duration"
-              suffix="seconds"
-              v-model="duration"
-              type="number"
-            ></v-text-field>
-          </v-layout>
         </v-layout>
       </v-flex>
     </v-layout>
@@ -90,6 +90,18 @@ export default {
   }),
   methods: {
     ...mapMutations(["setSplashScreenObject"]),
+    create_UUID() {
+      var dt = new Date().getTime();
+      var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+        /[xy]/g,
+        function(c) {
+          var r = (dt + Math.random() * 16) % 16 | 0;
+          dt = Math.floor(dt / 16);
+          return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
+        }
+      );
+      return uuid;
+    },
     handleDrag({ target, left, top }) {
       this.$frame.set("left", `${left}px`);
       this.$frame.set("top", `${top}px`);
@@ -99,7 +111,7 @@ export default {
       target.style.cssText = this.$frame.toCSS();
     },
     addNewTitle() {
-      let id = Math.floor(Date.now() / 1000);
+      let id = this.create_UUID();
       let title = {
         id: id,
         text: "Enter your text here"
@@ -118,12 +130,12 @@ export default {
     },
     validate() {
       //TODO Validate this
-      // this.canvasToData().then(() => {
-      //   this.setSplashScreenObject({
-      //     data: this.canvasData,
-      //     duration: this.duration
-      //   });
-      // });
+      this.canvasToData().then(() => {
+        this.setSplashScreenObject({
+          data: this.canvasData,
+          duration: this.duration
+        });
+      });
       return true;
     }
   },
