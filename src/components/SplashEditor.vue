@@ -39,13 +39,19 @@
             justify-space-around
           >
             <v-flex md8>
-              <v-text-field
-                color="green darken-3"
-                prepend-icon="fa fa-edit"
-                label="Text"
-                v-model="title.text"
-              ></v-text-field>
+              <v-form ref="form">
+                <v-text-field
+                  color="green darken-3"
+                  prepend-icon="fa fa-edit"
+                  label="Text"
+                  v-model="title.text"
+                  clearable
+                  autofocus
+                  :rules="rules.title"
+                ></v-text-field>
+              </v-form>
             </v-flex>
+
             <v-flex md2>
               <v-btn
                 @click="deleteTitle(title.id)"
@@ -80,7 +86,9 @@ export default {
   data: () => ({
     text: null,
     titleList: [],
-
+    rules: {
+      title: [value => (value && value.length > 0) || "Title can not be empty"]
+    },
     moveable: {
       draggable: true,
       throttleDrag: 1
@@ -102,6 +110,7 @@ export default {
       );
       return uuid;
     },
+
     handleDrag({ target, left, top }) {
       this.$frame.set("left", `${left}px`);
       this.$frame.set("top", `${top}px`);
@@ -111,6 +120,11 @@ export default {
       target.style.cssText = this.$frame.toCSS();
     },
     addNewTitle() {
+      if (this.titleList.length != 0) {
+        if (!this.$refs.form[this.titleList.length - 1].validate()) {
+          return;
+        }
+      }
       let id = this.create_UUID();
       let title = {
         id: id,
@@ -128,8 +142,15 @@ export default {
       };
       this.canvasData = await this.$html2canvas(canvas, options);
     },
+
     validate() {
       //TODO Validate this
+
+      if (this.titleList.length != 0) {
+        if (!this.$refs.form[this.titleList.length - 1].validate()) {
+          return;
+        }
+      }
       this.canvasToData().then(() => {
         this.setSplashScreenObject({
           data: this.canvasData,

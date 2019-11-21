@@ -8,7 +8,7 @@
             <v-list-item-group v-model="item" color="primary">
               <v-list-item v-for="(item, i) in items" :key="i">
                 <v-list-item-icon>
-                  <v-icon>fa fa-play</v-icon>
+                  <v-icon>fa fa-chalkboard-teacher</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content @click="playChapter(i)">
                   <v-list-item-title v-text="item.text"></v-list-item-title>

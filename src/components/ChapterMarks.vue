@@ -35,6 +35,7 @@
                 color="green darken-3"
                 label="Chapter Text"
                 v-model="chapterMark.text"
+                autofocus
               ></v-text-field>
             </v-flex>
             <v-flex md2>

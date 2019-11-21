@@ -8,7 +8,7 @@
       <v-divider></v-divider>
 
       <v-stepper-step :complete="stepperCount > 2" step="2"
-        >Add Splash</v-stepper-step
+        >Add Intro</v-stepper-step
       >
 
       <v-divider></v-divider>
