@@ -7,6 +7,11 @@
           :src="src"
           :thumbnail="thumbnail"
           :chapterList="chapterList"
+          :user="{
+            name: 'Chamara Senarath',
+            avatar:
+              'https://icon-library.net/images/avatar-icon-png/avatar-icon-png-8.jpg'
+          }"
         ></Player>
       </v-layout>
       <v-layout column align-center>

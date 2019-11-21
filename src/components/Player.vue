@@ -1,6 +1,6 @@
 /* eslint no-use-before-define: 0 */
 <template>
-  <v-container fluid>
+  <v-container>
     <v-sheet class="overflow-hidden" style="position: relative;">
       <v-container class="fill-height">
         <v-layout column>
@@ -40,24 +40,32 @@
         </v-layout>
       </v-container>
 
-      <v-navigation-drawer v-model="drawer" absolute temporary>
-        <v-list-item>
+      <v-navigation-drawer
+        v-model="drawer"
+        absolute
+        temporary
+        color="rgba(255, 255, 255, 0.9)"
+      >
+        <v-list-item v-if="user != null">
           <v-list-item-avatar>
-            <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+            <v-img :src="user.avatar"></v-img>
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title>Chamara Senarath</v-list-item-title>
+            <v-list-item-title>{{ user.name }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
         <v-divider></v-divider>
 
+        <v-layout my-3 row justify-center>
+          <v-icon left>fa fa-list-ul</v-icon> Chapter List
+        </v-layout>
+
         <v-list dense>
           <v-list-item
             v-for="(item, i) in chapterList"
             :key="i"
-            link
             @click="playChapter(i)"
           >
             <v-list-item-icon>
@@ -75,7 +83,7 @@
 </template>
 <script>
 export default {
-  props: ["src", "thumbnail", "chapterList"],
+  props: ["src", "thumbnail", "chapterList", "user"],
   data: () => ({
     drawer: null,
     player: null,
