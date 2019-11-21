@@ -15,6 +15,14 @@
                 >
                   <span>{{ title.text }}</span>
                 </Moveable>
+                <Moveable
+                  v-if="logo != null"
+                  class="moveable"
+                  v-bind="moveable"
+                  @drag="handleDrag"
+                >
+                  <span><img :src="logo" height="50" width="50"/></span>
+                </Moveable>
               </v-layout>
             </v-container>
           </v-card>
@@ -23,13 +31,29 @@
 
       <v-flex md2>
         <v-layout column align-center>
-          <v-layout mb-10>
+          <v-layout mb-4>
             <v-text-field
               label="Duration"
               suffix="seconds"
               v-model="duration"
               type="number"
             ></v-text-field>
+          </v-layout>
+          <v-layout mb-10>
+            <v-form>
+              <v-file-input
+                ref="logoSelect"
+                clearable
+                color="green darken-3"
+                :rules="rules.logo"
+                accept="image/png, image/jpeg"
+                placeholder="Select a Logo"
+                prepend-icon="mdi-camera"
+                label="Logo"
+                @change="selectLogo"
+                v-model="logofile"
+              ></v-file-input>
+            </v-form>
           </v-layout>
           <v-layout
             v-for="title in titleList"
@@ -86,8 +110,25 @@ export default {
   data: () => ({
     text: null,
     titleList: [],
+    logofile: null,
+    logo: null,
     rules: {
-      title: [value => (value && value.length > 0) || "Title can not be empty"]
+      title: [value => (value && value.length > 0) || "Title can not be empty"],
+      logo: [
+        value => {
+          if (value && value.name) {
+            return (
+              ["jpg", "jpeg", "png"].includes(value.name.split(".")[1]) ||
+              "Invalid File Type"
+            );
+          }
+          return false;
+        },
+        value =>
+          !value ||
+          value.size < 2000000 ||
+          "Logo size should be less than 2 MB!"
+      ]
     },
     moveable: {
       draggable: true,
@@ -135,6 +176,15 @@ export default {
     deleteTitle(id) {
       this.titleList = this.titleList.filter(title => title.id != id);
     },
+    selectLogo(file) {
+      if (
+        file &&
+        file.name &&
+        ["jpg", "jpeg", "png"].includes(file.name.split(".")[1])
+      ) {
+        this.logo = URL.createObjectURL(file);
+      }
+    },
     async canvasToData() {
       const canvas = this.$refs.canvas;
       const options = {
@@ -158,6 +208,13 @@ export default {
         });
       });
       return true;
+    }
+  },
+  watch: {
+    logofile(value) {
+      if (value == null) {
+        this.logo = null;
+      }
     }
   },
   mounted() {
