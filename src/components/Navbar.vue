@@ -77,7 +77,7 @@ export default {
       isLogged: true, // TODO remove this when implement user login
       getUser: true, // TODO remove this when implement user login
       submitLoading: false,
-      drawer: true,
+      drawer: false,
       bg:
         "https://images.wallpaperscraft.com/image/corn_field_summer_124670_3840x2400.jpg",
       items: [
