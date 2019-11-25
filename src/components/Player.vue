@@ -2,47 +2,43 @@
 <template>
   <v-container>
     <v-sheet class="overflow-hidden" style="position: relative;">
-      <v-container class="fill-height">
-        <v-layout column>
-          <!-- <v-overlay :absolute="true" opacity="0.5" :value="true" z-index="10">
+      <v-layout column>
+        <!-- <v-overlay :absolute="true" opacity="0.5" :value="true" z-index="10">
             <v-btn color="primary" @click="overlay = false">
               Hide Overlay
             </v-btn>
           </v-overlay> -->
-          <vue-plyr
-            @timeupdate="videoTimeUpdated"
-            :emit="['timeupdate']"
-            ref="player"
-          >
-            <video :poster="thumbnail">
-              <source :src="src" type="video/mp4" size="720" />
-            </video>
-          </vue-plyr>
+        <vue-plyr
+          @timeupdate="videoTimeUpdated"
+          :emit="['timeupdate']"
+          ref="player"
+        >
+          <video :poster="thumbnail">
+            <source :src="src" type="video/mp4" size="1080" />
+          </video>
+        </vue-plyr>
 
-          <v-alert
-            v-if="this.chapterList.length != 0"
-            color="primary"
-            dark
-            border="left"
-          >
-            Now Playing: Chapter - {{ chapterList[playingChapter].text }}
-            <v-fab-transition>
-              <v-btn
-                @click.stop="drawer = !drawer"
-                color="pink"
-                small
-                dark
-                absolute
-                bottom
-                right
-                fab
-              >
-                <v-icon>fa fa-list-ul</v-icon>
-              </v-btn>
-            </v-fab-transition>
-          </v-alert>
-        </v-layout>
-      </v-container>
+        <v-btn
+          @click.stop="drawer = !drawer"
+          color="pink"
+          small
+          dark
+          absolute
+          right
+          fab
+        >
+          <v-icon>fa fa-list-ul</v-icon>
+        </v-btn>
+
+        <v-alert
+          v-if="this.chapterList.length != 0"
+          color="primary"
+          dark
+          border="left"
+        >
+          Now Playing: Chapter - {{ chapterList[playingChapter].text }}
+        </v-alert>
+      </v-layout>
 
       <v-navigation-drawer
         v-model="drawer"

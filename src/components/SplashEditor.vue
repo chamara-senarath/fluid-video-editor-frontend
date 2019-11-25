@@ -3,25 +3,23 @@
     <v-layout row justify-space-between>
       <v-flex md9>
         <div ref="canvas">
-          <v-card outlined elevation="4" width="1280px" height="720px">
-            <v-container>
-              <v-layout>
-                <Moveable
-                  v-for="title in titleList"
-                  :key="title.id"
-                  class="moveable"
-                  v-bind="moveable"
-                  @drag="handleDrag"
-                >
-                  <span :class="convertFontSize(title.size)">{{
-                    title.text
-                  }}</span>
-                </Moveable>
-                <Moveable class="moveable" v-bind="moveable" @drag="handleDrag">
-                  <span><img ref="logoImage" :src="logo"/></span>
-                </Moveable>
-              </v-layout>
-            </v-container>
+          <v-card elevation="4" width="1280px" height="720px">
+            <v-layout>
+              <Moveable
+                v-for="title in titleList"
+                :key="title.id"
+                class="moveable"
+                v-bind="moveable"
+                @drag="handleDrag"
+              >
+                <span :class="convertFontSize(title.size)">{{
+                  title.text
+                }}</span>
+              </Moveable>
+              <Moveable class="moveable" v-bind="moveable" @drag="handleDrag">
+                <span><img ref="logoImage" :src="logo"/></span>
+              </Moveable>
+            </v-layout>
           </v-card>
         </div>
       </v-flex>
@@ -99,6 +97,7 @@
               </v-layout>
               <v-layout row justify-space-around align-center>
                 <v-flex md8>
+                  Font Size
                   <v-overflow-btn
                     :items="fontSizes"
                     value="H1"
