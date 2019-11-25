@@ -33,7 +33,8 @@
         dark
         border="left"
       >
-        Now Playing: Chapter - {{ chapterList[playingChapter].text }}
+        {{ title }} | Chapter -
+        {{ chapterList[playingChapter].text }}
       </v-alert>
     </v-layout>
 
@@ -83,7 +84,7 @@
 </template>
 <script>
 export default {
-  props: ["src", "thumbnail", "chapterList", "user"],
+  props: ["title", "src", "thumbnail", "chapterList", "user"],
   data: () => ({
     drawer: null,
     player: null,

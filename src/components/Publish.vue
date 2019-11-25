@@ -5,6 +5,7 @@
         <v-container>
           <Player
             v-if="this.thumbnail != null"
+            :title="title"
             :src="src"
             :thumbnail="thumbnail"
             :chapterList="chapterList"
@@ -35,17 +36,23 @@ export default {
   },
   data() {
     return {
+      title: "",
       src: "https://www.w3schools.com/html/mov_bbb.mp4",
       thumbnail: null,
       chapterList: []
     };
   },
   methods: {
-    ...mapGetters(["getChapterMarks", "getSplashScreenObject"]),
+    ...mapGetters([
+      "getChapterMarks",
+      "getSplashScreenObject",
+      "getVideoObject"
+    ]),
     downloadEmbedCode() {}
   },
 
   mounted() {
+    this.title = this.getVideoObject().title;
     this.chapterList = this.getChapterMarks();
     this.thumbnail = this.getSplashScreenObject().data;
   }
