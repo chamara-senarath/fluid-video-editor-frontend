@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-layout row justify-space-around>
       <v-flex md8>
         <vue-plyr ref="player">

@@ -3,7 +3,7 @@
     <v-layout row justify-space-between>
       <v-flex md9>
         <div ref="canvas">
-          <v-card elevation="4" width="1280px" height="720px">
+          <v-card outlined width="1280px" height="720px" :color="bgColor">
             <v-layout>
               <Moveable
                 v-for="title in titleList"
@@ -33,6 +33,9 @@
               v-model="duration"
               type="number"
             ></v-text-field>
+          </v-layout>
+          <v-layout mb-4>
+            <v-color-picker v-model="bgColor"></v-color-picker>
           </v-layout>
           <v-layout mb-10>
             <v-layout column justify-center>
@@ -147,6 +150,15 @@ export default {
     logofile: null,
     logo: null,
     aspectRatio: null,
+    //
+    types: ["hex", "hexa", "rgba", "hsla", "hsva"],
+    type: "hex",
+    hex: "#FF00FF",
+    hexa: "#FF00FFFF",
+    rgba: { r: 255, g: 0, b: 255, a: 1 },
+    hsla: { h: 300, s: 1, l: 0.5, a: 1 },
+    hsva: { h: 300, s: 1, v: 1, a: 1 },
+    //
     rules: {
       title: [value => (value && value.length > 0) || "Title can not be empty"],
       logo: [
@@ -175,6 +187,16 @@ export default {
     canvasData: null,
     duration: 0
   }),
+  computed: {
+    bgColor: {
+      get() {
+        return this[this.type];
+      },
+      set(v) {
+        this[this.type] = v;
+      }
+    }
+  },
   methods: {
     ...mapMutations(["setSplashScreenObject"]),
     create_UUID() {
@@ -227,6 +249,7 @@ export default {
         size: "H1"
       };
       this.titleList.push(title);
+      console.log(this.bgColor);
     },
     deleteTitle(id) {
       this.titleList = this.titleList.filter(title => title.id != id);

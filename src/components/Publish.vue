@@ -1,20 +1,22 @@
 <template>
   <v-container>
-    <v-layout column>
+    <v-layout row>
       <v-layout>
-        <Player
-          v-if="this.thumbnail != null"
-          :src="src"
-          :thumbnail="thumbnail"
-          :chapterList="chapterList"
-          :user="{
-            name: 'Chamara Senarath',
-            avatar:
-              'https://icon-library.net/images/avatar-icon-png/avatar-icon-png-8.jpg'
-          }"
-        ></Player>
+        <v-container>
+          <Player
+            v-if="this.thumbnail != null"
+            :src="src"
+            :thumbnail="thumbnail"
+            :chapterList="chapterList"
+            :user="{
+              name: 'Chamara Senarath',
+              avatar:
+                'https://icon-library.net/images/avatar-icon-png/avatar-icon-png-8.jpg'
+            }"
+          ></Player>
+        </v-container>
       </v-layout>
-      <v-layout column align-center>
+      <v-layout column align-center justify-center>
         <v-btn dark color="green darken-3" @click="downloadEmbedCode"
           >Download Embed Code <v-icon right>fa fa-download</v-icon></v-btn
         >

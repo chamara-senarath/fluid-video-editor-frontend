@@ -26,60 +26,57 @@
 
     <v-stepper-items>
       <v-stepper-content step="1">
-        <VideoUpload ref="videoUpload"></VideoUpload>
         <v-layout justify-end>
-          <v-btn color="primary" @click="clickNext(1)">
-            Next
+          <v-btn fab small color="primary" @click="clickNext(1)">
+            <v-icon>fa fa-angle-right</v-icon>
           </v-btn>
         </v-layout>
+        <VideoUpload ref="videoUpload"></VideoUpload>
       </v-stepper-content>
 
       <v-stepper-content step="2">
-        <SplashEditor ref="splashEditor"></SplashEditor>
-
         <v-layout>
           <v-layout justify-start>
-            <v-btn color="primary" @click="clickBack">
-              Back
+            <v-btn fab small color="primary" @click="clickBack">
+              <v-icon>fa fa-angle-left</v-icon>
             </v-btn>
           </v-layout>
           <v-layout justify-end>
-            <v-btn color="primary" @click="clickNext(2)">
-              Next
+            <v-btn fab small color="primary" @click="clickNext(2)">
+              <v-icon>fa fa-angle-right</v-icon>
             </v-btn>
           </v-layout>
         </v-layout>
+        <SplashEditor ref="splashEditor"></SplashEditor>
       </v-stepper-content>
       <v-stepper-content step="3">
-        <ChapterMarks ref="chapterMarks"></ChapterMarks>
-
         <v-layout>
           <v-layout justify-start>
-            <v-btn color="primary" @click="clickBack">
-              Back
+            <v-btn fab small color="primary" @click="clickBack">
+              <v-icon>fa fa-angle-left</v-icon>
             </v-btn>
           </v-layout>
           <v-layout justify-end>
-            <v-btn color="primary" @click="clickNext(3)">
-              Next
-            </v-btn>
-          </v-layout>
-        </v-layout> </v-stepper-content
-      ><v-stepper-content step="4">
-        <Publish v-if="stepperCount == 4" ref="publish"></Publish>
-
-        <v-layout>
-          <v-layout justify-start>
-            <v-btn color="primary" @click="clickBack">
-              Back
-            </v-btn>
-          </v-layout>
-          <v-layout justify-end>
-            <v-btn color="primary" @click="clickNext">
-              Next
+            <v-btn fab small color="primary" @click="clickNext(3)">
+              <v-icon>fa fa-angle-right</v-icon>
             </v-btn>
           </v-layout>
         </v-layout>
+        <ChapterMarks ref="chapterMarks"></ChapterMarks> </v-stepper-content
+      ><v-stepper-content step="4">
+        <v-layout>
+          <v-layout justify-start>
+            <v-btn fab small color="primary" @click="clickBack">
+              <v-icon>fa fa-angle-left</v-icon>
+            </v-btn>
+          </v-layout>
+          <v-layout justify-end>
+            <v-btn fab small color="primary" @click="clickNext">
+              <v-icon>fa fa-angle-right</v-icon>
+            </v-btn>
+          </v-layout>
+        </v-layout>
+        <Publish v-if="stepperCount == 4" ref="publish"></Publish>
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
