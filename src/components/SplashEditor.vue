@@ -21,7 +21,7 @@
                   v-bind="moveable"
                   @drag="handleDrag"
                 >
-                  <span><img :src="logo" height="50" width="50"/></span>
+                  <span><img ref="logoImage" :src="logo"/></span>
                 </Moveable>
               </v-layout>
             </v-container>
@@ -30,7 +30,7 @@
       </v-flex>
 
       <v-flex md2>
-        <v-layout column align-center>
+        <v-layout column>
           <v-layout mb-4>
             <v-text-field
               label="Duration"
@@ -40,20 +40,38 @@
             ></v-text-field>
           </v-layout>
           <v-layout mb-10>
-            <v-form>
-              <v-file-input
-                ref="logoSelect"
-                clearable
-                color="green darken-3"
-                :rules="rules.logo"
-                accept="image/png, image/jpeg"
-                placeholder="Select a Logo"
-                prepend-icon="mdi-camera"
-                label="Logo"
-                @change="selectLogo"
-                v-model="logofile"
-              ></v-file-input>
-            </v-form>
+            <v-layout column justify-center>
+              <v-layout>
+                <v-form>
+                  <v-file-input
+                    ref="logoSelect"
+                    clearable
+                    color="green darken-3"
+                    :rules="rules.logo"
+                    accept="image/png, image/jpeg"
+                    placeholder="Select a Logo"
+                    prepend-icon="mdi-camera"
+                    label="Logo"
+                    @change="selectLogo"
+                    v-model="logofile"
+                  ></v-file-input>
+                </v-form>
+              </v-layout>
+              <v-layout v-if="logo != null">
+                <v-btn
+                  class="mx-2"
+                  fab
+                  dark
+                  small
+                  color="primary"
+                  @click="width += 10"
+                >
+                  <v-icon dark>mdi-plus</v-icon> </v-btn
+                ><v-btn class="mx-2" fab dark small color="primary">
+                  <v-icon dark>mdi-minus</v-icon>
+                </v-btn>
+              </v-layout>
+            </v-layout>
           </v-layout>
           <v-layout
             v-for="title in titleList"
@@ -112,6 +130,8 @@ export default {
     titleList: [],
     logofile: null,
     logo: null,
+    width: null,
+    height: null,
     rules: {
       title: [value => (value && value.length > 0) || "Title can not be empty"],
       logo: [
@@ -183,6 +203,9 @@ export default {
         ["jpg", "jpeg", "png"].includes(file.name.split(".")[1])
       ) {
         this.logo = URL.createObjectURL(file);
+        // this.height = this.$refs.logoImage.height;
+        // this.width = this.$refs.logoImage.width;
+        console.log(this.logo);
       }
     },
     async canvasToData() {

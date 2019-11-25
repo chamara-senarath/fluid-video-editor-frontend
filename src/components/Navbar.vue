@@ -6,9 +6,7 @@
         @click.stop="drawer = !drawer"
       ></v-app-bar-nav-icon>
       <v-toolbar-title>
-        <v-avatar tile width="100">
-          <img src="@/assets/logo_banner.png" />
-        </v-avatar>
+        Training Catalog | Video Editor
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn

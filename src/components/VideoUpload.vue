@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 export default {
   data() {
     return {
@@ -49,7 +51,7 @@ export default {
       feedback: null,
       video: {
         title: null,
-        data: null
+        file: null
       },
       rules: {
         videoTitle: [
@@ -74,13 +76,14 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["setVideoObject"]),
     uploadVideo(file) {
       if (
         file &&
         file.name &&
         ["mp4", "avi"].includes(file.name.split(".")[1])
       ) {
-        this.video.data = file;
+        this.video.file = file;
       }
     },
     clickUpload() {
@@ -89,6 +92,7 @@ export default {
       }
     },
     validate() {
+      this.setVideoObject(this.video);
       return true; //TODO implement validation
     }
   }

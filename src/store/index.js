@@ -5,6 +5,10 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    video: {
+      title: null,
+      file: null
+    },
     splashScreen: {
       data: null,
       duration: null
@@ -12,6 +16,9 @@ export default new Vuex.Store({
     chapterMarks: []
   },
   getters: {
+    getVideoObject: state => {
+      return state.video;
+    },
     getSplashScreenObject: state => {
       return state.splashScreen;
     },
@@ -20,6 +27,10 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    setVideoObject: (state, payload) => {
+      state.video.title = payload.title;
+      state.video.file = payload.file;
+    },
     setSplashScreenObject: (state, payload) => {
       state.splashScreen.data = payload.data;
       state.splashScreen.duration = payload.duration;

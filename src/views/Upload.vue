@@ -28,7 +28,7 @@
       <v-stepper-content step="1">
         <VideoUpload ref="videoUpload"></VideoUpload>
         <v-layout justify-end>
-          <v-btn color="primary" @click="clickNext">
+          <v-btn color="primary" @click="clickNext(1)">
             Next
           </v-btn>
         </v-layout>
