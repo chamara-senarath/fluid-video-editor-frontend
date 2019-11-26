@@ -5,7 +5,7 @@
         <vue-plyr ref="player">
           <video>
             <source
-              src="https://www.w3schools.com/html/mov_bbb.mp4"
+              src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
               type="video/mp4"
               size="720"
             />
@@ -26,8 +26,7 @@
                 readonly
                 color="green darken-3"
                 label="Time"
-                :value="startTime"
-                suffix="s"
+                :value="secondToHHMMSS(chapterMark.startTime)"
               ></v-text-field>
             </v-flex>
             <v-flex md5>
@@ -120,15 +119,15 @@ export default {
     validate() {
       this.setChapterMarks(this.chapterMarkList);
       return true;
+    },
+    secondToHHMMSS(time) {
+      var date = new Date(null);
+      date.setSeconds(time);
+      var result = date.toISOString().substr(11, 8);
+      return result;
     }
   },
-  computed: {
-    startTime() {
-      return parseFloat(
-        Math.round(this.chapterMark.startTime * 100) / 100
-      ).toFixed(2);
-    }
-  },
+
   mounted() {
     this.player = this.$refs.player.player;
   }

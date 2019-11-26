@@ -1,10 +1,7 @@
 /* eslint no-use-before-define: 0 */
 <template>
   <v-sheet class="overflow-hidden" style="position: relative;">
-    <v-layout column>
-      <!-- <v-overlay :absolute="true" opacity="0.5" :value="true">
-          ddd
-        </v-overlay> -->
+    <v-layout>
       <vue-plyr
         @timeupdate="videoTimeUpdated"
         :emit="['timeupdate']"
@@ -16,47 +13,26 @@
       </vue-plyr>
 
       <v-btn
-        v-if="this.chapterList.length != 0"
-        @mouseover="controlVisibility = true"
-        @mouseleave="hideControls"
+        v-if="this.chapterList.length != 0 && !drawer"
         @click.stop="drawer = !drawer"
-        :color="
-          controlVisibility
-            ? 'rgba(61, 203, 255, 0.4)'
-            : 'rgba(61, 203, 255, 0.1)'
-        "
-        small
+        color="rgba(0, 0, 0, 0.4)"
+        depressed
         dark
         absolute
-        right
       >
-        <span
-          v-if="this.chapterList.length != 0 && this.controlVisibility"
-          color="primary"
-          dark
-        >
-          {{ title }} | Chapter -
+        <v-icon left dark color="white">fa fa-list-ul</v-icon>
+        <span v-if="this.chapterList.length != 0" color="primary" dark>
+          {{ title }} |
           {{ chapterList[playingChapter].text }}
         </span>
-        <v-icon
-          right
-          dark
-          :color="
-            controlVisibility
-              ? 'rgba(255, 255, 255, 0.9)'
-              : 'rgba(255, 255, 255, 0.4)'
-          "
-          >fa fa-list-ul</v-icon
-        >
       </v-btn>
     </v-layout>
 
     <v-navigation-drawer
       v-model="drawer"
       absolute
-      temporary
       dark
-      color="rgba(255, 255, 255, 0.4)"
+      color="rgba(0, 0, 0, 0.3)"
     >
       <v-list-item v-if="user != null">
         <v-list-item-avatar>
@@ -70,9 +46,11 @@
 
       <v-divider></v-divider>
 
-      <v-layout my-3 row justify-center>
-        <v-icon left>fa fa-list-ul</v-icon>
+      <v-layout my-3 mx-4 row justify-space-between align-center>
         <span class="title white--text">Chapter List</span>
+        <v-btn text icon color="white" @click="drawer = !drawer">
+          <v-icon>fa fa-chevron-circle-left</v-icon>
+        </v-btn>
       </v-layout>
 
       <v-list dense>
@@ -88,7 +66,10 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>{{ item.text }}</v-list-item-title>
+            <v-list-item-title
+              :class="i == playingChapter ? 'red--text' : 'white--text'"
+              >{{ item.text }}</v-list-item-title
+            >
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -99,8 +80,8 @@
 export default {
   props: ["title", "src", "thumbnail", "chapterList", "user"],
   data: () => ({
-    controlVisibility: false,
-    drawer: null,
+    controlVisibility: true,
+    drawer: true,
     player: null,
     duration: null,
     playingChapter: 0
