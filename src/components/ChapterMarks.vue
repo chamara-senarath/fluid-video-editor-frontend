@@ -26,7 +26,7 @@
                 readonly
                 color="green darken-3"
                 label="Time"
-                v-model="chapterMark.startTime"
+                :value="startTime"
                 suffix="s"
               ></v-text-field>
             </v-flex>
@@ -120,6 +120,13 @@ export default {
     validate() {
       this.setChapterMarks(this.chapterMarkList);
       return true;
+    }
+  },
+  computed: {
+    startTime() {
+      return parseFloat(
+        Math.round(this.chapterMark.startTime * 100) / 100
+      ).toFixed(2);
     }
   },
   mounted() {

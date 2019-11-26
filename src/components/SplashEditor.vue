@@ -3,7 +3,13 @@
     <v-layout row justify-space-between>
       <v-flex md9>
         <div ref="canvas">
-          <v-card outlined width="1280px" height="720px" :color="bgColor">
+          <v-card
+            outlined
+            elevation="5"
+            width="1280px"
+            height="720px"
+            :color="bgColor"
+          >
             <v-layout>
               <Moveable
                 v-for="title in titleList"
@@ -153,9 +159,9 @@ export default {
     //
     types: ["hex", "hexa", "rgba", "hsla", "hsva"],
     type: "hex",
-    hex: "#FF00FF",
+    hex: "#FFFFFF",
     hexa: "#FF00FFFF",
-    rgba: { r: 255, g: 0, b: 255, a: 1 },
+    rgba: { r: 0, g: 0, b: 0, a: 1 },
     hsla: { h: 300, s: 1, l: 0.5, a: 1 },
     hsva: { h: 300, s: 1, v: 1, a: 1 },
     //

@@ -10,32 +10,45 @@
         :emit="['timeupdate']"
         ref="player"
       >
-        <video :poster="thumbnail">
-          <source :src="src" type="video/mp4" size="1080" />
+        <video :poster="thumbnail" size="720">
+          <source :src="src" type="video/mp4" size="720" />
         </video>
       </vue-plyr>
 
       <v-btn
+        v-if="this.chapterList.length != 0"
+        @mouseover="controlVisibility = true"
+        @mouseleave="hideControls"
         @click.stop="drawer = !drawer"
-        color="pink"
+        :color="
+          controlVisibility
+            ? 'rgba(61, 203, 255, 0.4)'
+            : 'rgba(61, 203, 255, 0.1)'
+        "
         small
         dark
         absolute
         right
-        fab
       >
-        <v-icon>fa fa-list-ul</v-icon>
+        <span
+          v-if="this.chapterList.length != 0 && this.controlVisibility"
+          color="primary"
+          dark
+        >
+          {{ title }} | Chapter -
+          {{ chapterList[playingChapter].text }}
+        </span>
+        <v-icon
+          right
+          dark
+          :color="
+            controlVisibility
+              ? 'rgba(255, 255, 255, 0.9)'
+              : 'rgba(255, 255, 255, 0.4)'
+          "
+          >fa fa-list-ul</v-icon
+        >
       </v-btn>
-
-      <v-alert
-        v-if="this.chapterList.length != 0"
-        color="primary"
-        dark
-        border="left"
-      >
-        {{ title }} | Chapter -
-        {{ chapterList[playingChapter].text }}
-      </v-alert>
     </v-layout>
 
     <v-navigation-drawer
@@ -86,6 +99,7 @@
 export default {
   props: ["title", "src", "thumbnail", "chapterList", "user"],
   data: () => ({
+    controlVisibility: false,
     drawer: null,
     player: null,
     duration: null,
@@ -98,6 +112,11 @@ export default {
     },
     videoTimeUpdated: function() {
       this.duration = this.player.currentTime;
+    },
+    hideControls() {
+      setTimeout(() => {
+        this.controlVisibility = false;
+      }, 2000);
     }
   },
   watch: {
