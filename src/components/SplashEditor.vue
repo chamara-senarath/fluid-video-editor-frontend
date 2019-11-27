@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
-    <v-layout row justify-space-between>
-      <v-flex md9>
+    <v-layout row>
+      <v-flex md9 mr-10>
         <div ref="canvas">
           <v-card
             outlined
@@ -18,9 +18,64 @@
                 v-bind="moveable"
                 @drag="handleDrag"
               >
-                <span :class="convertFontSize(title.size)">{{
-                  title.text
-                }}</span>
+                <span
+                  v-show="!title.edit"
+                  @dblclick="title.edit = true"
+                  :class="convertFontSize(title.size)"
+                  >{{ title.text }}</span
+                >
+                <v-layout
+                  row
+                  v-show="title.edit"
+                  @mouseleave="title.edit = false"
+                >
+                  <v-flex>
+                    <v-text-field
+                      v-model="title.text"
+                      clearable
+                      autofocus
+                      outlined
+                      @keypress.enter="changeTitle(title)"
+                    ></v-text-field>
+                  </v-flex>
+
+                  <v-flex>
+                    <v-menu offset-y>
+                      <template v-slot:activator="{ on }">
+                        <v-btn
+                          class="mx-2"
+                          depressed
+                          dark
+                          small
+                          color="primary"
+                          v-on="on"
+                        >
+                          <v-icon left>mdi-format-size</v-icon
+                          >{{ title.size }}</v-btn
+                        >
+                      </template>
+                      <v-list>
+                        <v-list-item
+                          v-for="(item, index) in fontSizes"
+                          :key="index"
+                          @click="title.size = item"
+                        >
+                          <v-list-item-title>{{ item }}</v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </v-flex>
+                  <v-flex>
+                    <v-btn
+                      @click="deleteTitle(title.id)"
+                      dark
+                      color="red darken-3"
+                      class="mx-2"
+                      small
+                      ><v-icon small dark>fa fa-trash-alt</v-icon></v-btn
+                    >
+                  </v-flex>
+                </v-layout>
               </Moveable>
               <Moveable class="moveable" v-bind="moveable" @drag="handleDrag">
                 <span><img ref="logoImage" :src="logo"/></span>
@@ -31,7 +86,13 @@
       </v-flex>
 
       <v-flex md2>
-        <v-layout column>
+        <v-layout column justify-center wrap>
+          <v-layout mb-4>
+            <v-layout column>
+              <span class="caption">Background Color</span>
+              <v-color-picker v-model="bgColor"></v-color-picker>
+            </v-layout>
+          </v-layout>
           <v-layout mb-4>
             <v-text-field
               label="Duration"
@@ -39,9 +100,6 @@
               v-model="duration"
               type="number"
             ></v-text-field>
-          </v-layout>
-          <v-layout mb-4>
-            <v-color-picker v-model="bgColor"></v-color-picker>
           </v-layout>
           <v-layout mb-10>
             <v-layout column justify-center>
@@ -84,52 +142,7 @@
               </v-layout>
             </v-layout>
           </v-layout>
-          <v-card
-            outlined
-            elevation="4"
-            v-for="title in titleList"
-            :key="title.id"
-          >
-            <v-layout column ma-2>
-              <v-layout>
-                <v-form ref="form">
-                  <v-text-field
-                    color="green darken-3"
-                    prepend-icon="fa fa-edit"
-                    label="Text"
-                    v-model="title.text"
-                    clearable
-                    autofocus
-                    :rules="rules.title"
-                  ></v-text-field>
-                </v-form>
-              </v-layout>
-              <v-layout row justify-space-around align-center>
-                <v-flex md8>
-                  Font Size
-                  <v-overflow-btn
-                    :items="fontSizes"
-                    value="H1"
-                    v-model="title.size"
-                    label="Font Size"
-                    editable
-                    item-value="text"
-                  ></v-overflow-btn>
-                </v-flex>
-                <v-flex md2>
-                  <v-btn
-                    @click="deleteTitle(title.id)"
-                    dark
-                    color="red darken-3"
-                    class="mx-2"
-                    fab
-                    small
-                    ><v-icon small dark>fa fa-trash-alt</v-icon></v-btn
-                  >
-                </v-flex>
-              </v-layout>
-            </v-layout>
-          </v-card>
+
           <v-layout my-3>
             <v-btn dark color="green darken-3" block @click="addNewTitle"
               >Add New Title <v-icon right>fa fa-plus</v-icon></v-btn
@@ -243,19 +256,21 @@ export default {
       }
     },
     addNewTitle() {
-      if (this.titleList.length != 0) {
-        if (!this.$refs.form[this.titleList.length - 1].validate()) {
-          return;
-        }
-      }
       let id = this.create_UUID();
       let title = {
         id: id,
         text: "Enter your text here",
-        size: "H1"
+        size: "H1",
+        edit: false
       };
       this.titleList.push(title);
       console.log(this.bgColor);
+    },
+    changeTitle(title) {
+      if (title.text == null) {
+        this.deleteTitle(title.id);
+      }
+      title.edit = false;
     },
     deleteTitle(id) {
       this.titleList = this.titleList.filter(title => title.id != id);

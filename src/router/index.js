@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Upload from "../views/Upload.vue";
+import Test from "../components/Test.vue";
 
 Vue.use(VueRouter);
 
@@ -8,7 +9,7 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: Upload
+    component: Test
   },
   {
     path: "/upload",
