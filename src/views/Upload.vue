@@ -27,7 +27,7 @@
     <v-stepper-items>
       <v-stepper-content step="1">
         <v-layout justify-end>
-          <v-btn fab small color="primary" @click="clickNext(1)">
+          <v-btn depressed fab small color="primary" @click="clickNext(1)">
             <v-icon>fa fa-angle-right</v-icon>
           </v-btn>
         </v-layout>
@@ -37,12 +37,12 @@
       <v-stepper-content step="2">
         <v-layout>
           <v-layout justify-start>
-            <v-btn fab small color="primary" @click="clickBack">
+            <v-btn depressed fab small color="primary" @click="clickBack">
               <v-icon>fa fa-angle-left</v-icon>
             </v-btn>
           </v-layout>
           <v-layout justify-end>
-            <v-btn fab small color="primary" @click="clickNext(2)">
+            <v-btn depressed fab small color="primary" @click="clickNext(2)">
               <v-icon>fa fa-angle-right</v-icon>
             </v-btn>
           </v-layout>
@@ -52,12 +52,12 @@
       <v-stepper-content step="3">
         <v-layout>
           <v-layout justify-start>
-            <v-btn fab small color="primary" @click="clickBack">
+            <v-btn depressed fab small color="primary" @click="clickBack">
               <v-icon>fa fa-angle-left</v-icon>
             </v-btn>
           </v-layout>
           <v-layout justify-end>
-            <v-btn fab small color="primary" @click="clickNext(3)">
+            <v-btn depressed fab small color="primary" @click="clickNext(3)">
               <v-icon>fa fa-angle-right</v-icon>
             </v-btn>
           </v-layout>
@@ -66,12 +66,12 @@
       ><v-stepper-content step="4">
         <v-layout>
           <v-layout justify-start>
-            <v-btn fab small color="primary" @click="clickBack">
+            <v-btn depressed fab small color="primary" @click="clickBack">
               <v-icon>fa fa-angle-left</v-icon>
             </v-btn>
           </v-layout>
           <v-layout justify-end>
-            <v-btn fab small color="primary" @click="clickNext">
+            <v-btn depressed fab small color="primary" @click="clickNext">
               <v-icon>fa fa-angle-right</v-icon>
             </v-btn>
           </v-layout>

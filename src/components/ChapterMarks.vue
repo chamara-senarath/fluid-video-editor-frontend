@@ -13,50 +13,53 @@
         </vue-plyr>
       </v-flex>
       <v-flex md3>
-        <v-layout column>
-          <v-layout
-            v-for="chapterMark in chapterMarkList"
-            :key="chapterMark.id"
-            row
-            align-center
-            justify-space-around
-          >
-            <v-flex md3>
-              <v-text-field
-                readonly
-                color="green darken-3"
-                label="Time"
-                :value="secondToHHMMSS(chapterMark.startTime)"
-              ></v-text-field>
-            </v-flex>
-            <v-flex md5>
-              <v-text-field
-                color="green darken-3"
-                label="Chapter Text"
-                v-model="chapterMark.text"
-                autofocus
-              ></v-text-field>
-            </v-flex>
-            <v-flex md2>
-              <v-btn
-                @click="deleteChapterMark(chapterMark.id)"
-                dark
-                color="red darken-3"
-                class="mx-2"
-                fab
-                small
-                ><v-icon small dark>fa fa-trash-alt</v-icon></v-btn
-              >
-            </v-flex>
+        <v-form ref="chapterTextForm">
+          <v-layout column>
+            <v-layout
+              v-for="chapterMark in chapterMarkList"
+              :key="chapterMark.id"
+              row
+              align-center
+              justify-space-around
+            >
+              <v-flex md3>
+                <v-text-field
+                  readonly
+                  color="green darken-3"
+                  label="Time"
+                  :value="secondToHHMMSS(chapterMark.startTime)"
+                ></v-text-field>
+              </v-flex>
+              <v-flex md5>
+                <v-text-field
+                  color="green darken-3"
+                  label="Chapter Text"
+                  v-model="chapterMark.text"
+                  autofocus
+                  :rules="rules.chapterText"
+                ></v-text-field>
+              </v-flex>
+              <v-flex md2>
+                <v-btn
+                  @click="deleteChapterMark(chapterMark.id)"
+                  dark
+                  color="red darken-3"
+                  class="mx-2"
+                  fab
+                  small
+                  ><v-icon small dark>fa fa-trash-alt</v-icon></v-btn
+                >
+              </v-flex>
+            </v-layout>
+            <v-layout column align-center>
+              <v-flex>
+                <v-btn dark color="green darken-3" @click="addChapterMark"
+                  >Add Chapter Mark <v-icon right>fa fa-plus</v-icon></v-btn
+                >
+              </v-flex>
+            </v-layout>
           </v-layout>
-          <v-layout column align-center>
-            <v-flex>
-              <v-btn dark color="green darken-3" @click="addChapterMark"
-                >Add Chapter Mark <v-icon right>fa fa-plus</v-icon></v-btn
-              >
-            </v-flex>
-          </v-layout>
-        </v-layout>
+        </v-form>
       </v-flex>
     </v-layout>
   </v-container>
@@ -74,6 +77,12 @@ export default {
         id: null,
         startTime: null,
         text: null
+      },
+      rules: {
+        chapterText: [
+          value =>
+            (value && value.length > 0) || "Chapter Text can not be empty"
+        ]
       }
     };
   },
@@ -93,6 +102,9 @@ export default {
       return uuid;
     },
     addChapterMark() {
+      if (!this.$refs.chapterTextForm.validate()) {
+        return;
+      }
       this.player.pause();
       this.chapterMark.startTime = this.player.currentTime;
       let id = this.create_UUID();
@@ -117,6 +129,9 @@ export default {
       );
     },
     validate() {
+      if (!this.$refs.chapterTextForm.validate()) {
+        return;
+      }
       this.setChapterMarks(this.chapterMarkList);
       return true;
     },

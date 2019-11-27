@@ -29,6 +29,7 @@
     </v-layout>
 
     <v-navigation-drawer
+      v-if="this.chapterList.length != 0"
       v-model="drawer"
       absolute
       dark

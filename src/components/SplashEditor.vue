@@ -35,6 +35,11 @@
                       clearable
                       autofocus
                       outlined
+                      @focus="
+                        title.text == 'Enter your text here'
+                          ? (title.text = '')
+                          : (title.text = title.text)
+                      "
                       @keypress.enter="changeTitle(title)"
                     ></v-text-field>
                   </v-flex>
@@ -59,6 +64,7 @@
                           v-for="(item, index) in fontSizes"
                           :key="index"
                           @click="title.size = item"
+                          @mouseover="title.size = item"
                         >
                           <v-list-item-title>{{ item }}</v-list-item-title>
                         </v-list-item>
@@ -83,7 +89,7 @@
                 @drag="handleDrag"
                 v-if="logo != null"
               >
-                <span><img ref="logoImage" :src="logo"/></span>
+                <span><img class="logo" ref="logoImage" :src="logo"/></span>
               </Moveable>
             </v-layout>
           </v-card>
@@ -297,21 +303,19 @@ export default {
       }
     },
     resizeLogo(type) {
-      let width = this.$refs.logoImage.width;
-      let height = this.$refs.logoImage.height;
-      this.aspectRatio = width / height;
-      let newWidth;
-      let newHeight;
+      // let width = this.$refs.logoImage.width;
+      // let height = this.$refs.logoImage.height;
+      // this.aspectRatio = width / height;
+      // let newWidth;
+      // let newHeight;
       if (type == "+") {
-        newWidth = this.$refs.logoImage.width + 10;
-        newHeight = this.$refs.logoImage.height + 10;
+        this.$refs.logoImage.width = this.$refs.logoImage.width + 10;
       }
       if (type == "-") {
-        newWidth = this.$refs.logoImage.width - 10;
-        newHeight = this.$refs.logoImage.height - 10;
+        this.$refs.logoImage.width = this.$refs.logoImage.width - 10;
       }
-      this.$refs.logoImage.width = newHeight * this.aspectRatio;
-      this.$refs.logoImage.height = newWidth / this.aspectRatio;
+      // this.$refs.logoImage.width = newHeight * this.aspectRatio;
+      // this.$refs.logoImage.height = newWidth / this.aspectRatio;
     },
     async canvasToData() {
       const canvas = this.$refs.canvas;
@@ -348,6 +352,8 @@ export default {
 .moveable {
   position: relative;
   text-align: center;
+  color: black;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 40px;
   font-weight: 100;
   letter-spacing: 1px;
@@ -356,5 +362,9 @@ export default {
 .moveable span {
   position: absolute;
   white-space: nowrap;
+}
+.logo {
+  display: block;
+  height: auto;
 }
 </style>
