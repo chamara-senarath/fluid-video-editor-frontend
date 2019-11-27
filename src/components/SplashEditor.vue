@@ -14,7 +14,7 @@
               <Moveable
                 v-for="title in titleList"
                 :key="title.id"
-                class="moveable"
+                :class="title.edit ? 'fixed' : 'moveable'"
                 v-bind="moveable"
                 @drag="handleDrag"
               >
@@ -26,6 +26,7 @@
                 >
                 <v-layout
                   row
+                  align-baseline
                   v-show="title.edit"
                   @mouseleave="title.edit = false"
                 >
@@ -358,7 +359,9 @@ export default {
   font-weight: 100;
   letter-spacing: 1px;
 }
-
+.fixed {
+  position: absolute;
+}
 .moveable span {
   position: absolute;
   white-space: nowrap;
