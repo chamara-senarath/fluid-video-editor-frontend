@@ -283,7 +283,6 @@ export default {
         edit: false
       };
       this.titleList.push(title);
-      console.log(this.bgColor);
     },
     changeTitle(title) {
       if (title.text == null) {
@@ -321,7 +320,9 @@ export default {
     async canvasToData() {
       const canvas = this.$refs.canvas;
       const options = {
-        type: "dataURL"
+        type: "dataURL",
+        width: 1280,
+        height: 720
       };
       this.canvasData = await this.$html2canvas(canvas, options);
     },
