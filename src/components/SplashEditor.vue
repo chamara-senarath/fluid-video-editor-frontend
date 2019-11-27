@@ -87,6 +87,11 @@
 
       <v-flex md2>
         <v-layout column justify-center wrap>
+          <v-layout my-3>
+            <v-btn dark color="green darken-3" block @click="addNewTitle"
+              >Add New Title <v-icon right>fa fa-plus</v-icon></v-btn
+            >
+          </v-layout>
           <v-layout mb-4>
             <v-layout column>
               <span class="caption">Background Color</span>
@@ -117,9 +122,17 @@
                     @change="selectLogo"
                     v-model="logofile"
                   ></v-file-input>
+                  <v-switch
+                    v-if="logo != null"
+                    v-model="enableWatermark"
+                    label="Make the logo as the video watermark"
+                    value
+                    input-value="true"
+                    hide-details
+                  ></v-switch>
                 </v-form>
               </v-layout>
-              <v-layout v-if="logo != null">
+              <v-layout v-if="logo != null" mt-3>
                 <v-btn
                   class="mx-2"
                   fab
@@ -142,12 +155,6 @@
               </v-layout>
             </v-layout>
           </v-layout>
-
-          <v-layout my-3>
-            <v-btn dark color="green darken-3" block @click="addNewTitle"
-              >Add New Title <v-icon right>fa fa-plus</v-icon></v-btn
-            >
-          </v-layout>
         </v-layout>
       </v-flex>
     </v-layout>
@@ -168,6 +175,7 @@ export default {
     fontSizes: ["H1", "H2", "H3", "H4", "H5", "H6"],
     logofile: null,
     logo: null,
+    enableWatermark: false,
     aspectRatio: null,
     //
     types: ["hex", "hexa", "rgba", "hsla", "hsva"],
@@ -179,7 +187,6 @@ export default {
     hsva: { h: 300, s: 1, v: 1, a: 1 },
     //
     rules: {
-      title: [value => (value && value.length > 0) || "Title can not be empty"],
       logo: [
         value => {
           if (value && value.name) {
@@ -310,13 +317,6 @@ export default {
     },
 
     validate() {
-      //TODO Validate this
-
-      if (this.titleList.length != 0) {
-        if (!this.$refs.form[this.titleList.length - 1].validate()) {
-          return;
-        }
-      }
       this.canvasToData().then(() => {
         this.setSplashScreenObject({
           data: this.canvasData,
