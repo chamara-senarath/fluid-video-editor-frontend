@@ -72,7 +72,7 @@
           </v-layout>
           <v-layout justify-end>
             <v-btn depressed fab small color="primary" @click="clickNext">
-              <v-icon>fa fa-angle-right</v-icon>
+              <v-icon>fa fa-folder-plus</v-icon>
             </v-btn>
           </v-layout>
         </v-layout>
