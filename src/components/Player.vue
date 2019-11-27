@@ -68,7 +68,13 @@
           <v-list-item-content>
             <v-list-item-title
               :class="i == playingChapter ? 'red--text' : 'white--text'"
-              >{{ item.text }}</v-list-item-title
+            >
+              <v-tooltip right>
+                <template v-slot:activator="{ on }">
+                  <span v-on="on">{{ item.text }}</span>
+                </template>
+                <span>{{ item.text }}</span>
+              </v-tooltip></v-list-item-title
             >
           </v-list-item-content>
         </v-list-item>

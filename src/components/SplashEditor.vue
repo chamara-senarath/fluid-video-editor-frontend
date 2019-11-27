@@ -77,7 +77,12 @@
                   </v-flex>
                 </v-layout>
               </Moveable>
-              <Moveable class="moveable" v-bind="moveable" @drag="handleDrag">
+              <Moveable
+                class="moveable"
+                v-bind="moveable"
+                @drag="handleDrag"
+                v-if="logo != null"
+              >
                 <span><img ref="logoImage" :src="logo"/></span>
               </Moveable>
             </v-layout>

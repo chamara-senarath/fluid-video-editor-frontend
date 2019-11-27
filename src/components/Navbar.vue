@@ -9,6 +9,19 @@
         Training Catalog | Video Editor
       </v-toolbar-title>
       <v-spacer></v-spacer>
+
+      <v-btn
+        small
+        depressed
+        outlined
+        @click="$vuetify.theme.dark = !$vuetify.theme.dark"
+      >
+        <v-icon small left>{{
+          $vuetify.theme.dark ? "fa fa-moon" : "fa fa-sun"
+        }}</v-icon>
+        <span>{{ $vuetify.theme.dark ? "Dark Mode" : "Light Mode" }}</span>
+      </v-btn>
+      <v-spacer></v-spacer>
       <v-btn
         class="hidden-xs-only"
         v-if="isLogged"
