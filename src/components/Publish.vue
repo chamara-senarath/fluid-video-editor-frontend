@@ -37,8 +37,7 @@ export default {
   data() {
     return {
       title: "",
-      src:
-        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      src: "http://localhost:3000/video/videoFile?id=5ddf4b83ac48434f38dad6fa",
       thumbnail: null,
       chapterList: []
     };
