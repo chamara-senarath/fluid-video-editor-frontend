@@ -10,7 +10,7 @@ export default new Vuex.Store({
       file: null
     },
     splashScreen: {
-      data: null,
+      data: "null",
       duration: null
     },
     chapterMarks: []

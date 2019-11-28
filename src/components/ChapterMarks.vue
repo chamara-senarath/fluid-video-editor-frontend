@@ -4,11 +4,7 @@
       <v-flex md8>
         <vue-plyr ref="player">
           <video>
-            <source
-              src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-              type="video/mp4"
-              size="720"
-            />
+            <source :src="file" type="video/mp4" size="720" />
           </video>
         </vue-plyr>
       </v-flex>
@@ -140,6 +136,11 @@ export default {
       date.setSeconds(time);
       var result = date.toISOString().substr(11, 8);
       return result;
+    }
+  },
+  computed: {
+    file() {
+      return this.getVideoObject().file;
     }
   },
 

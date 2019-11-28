@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       title: "",
-      src: "http://localhost:3000/video/videoFile?id=5ddf4b83ac48434f38dad6fa",
+      src: null,
       thumbnail: null,
       chapterList: []
     };
@@ -53,6 +53,7 @@ export default {
 
   mounted() {
     this.title = this.getVideoObject().title;
+    this.src = this.getVideoObject().file;
     this.chapterList = this.getChapterMarks();
     this.thumbnail = this.getSplashScreenObject().data;
   }

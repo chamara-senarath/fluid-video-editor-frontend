@@ -1,42 +1,36 @@
 <template>
-  <v-container fluid>
-    <v-snackbar color="blue darken-3" top v-model="snackbar">
-      <v-icon color="white">fa fa-check</v-icon>
-      {{ snackbarMessage }}
-      <v-btn color="yellow darken-3" text @click="snackbar = false"
-        >Close</v-btn
+  <v-container>
+    <v-layout column align-center>
+      <v-flex>
+        <v-img src="uploadFile.png" width="300"></v-img>
+      </v-flex>
+    </v-layout>
+
+    <v-form ref="form">
+      <v-alert v-if="feedback" type="error">{{ feedback }}</v-alert>
+      <v-file-input
+        ref="videoSelect"
+        clearable
+        color="green darken-3"
+        :rules="rules.videoData"
+        accept="video/mp4, video/avi"
+        placeholder="Select a Video"
+        prepend-icon="fa fa-video"
+        label="Upload Video"
+        @change="uploadVideo"
+      ></v-file-input>
+      <v-text-field
+        color="green darken-3"
+        prepend-icon="fa fa-edit"
+        label="Video Title"
+        v-model="video.title"
+        :rules="rules.videoTitle"
+      ></v-text-field>
+
+      <v-btn @click="clickUpload" class="primary" block
+        >Upload<v-icon small right>fa fa-upload</v-icon></v-btn
       >
-    </v-snackbar>
-    <v-card class="mb-12" outlined height="400px">
-      <v-card-title>
-        <v-layout align-center justify-center>
-          <v-form ref="form">
-            <v-alert v-if="feedback" type="error">{{ feedback }}</v-alert>
-            <v-text-field
-              color="green darken-3"
-              prepend-icon="fa fa-edit"
-              label="Video Title"
-              v-model="video.title"
-              :rules="rules.videoTitle"
-            ></v-text-field>
-            <v-file-input
-              ref="videoSelect"
-              clearable
-              color="green darken-3"
-              :rules="rules.videoData"
-              accept="video/mp4, video/avi"
-              placeholder="Select a Video"
-              prepend-icon="fa fa-video"
-              label="Upload Video"
-              @change="uploadVideo"
-            ></v-file-input>
-            <v-btn @click="clickUpload" class="primary" block
-              >Upload<v-icon small right>fa fa-upload</v-icon></v-btn
-            >
-          </v-form>
-        </v-layout>
-      </v-card-title>
-    </v-card>
+    </v-form>
   </v-container>
 </template>
 
@@ -51,7 +45,8 @@ export default {
       feedback: null,
       video: {
         title: null,
-        file: null
+        file:
+          "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
       },
       rules: {
         videoTitle: [
