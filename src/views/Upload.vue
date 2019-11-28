@@ -20,6 +20,12 @@
       <v-divider></v-divider>
 
       <v-stepper-step :complete="stepperCount > 4" step="4"
+        >Add Questions</v-stepper-step
+      >
+
+      <v-divider></v-divider>
+
+      <v-stepper-step :complete="stepperCount > 5" step="5"
         >Publish</v-stepper-step
       >
     </v-stepper-header>
@@ -65,8 +71,23 @@
         <ChapterMarks
           v-if="stepperCount == 3"
           ref="chapterMarks"
-        ></ChapterMarks> </v-stepper-content
-      ><v-stepper-content step="4">
+        ></ChapterMarks>
+      </v-stepper-content>
+      <v-stepper-content step="4">
+        <v-layout>
+          <v-layout justify-start>
+            <v-btn depressed fab small color="primary" @click="clickBack">
+              <v-icon>fa fa-angle-left</v-icon>
+            </v-btn>
+          </v-layout>
+          <v-layout justify-end>
+            <v-btn depressed fab small color="primary" @click="clickNext(4)">
+              <v-icon>fa fa-angle-right</v-icon>
+            </v-btn>
+          </v-layout>
+        </v-layout>
+        <Questions ref="questions"></Questions> </v-stepper-content
+      ><v-stepper-content step="5">
         <v-layout>
           <v-layout justify-start>
             <v-btn depressed fab small color="primary" @click="clickBack">
@@ -79,7 +100,7 @@
             </v-btn>
           </v-layout>
         </v-layout>
-        <Publish v-if="stepperCount == 4" ref="publish"></Publish>
+        <Publish v-if="stepperCount == 5" ref="publish"></Publish>
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
@@ -88,6 +109,7 @@
 import VideoUpload from "@/components/VideoUpload";
 import SplashEditor from "@/components/SplashEditor";
 import ChapterMarks from "@/components/ChapterMarks";
+import Questions from "@/components/Questions";
 import Publish from "@/components/Publish";
 import { mapGetters } from "vuex";
 
@@ -96,6 +118,7 @@ export default {
     VideoUpload,
     SplashEditor,
     ChapterMarks,
+    Questions,
     Publish
   },
   data() {
@@ -124,7 +147,13 @@ export default {
           return;
         }
       }
-      if (this.stepperCount < 4) {
+      if (stepper == 4) {
+        // let validate = this.$refs.chapterMarks.validate();
+        // if (!validate) {
+        //   return;
+        // }
+      }
+      if (this.stepperCount < 5) {
         this.stepperCount += 1;
       }
     },
