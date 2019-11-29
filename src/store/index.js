@@ -13,7 +13,8 @@ export default new Vuex.Store({
       data: "null",
       duration: null
     },
-    chapterMarks: []
+    chapterMarks: [],
+    questionMarks: []
   },
   getters: {
     getVideoObject: state => {
@@ -24,6 +25,9 @@ export default new Vuex.Store({
     },
     getChapterMarks: state => {
       return state.chapterMarks;
+    },
+    getQuestionMarks: state => {
+      return state.questionMarks;
     }
   },
   mutations: {
@@ -37,6 +41,9 @@ export default new Vuex.Store({
     },
     setChapterMarks: (state, payload) => {
       state.chapterMarks = payload;
+    },
+    setQuestionMarks: (state, payload) => {
+      state.questionMarks = payload;
     }
   },
   actions: {},

@@ -11,7 +11,7 @@
       <v-file-input
         ref="videoSelect"
         clearable
-        color="green darken-3"
+        color="blue darken-3"
         :rules="rules.videoData"
         accept="video/mp4, video/avi"
         placeholder="Select a Video"
@@ -20,7 +20,7 @@
         @change="uploadVideo"
       ></v-file-input>
       <v-text-field
-        color="green darken-3"
+        color="blue darken-3"
         prepend-icon="fa fa-edit"
         label="Video Title"
         v-model="video.title"

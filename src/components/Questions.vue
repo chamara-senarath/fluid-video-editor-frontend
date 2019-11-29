@@ -1,8 +1,10 @@
 <template>
   <v-container>
     <QuestionMaker
+      :startTime="startTime"
       :dialog="dialogBox"
       @dialogStatus="changeDialogState"
+      @questionsMark="createQuestionMarks"
     ></QuestionMaker>
     <v-layout row justify-space-around>
       <v-flex md8>
@@ -16,8 +18,8 @@
         <v-form ref="chapterTextForm">
           <v-layout column>
             <v-layout
-              v-for="chapterMark in chapterMarkList"
-              :key="chapterMark.id"
+              v-for="questionsMark in questionsMarks"
+              :key="questionsMark.id"
               row
               align-center
               justify-space-around
@@ -25,23 +27,23 @@
               <v-flex md3>
                 <v-text-field
                   readonly
-                  color="green darken-3"
+                  color="blue darken-3"
                   label="Time"
-                  :value="secondToHHMMSS(chapterMark.startTime)"
+                  :value="secondToHHMMSS(questionsMark.startTime)"
                 ></v-text-field>
               </v-flex>
               <v-flex md5>
                 <v-text-field
-                  color="green darken-3"
-                  label="Chapter Text"
-                  v-model="chapterMark.text"
+                  color="blue darken-3"
+                  label="Question"
+                  v-model="questionsMark.question"
                   autofocus
-                  :rules="rules.chapterText"
+                  readonly
                 ></v-text-field>
               </v-flex>
               <v-flex md2>
                 <v-btn
-                  @click="deleteChapterMark(chapterMark.id)"
+                  @click="deleteQuestionMark(questionsMark.id)"
                   dark
                   color="red darken-3"
                   class="mx-2"
@@ -53,10 +55,7 @@
             </v-layout>
             <v-layout column align-center>
               <v-flex>
-                <v-btn
-                  dark
-                  color="green darken-3"
-                  @click="changeDialogState(true)"
+                <v-btn dark color="blue darken-3" @click="addQuestionMark"
                   >Add Question Mark <v-icon right>fa fa-plus</v-icon></v-btn
                 >
               </v-flex>
@@ -70,7 +69,7 @@
 
 <script>
 import QuestionMaker from "@/components/QuestionMaker";
-import { mapMutations, mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   components: {
@@ -80,26 +79,16 @@ export default {
     return {
       dialogBox: false,
       player: null,
-      chapterMarkList: [],
-      chapterMark: {
-        id: null,
-        startTime: null,
-        text: null
-      },
-      rules: {
-        chapterText: [
-          value =>
-            (value && value.length > 0) || "Chapter Text can not be empty"
-        ]
-      }
+      startTime: null,
+      questionsMarks: []
     };
   },
   methods: {
+    ...mapGetters(["getVideoObject"]),
+    ...mapMutations(["setQuestionMarks"]),
     changeDialogState(val) {
       this.dialogBox = val;
     },
-    ...mapMutations(["setChapterMarks"]),
-    ...mapGetters(["getVideoObject"]),
     create_UUID() {
       var dt = new Date().getTime();
       var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
@@ -112,45 +101,38 @@ export default {
       );
       return uuid;
     },
-    addChapterMark() {
-      if (!this.$refs.chapterTextForm.validate()) {
-        return;
-      }
-      this.player.pause();
-      this.chapterMark.startTime = this.player.currentTime;
-      let id = this.create_UUID();
-      let chapterMark = {
-        id: id,
-        startTime: this.chapterMark.startTime,
-        text: this.chapterMark.text
-      };
-      let chapterMarkExist = false;
-      this.chapterMarkList.forEach(chapterMark => {
-        if (chapterMark.startTime == this.chapterMark.startTime) {
-          chapterMarkExist = true;
-        }
-      });
-      if (!chapterMarkExist) {
-        this.chapterMarkList.push(chapterMark);
-      }
-    },
-    deleteChapterMark(id) {
-      this.chapterMarkList = this.chapterMarkList.filter(
-        chapterMark => chapterMark.id != id
-      );
-    },
-    validate() {
-      if (!this.$refs.chapterTextForm.validate()) {
-        return;
-      }
-      this.setChapterMarks(this.chapterMarkList);
-      return true;
-    },
     secondToHHMMSS(time) {
       var date = new Date(null);
       date.setSeconds(time);
       var result = date.toISOString().substr(11, 8);
       return result;
+    },
+    addQuestionMark() {
+      this.player.pause();
+      this.startTime = this.player.currentTime;
+      let questionMarkExist = false;
+      this.questionsMarks.forEach(questionMark => {
+        if (questionMark.startTime == this.startTime) {
+          questionMarkExist = true;
+        }
+      });
+      if (!questionMarkExist) {
+        this.changeDialogState(true);
+      }
+    },
+
+    createQuestionMarks(val) {
+      let id = this.create_UUID();
+      this.questionsMarks.push({ ...val, id });
+    },
+    deleteQuestionMark(id) {
+      this.questionsMarks = this.questionsMarks.filter(
+        questionMark => questionMark.id != id
+      );
+    },
+    validate() {
+      this.setQuestionMarks = this.questionsMarks;
+      return true;
     }
   },
   computed: {

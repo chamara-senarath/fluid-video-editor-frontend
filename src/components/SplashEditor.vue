@@ -76,7 +76,7 @@
                     <v-btn
                       @click="deleteTitle(title.id)"
                       dark
-                      color="red darken-3"
+                      color="blue darken-3"
                       class="mx-2"
                       small
                       ><v-icon small dark>fa fa-trash-alt</v-icon></v-btn
@@ -100,7 +100,7 @@
       <v-flex md2>
         <v-layout column justify-center wrap>
           <v-layout my-3>
-            <v-btn dark color="green darken-3" block @click="addNewTitle"
+            <v-btn dark color="blue darken-3" block @click="addNewTitle"
               >Add New Title <v-icon right>fa fa-plus</v-icon></v-btn
             >
           </v-layout>
@@ -125,7 +125,7 @@
                   <v-file-input
                     ref="logoSelect"
                     clearable
-                    color="green darken-3"
+                    color="blue darken-3"
                     :rules="rules.logo"
                     accept="image/png, image/jpeg"
                     placeholder="Select a Logo"

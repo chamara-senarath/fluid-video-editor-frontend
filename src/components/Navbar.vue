@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <v-app-bar color="green darken-3" app dark>
+    <v-app-bar color="blue darken-3" app dark>
       <v-app-bar-nav-icon
         v-if="isLogged"
         @click.stop="drawer = !drawer"
@@ -74,7 +74,7 @@
 
       <v-list dense>
         <v-list-item
-          color="green darken-3"
+          color="blue darken-3"
           v-for="item in items"
           :key="item.title"
           link

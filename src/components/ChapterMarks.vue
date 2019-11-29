@@ -21,14 +21,14 @@
               <v-flex md3>
                 <v-text-field
                   readonly
-                  color="green darken-3"
+                  color="blue darken-3"
                   label="Time"
                   :value="secondToHHMMSS(chapterMark.startTime)"
                 ></v-text-field>
               </v-flex>
               <v-flex md5>
                 <v-text-field
-                  color="green darken-3"
+                  color="blue darken-3"
                   label="Chapter Text"
                   v-model="chapterMark.text"
                   autofocus
@@ -49,7 +49,7 @@
             </v-layout>
             <v-layout column align-center>
               <v-flex>
-                <v-btn dark color="green darken-3" @click="addChapterMark"
+                <v-btn dark color="blue darken-3" @click="addChapterMark"
                   >Add Chapter Mark <v-icon right>fa fa-plus</v-icon></v-btn
                 >
               </v-flex>
