@@ -66,9 +66,9 @@
           @click="playChapter(i)"
         >
           <v-list-item-icon>
-            <v-icon :color="i == playingChapter ? 'red' : 'blue'"
-              >fa fa-bookmark-o</v-icon
-            >
+            <span :class="i == playingChapter ? 'red--text' : 'white--text'">{{
+              secondToHHMMSS(item.startTime)
+            }}</span>
           </v-list-item-icon>
 
           <v-list-item-content>
@@ -106,6 +106,12 @@ export default {
     currentQuestion: null
   }),
   methods: {
+    secondToHHMMSS(time) {
+      var date = new Date(null);
+      date.setSeconds(time);
+      var result = date.toISOString().substr(11, 8);
+      return result;
+    },
     playChapter(index) {
       this.player.currentTime = this.chapterList[index].startTime;
       this.player.pause();

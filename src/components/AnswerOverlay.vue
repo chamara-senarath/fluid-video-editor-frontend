@@ -1,6 +1,6 @@
 <template>
   <v-overlay :absolute="true" :value="overlay">
-    <v-card min-width="200">
+    <v-card>
       <v-card-text>
         <v-layout column justify-center>
           <v-layout column justify-center>

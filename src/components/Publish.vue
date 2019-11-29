@@ -2,21 +2,19 @@
   <v-container>
     <v-layout row>
       <v-layout>
-        <v-container>
-          <Player
-            v-if="this.thumbnail != null"
-            :title="title"
-            :src="src"
-            :thumbnail="thumbnail"
-            :chapterList="chapterList"
-            :questionList="this.questionList"
-            :user="{
-              name: 'Chamara Senarath',
-              avatar:
-                'https://icon-library.net/images/avatar-icon-png/avatar-icon-png-8.jpg'
-            }"
-          ></Player>
-        </v-container>
+        <Player
+          v-if="this.thumbnail != null"
+          :title="title"
+          :src="src"
+          :thumbnail="thumbnail"
+          :chapterList="chapterList"
+          :questionList="this.questionList"
+          :user="{
+            name: 'Chamara Senarath',
+            avatar:
+              'https://icon-library.net/images/avatar-icon-png/avatar-icon-png-8.jpg'
+          }"
+        ></Player>
       </v-layout>
       <v-layout column align-center justify-center>
         <v-btn dark color="blue darken-3" @click="downloadEmbedCode"
