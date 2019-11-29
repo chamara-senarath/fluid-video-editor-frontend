@@ -80,6 +80,9 @@ export default {
       this.changeOverlayState(false);
     },
     timer() {
+      if (this.question.duration == 0) {
+        return;
+      }
       if (this.interval != null) {
         clearInterval(this.interval);
       }
@@ -92,7 +95,7 @@ export default {
   },
   watch: {
     timerValue(val) {
-      if (val >= 100) {
+      if (val >= 100 && this.question.duration != 0) {
         this.skip();
       }
     },

@@ -13,6 +13,7 @@
                   label="Question"
                   v-model="question"
                   prepend-inner-icon="fa fa-question"
+                  :rules="rules.text"
                 ></v-text-field>
                 <v-layout v-for="(option, i) in options" :key="option.id">
                   <v-text-field
@@ -20,6 +21,7 @@
                     v-model="option.text"
                     :label="`Option ${i + 1}`"
                     prepend-inner-icon="fa fa-check-double"
+                    :rules="rules.text"
                   ></v-text-field>
                   <v-btn
                     @click="deleteOption(option.id)"
@@ -41,6 +43,8 @@
                     v-model="answer"
                     :items="options.filter(option => option.text)"
                     label="Correct Answer"
+                    required
+                    :rules="[v => !!v || 'Correct answer is required']"
                     dense
                   ></v-select>
                   <v-select
@@ -50,6 +54,10 @@
                     dense
                     suffix="Seconds"
                   ></v-select>
+                  <small class="orange--text"
+                    >*leave select time duration empty if time duration for the
+                    question is not needed</small
+                  >
                 </v-layout>
               </v-form>
             </v-layout>
@@ -61,7 +69,7 @@
             >Close</v-btn
           >
           <v-btn
-            :disabled="options.length == 0"
+            :disabled="answer == null || options.length == 0"
             color="blue darken-1"
             text
             @click="save"
@@ -82,7 +90,12 @@ export default {
       question: null,
       options: [],
       answer: null,
-      duration: null
+      duration: null,
+      rules: {
+        text: [
+          value => (value && value.length > 0) || "This field can not be empty"
+        ]
+      }
     };
   },
   methods: {
@@ -108,16 +121,20 @@ export default {
     },
     deleteOption(id) {
       this.options = this.options.filter(option => option.id != id);
+      this.answer = null;
     },
     changeDialogState(val) {
       this.$emit("dialogStatus", val);
     },
     save() {
+      if (!this.$refs.mcqForm.validate()) {
+        return;
+      }
       let questionMark = {
         question: this.question,
         options: this.options,
         answer: this.answer,
-        duration: this.duration,
+        duration: this.duration == null ? 0 : this.duration,
         startTime: this.startTime,
         correct: false,
         checked: false
