@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { mapMutations, mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   data() {
@@ -83,8 +83,8 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setChapterMarks"]),
     ...mapGetters(["getVideoObject"]),
+    ...mapMutations(["setChapterMarks"]),
     create_UUID() {
       var dt = new Date().getTime();
       var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(

@@ -11,7 +11,12 @@
           <source :src="src" type="video/mp4" size="720" />
         </video>
       </vue-plyr>
-
+      <AnswerOverlay
+        v-if="currentQuestion != null"
+        @state="changeAnswerOverlayState"
+        :overlay="answerOverlay"
+        :question="currentQuestion"
+      ></AnswerOverlay>
       <v-btn
         v-if="this.chapterList.length != 0 && !drawer"
         @click.stop="drawer = !drawer"
@@ -84,14 +89,21 @@
   </v-sheet>
 </template>
 <script>
+import AnswerOverlay from "@/components/AnswerOverlay";
+
 export default {
-  props: ["title", "src", "thumbnail", "chapterList", "user"],
+  components: {
+    AnswerOverlay
+  },
+  props: ["title", "src", "thumbnail", "chapterList", "questionList", "user"],
   data: () => ({
     controlVisibility: true,
     drawer: true,
     player: null,
     duration: null,
-    playingChapter: 0
+    playingChapter: 0,
+    answerOverlay: false,
+    currentQuestion: null
   }),
   methods: {
     playChapter(index) {
@@ -105,6 +117,15 @@ export default {
       setTimeout(() => {
         this.controlVisibility = false;
       }, 2000);
+    },
+    changeAnswerOverlayState(val) {
+      this.answerOverlay = val;
+      this.player.play();
+    },
+    displayQuestion(i) {
+      this.player.pause();
+      this.currentQuestion = this.questionList[i];
+      this.answerOverlay = true;
     }
   },
   watch: {
@@ -112,6 +133,14 @@ export default {
       for (let i = 0; i < this.chapterList.length; i++) {
         if (value >= this.chapterList[i].startTime) {
           this.playingChapter = i;
+        }
+      }
+      for (let i = 0; i < this.questionList.length; i++) {
+        if (
+          value >= this.questionList[i].startTime &&
+          !this.questionList[i].checked
+        ) {
+          this.displayQuestion(i);
         }
       }
     }

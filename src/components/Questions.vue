@@ -131,7 +131,7 @@ export default {
       );
     },
     validate() {
-      this.setQuestionMarks = this.questionsMarks;
+      this.setQuestionMarks(this.questionsMarks);
       return true;
     }
   },

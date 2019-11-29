@@ -9,6 +9,7 @@
             :src="src"
             :thumbnail="thumbnail"
             :chapterList="chapterList"
+            :questionList="this.questionList"
             :user="{
               name: 'Chamara Senarath',
               avatar:
@@ -39,14 +40,16 @@ export default {
       title: "",
       src: null,
       thumbnail: null,
-      chapterList: []
+      chapterList: [],
+      questionList: []
     };
   },
   methods: {
     ...mapGetters([
       "getChapterMarks",
       "getSplashScreenObject",
-      "getVideoObject"
+      "getVideoObject",
+      "getQuestionMarks"
     ]),
     downloadEmbedCode() {}
   },
@@ -55,6 +58,7 @@ export default {
     this.title = this.getVideoObject().title;
     this.src = this.getVideoObject().file;
     this.chapterList = this.getChapterMarks();
+    this.questionList = this.getQuestionMarks();
     this.thumbnail = this.getSplashScreenObject().data;
   }
 };

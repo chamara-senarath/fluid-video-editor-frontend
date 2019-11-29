@@ -1,0 +1,84 @@
+<template>
+  <v-overlay :absolute="true" :value="overlay">
+    <v-radio-group v-model="option">
+      <template v-slot:label>
+        <div>
+          <strong>{{ question.question }}</strong>
+        </div>
+      </template>
+      <v-radio
+        v-for="option in question.options"
+        :key="option.id"
+        :value="option.text"
+      >
+        <template v-slot:label>
+          <div>
+            <strong>{{ option.text }}</strong>
+          </div>
+        </template>
+      </v-radio>
+    </v-radio-group>
+    <v-progress-linear
+      v-if="question.duration != 0"
+      :value="timerValue"
+    ></v-progress-linear>
+
+    <v-layout row>
+      <v-flex>
+        <v-btn color="success" @click="answer">
+          Answer
+        </v-btn>
+      </v-flex>
+      <v-flex>
+        <v-btn color="success" @click="skip">
+          Skip
+        </v-btn>
+      </v-flex>
+    </v-layout>
+  </v-overlay>
+</template>
+
+<script>
+export default {
+  props: ["overlay", "question"],
+  data() {
+    return {
+      option: null,
+      timerValue: null
+    };
+  },
+  methods: {
+    changeOverlayState(val) {
+      this.$emit("state", val);
+      this.timerValue = 0;
+    },
+    answer() {
+      this.question.checked = true;
+      if (this.option == this.question.answer) {
+        this.question.correct = true;
+      }
+      this.changeOverlayState(false);
+    },
+    skip() {
+      this.question.checked = true;
+      this.changeOverlayState(false);
+    },
+    timer() {
+      let duration = this.question.duration;
+      setInterval(() => {
+        this.timerValue += 100 / (duration * 10);
+      }, 100);
+    }
+  },
+  mounted() {
+    this.timer();
+  },
+  watch: {
+    timerValue(val) {
+      if (val >= 100) {
+        this.skip();
+      }
+    }
+  }
+};
+</script>

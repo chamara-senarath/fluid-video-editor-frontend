@@ -39,7 +39,7 @@
                   <v-select
                     v-if="options.length != 0 && options[0].text != ''"
                     v-model="answer"
-                    :items="options"
+                    :items="options.filter(option => option.text)"
                     label="Correct Answer"
                     dense
                   ></v-select>
@@ -120,12 +120,16 @@ export default {
         options: this.options,
         answer: this.answer,
         duration: this.duration,
-        startTime: this.startTime
+        startTime: this.startTime,
+        correct: false,
+        checked: false
       };
       this.$emit("questionsMark", questionMark);
-      this.$refs.mcqForm.reset();
-      this.options = [];
       this.changeDialogState(false);
+      this.question = null;
+      this.options = [];
+      this.answer = null;
+      this.duration = null;
     }
   }
 };

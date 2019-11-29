@@ -86,7 +86,10 @@
             </v-btn>
           </v-layout>
         </v-layout>
-        <Questions ref="questions"></Questions> </v-stepper-content
+        <Questions
+          v-if="stepperCount == 4"
+          ref="questionMarks"
+        ></Questions> </v-stepper-content
       ><v-stepper-content step="5">
         <v-layout>
           <v-layout justify-start>
@@ -111,7 +114,6 @@ import SplashEditor from "@/components/SplashEditor";
 import ChapterMarks from "@/components/ChapterMarks";
 import Questions from "@/components/Questions";
 import Publish from "@/components/Publish";
-import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -127,7 +129,6 @@ export default {
     };
   },
   methods: {
-    ...mapGetters(["getVideoObject"]),
     clickNext(stepper) {
       if (stepper == 1) {
         let validate = this.$refs.videoUpload.validate();
@@ -148,10 +149,10 @@ export default {
         }
       }
       if (stepper == 4) {
-        // let validate = this.$refs.chapterMarks.validate();
-        // if (!validate) {
-        //   return;
-        // }
+        let validate = this.$refs.questionMarks.validate();
+        if (!validate) {
+          return;
+        }
       }
       if (this.stepperCount < 5) {
         this.stepperCount += 1;
