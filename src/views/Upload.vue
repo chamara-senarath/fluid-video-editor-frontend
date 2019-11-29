@@ -68,10 +68,7 @@
             </v-btn>
           </v-layout>
         </v-layout>
-        <ChapterMarks
-          v-if="stepperCount == 3"
-          ref="chapterMarks"
-        ></ChapterMarks>
+        <ChapterMarks v-if="stepperCount > 2" ref="chapterMarks"></ChapterMarks>
       </v-stepper-content>
       <v-stepper-content step="4">
         <v-layout>
@@ -87,7 +84,7 @@
           </v-layout>
         </v-layout>
         <Questions
-          v-if="stepperCount == 4"
+          v-if="stepperCount > 2"
           ref="questionMarks"
         ></Questions> </v-stepper-content
       ><v-stepper-content step="5">
@@ -114,7 +111,7 @@ import SplashEditor from "@/components/SplashEditor";
 import ChapterMarks from "@/components/ChapterMarks";
 import Questions from "@/components/Questions";
 import Publish from "@/components/Publish";
-
+import { mapGetters } from "vuex";
 export default {
   components: {
     VideoUpload,
@@ -129,6 +126,7 @@ export default {
     };
   },
   methods: {
+    ...mapGetters(["getVideoObject"]),
     clickNext(stepper) {
       if (stepper == 1) {
         let validate = this.$refs.videoUpload.validate();

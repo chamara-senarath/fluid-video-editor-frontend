@@ -1,6 +1,6 @@
 /* eslint no-use-before-define: 0 */
 <template>
-  <v-sheet class="overflow-hidden" style="position: relative;">
+  <div class="overflow-hidden" style="position: relative;">
     <v-layout>
       <vue-plyr
         @timeupdate="videoTimeUpdated"
@@ -86,7 +86,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-  </v-sheet>
+  </div>
 </template>
 <script>
 import AnswerOverlay from "@/components/AnswerOverlay";

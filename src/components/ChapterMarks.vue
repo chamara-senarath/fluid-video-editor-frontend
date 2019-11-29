@@ -145,7 +145,9 @@ export default {
   },
 
   mounted() {
-    this.player = this.$refs.player.player;
+    if (this.file != null) {
+      this.player = this.$refs.player.player;
+    }
   }
 };
 </script>
