@@ -126,7 +126,9 @@ export default {
     },
     changeAnswerOverlayState(val) {
       this.answerOverlay = val;
-      this.player.play();
+      if (val == false) {
+        this.player.play();
+      }
     },
     displayQuestion(i) {
       this.player.pause();

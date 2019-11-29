@@ -59,7 +59,8 @@ export default {
   data() {
     return {
       option: null,
-      timerValue: null
+      timerValue: null,
+      interval: null
     };
   },
   methods: {
@@ -79,21 +80,30 @@ export default {
       this.changeOverlayState(false);
     },
     timer() {
+      if (this.interval != null) {
+        clearInterval(this.interval);
+      }
+      this.timerValue = 0;
       let duration = this.question.duration;
-      setInterval(() => {
+      this.interval = setInterval(() => {
         this.timerValue += 100 / (duration * 10);
       }, 100);
     }
-  },
-  mounted() {
-    this.timer();
   },
   watch: {
     timerValue(val) {
       if (val >= 100) {
         this.skip();
       }
+    },
+    question(newVal, oldVal) {
+      if (oldVal.id != newVal.id) {
+        this.timer();
+      }
     }
+  },
+  mounted() {
+    this.timer();
   }
 };
 </script>
