@@ -1,40 +1,55 @@
 <template>
   <v-overlay :absolute="true" :value="overlay">
-    <v-radio-group v-model="option">
-      <template v-slot:label>
-        <div>
-          <strong>{{ question.question }}</strong>
-        </div>
-      </template>
-      <v-radio
-        v-for="option in question.options"
-        :key="option.id"
-        :value="option.text"
-      >
-        <template v-slot:label>
-          <div>
-            <strong>{{ option.text }}</strong>
-          </div>
-        </template>
-      </v-radio>
-    </v-radio-group>
-    <v-progress-linear
-      v-if="question.duration != 0"
-      :value="timerValue"
-    ></v-progress-linear>
+    <v-card min-width="200">
+      <v-card-text>
+        <v-layout column justify-center>
+          <v-layout column justify-center>
+            <v-radio-group v-model="option">
+              <template v-slot:label>
+                <div>
+                  {{ question.question }}
+                </div>
+              </template>
+              <v-radio
+                v-for="option in question.options"
+                :key="option.id"
+                :value="option.text"
+              >
+                <template v-slot:label>
+                  <div>
+                    <strong>{{ option.text }}</strong>
+                  </div>
+                </template>
+              </v-radio>
+            </v-radio-group>
+            <v-progress-linear
+              v-if="question.duration != 0"
+              :value="timerValue"
+            ></v-progress-linear>
+          </v-layout>
 
-    <v-layout row>
-      <v-flex>
-        <v-btn color="success" @click="answer">
-          Answer
-        </v-btn>
-      </v-flex>
-      <v-flex>
-        <v-btn color="success" @click="skip">
-          Skip
-        </v-btn>
-      </v-flex>
-    </v-layout>
+          <v-layout mt-4 column>
+            <v-layout>
+              <v-btn block small color="success" @click="answer">
+                Answer
+              </v-btn>
+            </v-layout>
+
+            <v-layout mt-2>
+              <v-btn
+                block
+                small
+                v-if="question.duration == 0"
+                color="info"
+                @click="skip"
+              >
+                Skip
+              </v-btn>
+            </v-layout>
+          </v-layout>
+        </v-layout>
+      </v-card-text>
+    </v-card>
   </v-overlay>
 </template>
 
