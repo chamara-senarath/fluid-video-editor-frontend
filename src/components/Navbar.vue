@@ -1,5 +1,5 @@
 <template>
-  <nav>
+  <nav v-if="$route.name != 'video'">
     <v-app-bar color="blue darken-3" app dark>
       <v-app-bar-nav-icon
         v-if="isLogged"

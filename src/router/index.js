@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Upload from "../views/Upload.vue";
 import Search from "../views/Search.vue";
+import Video from "../views/Video.vue";
 
 Vue.use(VueRouter);
 
@@ -15,6 +16,11 @@ const routes = [
     path: "/upload",
     name: "upload",
     component: Upload
+  },
+  {
+    path: "/video",
+    name: "video",
+    component: Video
   }
 ];
 

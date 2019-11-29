@@ -16,7 +16,7 @@
           }"
         ></Player>
       </v-layout>
-      <v-layout column align-center justify-center>
+      <v-layout mt-3 column align-center justify-center>
         <v-btn dark color="blue darken-3" @click="downloadEmbedCode"
           >Download Embed Code <v-icon right>fa fa-download</v-icon></v-btn
         >

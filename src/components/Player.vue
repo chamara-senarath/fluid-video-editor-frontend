@@ -1,4 +1,3 @@
-/* eslint no-use-before-define: 0 */
 <template>
   <div class="overflow-hidden" style="position: relative;">
     <v-layout>
