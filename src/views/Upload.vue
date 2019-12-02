@@ -32,12 +32,14 @@
 
     <v-stepper-items>
       <v-stepper-content step="1">
-        <v-layout justify-end>
-          <v-btn depressed fab small color="primary" @click="clickNext(1)">
-            <v-icon>fa fa-angle-right</v-icon>
-          </v-btn>
-        </v-layout>
-        <VideoUpload ref="videoUpload"></VideoUpload>
+        <VideoUpload
+          @uploaded="
+            val => {
+              val == true ? (stepperCount += 1) : (stepperCount = 0);
+            }
+          "
+          ref="videoUpload"
+        ></VideoUpload>
       </v-stepper-content>
 
       <v-stepper-content step="2">
@@ -156,6 +158,7 @@ export default {
         this.stepperCount += 1;
       }
     },
+
     clickBack() {
       if (this.stepperCount > 0) {
         this.stepperCount -= 1;

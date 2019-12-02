@@ -1,11 +1,23 @@
 <template>
   <v-container>
     <v-layout column align-center>
+      <v-snackbar color="blue darken-3" top v-model="snackbar">
+        <v-icon color="white">fa fa-check</v-icon>
+        {{ snackbarMessage }}
+        <v-btn color="yellow darken-3" text @click="snackbar = false"
+          >Close</v-btn
+        >
+      </v-snackbar>
       <v-flex>
         <v-img src="uploadFile.png" width="300"></v-img>
       </v-flex>
     </v-layout>
-
+    <v-overlay :value="overlay">
+      <v-layout column align-center>
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+        <span>Uploading...</span>
+      </v-layout>
+    </v-overlay>
     <v-form ref="form">
       <v-alert v-if="feedback" type="error">{{ feedback }}</v-alert>
       <v-file-input
@@ -36,6 +48,7 @@
 
 <script>
 import { mapMutations } from "vuex";
+import axios from "axios";
 
 export default {
   data() {
@@ -43,11 +56,12 @@ export default {
       snackbarMessage: null,
       snackbar: false,
       feedback: null,
+      overlay: false,
       video: {
         title: null,
-        file:
-          "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+        file: null
       },
+      uploaded: false,
       rules: {
         videoTitle: [
           value => (value && value.length > 0) || "Video Title can not be empty"
@@ -64,8 +78,8 @@ export default {
           },
           value =>
             !value ||
-            value.size < 2000000 * 100 || //2MB * 100
-            "Video size should be less than 200 MB!"
+            value.size < 2000000 * 512 || //2MB * 512
+            "Video size should be less than 1 GB!"
         ]
       }
     };
@@ -78,16 +92,47 @@ export default {
         file.name &&
         ["mp4", "avi"].includes(file.name.split(".")[1])
       ) {
+        this.video.title = file.name.split(".")[0];
         this.video.file = file;
       }
     },
-    clickUpload() {
+    async clickUpload() {
       if (!this.$refs.form.validate()) {
         return;
       }
+      try {
+        this.overlay = true;
+        this.uploaded = false;
+        let res = axios.post("http://10.16.1.77/:3000/video", {
+          title: this.video.title
+        });
+        const formData = new FormData();
+        formData.append("videoFile", this.video.file);
+        await axios.post("http://10.16.1.77/:3000/video/videoFile", formData);
+        let videoURL = "http://10.16.1.77/:3000/video/videoFile?id=" + res.id;
+
+        let video = {
+          title: res.title,
+          file: videoURL
+        };
+        this.setVideoObject(video);
+        this.overlay = false;
+        this.uploaded = true;
+        this.snackbarMessage = "Video Uploaded Successfully";
+        this.snackbar = true;
+        this.$emit("uploaded", true);
+      } catch (error) {
+        console.log(error);
+        this.feedback = error.response.data;
+        this.overlay = false;
+        this.uploaded = false;
+      }
     },
     validate() {
-      this.setVideoObject(this.video);
+      if (!this.uploaded) {
+        this.snackbarMessage = "Please Upload a video to continue";
+        return;
+      }
       return true; //TODO implement validation
     }
   }
