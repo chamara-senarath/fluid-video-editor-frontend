@@ -103,13 +103,20 @@ export default {
       try {
         this.overlay = true;
         this.uploaded = false;
-        let res = axios.post("http://10.16.1.77/:3000/video", {
+        let res = await axios.post("http://localhost:3000/video", {
           title: this.video.title
         });
+
         const formData = new FormData();
         formData.append("videoFile", this.video.file);
-        await axios.post("http://10.16.1.77/:3000/video/videoFile", formData);
-        let videoURL = "http://10.16.1.77/:3000/video/videoFile?id=" + res.id;
+        await axios.post("http://localhost:3000/video/videoFile", formData, {
+          params: {
+            id: res.data.id
+          }
+        });
+
+        let videoURL =
+          "http://localhost:3000/video/videoFile?id=" + res.data.id;
 
         let video = {
           title: res.title,
@@ -123,7 +130,7 @@ export default {
         this.$emit("uploaded", true);
       } catch (error) {
         console.log(error);
-        this.feedback = error.response.data;
+        this.feedback = error;
         this.overlay = false;
         this.uploaded = false;
       }
