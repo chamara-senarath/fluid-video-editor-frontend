@@ -65,14 +65,14 @@
           @click="playChapter(i)"
         >
           <v-list-item-icon>
-            <span :class="i == playingChapter ? 'red--text' : 'white--text'">{{
+            <span :class="i == playingChapter ? 'blue--text' : 'white--text'">{{
               secondToHHMMSS(item.startTime)
             }}</span>
           </v-list-item-icon>
 
           <v-list-item-content>
             <v-list-item-title
-              :class="i == playingChapter ? 'red--text' : 'white--text'"
+              :class="i == playingChapter ? 'blue--text' : 'white--text'"
             >
               <v-tooltip right>
                 <template v-slot:activator="{ on }">
