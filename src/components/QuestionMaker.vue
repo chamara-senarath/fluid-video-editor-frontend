@@ -48,6 +48,12 @@
                     dense
                   ></v-select>
                   <v-select
+                    v-model="points"
+                    :items="pointsList"
+                    label="Select Points"
+                    dense
+                  ></v-select>
+                  <v-select
                     v-model="duration"
                     :items="timeDurations"
                     label="Select Time Duration"
@@ -87,10 +93,12 @@ export default {
   data() {
     return {
       timeDurations: [0, 2, 3, 5, 10, 15],
+      pointsList: [10, 20, 50, 100, 200],
       question: null,
       options: [],
       answer: null,
       duration: null,
+      points: null,
       rules: {
         text: [
           value => (value && value.length > 0) || "This field can not be empty"
