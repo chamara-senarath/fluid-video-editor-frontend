@@ -16,6 +16,7 @@
         :overlay="answerOverlay"
         :question="currentQuestion"
       ></AnswerOverlay>
+
       <v-btn
         v-if="this.chapterList.length != 0 && !drawer"
         @click.stop="drawer = !drawer"
@@ -26,7 +27,7 @@
       >
         <v-icon left dark color="white">fa fa-list-ul</v-icon>
         <span v-if="this.chapterList.length != 0" color="primary" dark>
-          {{ title }} |
+          {{ title }} <strong class="blue--text">|</strong>
           {{ chapterList[playingChapter].text }}
         </span>
       </v-btn>
@@ -37,7 +38,7 @@
       v-model="drawer"
       absolute
       dark
-      color="rgba(0, 0, 0, 0.3)"
+      color="rgba(0, 0, 0, 0.4)"
     >
       <v-list-item v-if="user != null">
         <v-list-item-avatar>
@@ -63,22 +64,19 @@
           v-for="(item, i) in chapterList"
           :key="i"
           @click="playChapter(i)"
+          :class="i == playingChapter ? 'chapterRibbon' : 'rgba(0, 0, 0, 0.4)'"
         >
           <v-list-item-icon>
-            <span :class="i == playingChapter ? 'blue--text' : 'white--text'">{{
-              secondToHHMMSS(item.startTime)
-            }}</span>
+            <span>{{ secondToHHMMSS(item.startTime) }}</span>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title
-              :class="i == playingChapter ? 'blue--text' : 'white--text'"
-            >
+            <v-list-item-title>
               <v-tooltip right>
                 <template v-slot:activator="{ on }">
-                  <span v-on="on">{{ item.text }}</span>
+                  <strong v-on="on">{{ item.text }}</strong>
                 </template>
-                <span>{{ item.text }}</span>
+                <strong>{{ item.text }}</strong>
               </v-tooltip></v-list-item-title
             >
           </v-list-item-content>
@@ -157,3 +155,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.chapterRibbon {
+  background-color: rgba(13, 71, 161, 0.3);
+}
+</style>
