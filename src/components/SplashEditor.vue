@@ -236,7 +236,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["setSplashScreenObject"]),
+    ...mapMutations(["setSplashScreenObject", "setWatermark"]),
     create_UUID() {
       var dt = new Date().getTime();
       var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
@@ -333,6 +333,11 @@ export default {
           data: this.canvasData,
           duration: this.duration
         });
+        if (this.enableWatermark) {
+          this.setWatermark(this.logo);
+        } else {
+          this.setWatermark(null);
+        }
       });
       return true;
     }

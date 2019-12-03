@@ -13,6 +13,7 @@ export default new Vuex.Store({
       data: "null",
       duration: null
     },
+    watermark: null,
     chapterMarks: [],
     questionMarks: []
   },
@@ -28,6 +29,9 @@ export default new Vuex.Store({
     },
     getQuestionMarks: state => {
       return state.questionMarks;
+    },
+    getWatermark: state => {
+      return state.watermark;
     }
   },
   mutations: {
@@ -44,6 +48,9 @@ export default new Vuex.Store({
     },
     setQuestionMarks: (state, payload) => {
       state.questionMarks = payload;
+    },
+    setWatermark: (state, payload) => {
+      state.watermark = payload;
     }
   },
   actions: {},

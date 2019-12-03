@@ -17,6 +17,21 @@
         :question="currentQuestion"
       ></AnswerOverlay>
 
+      <v-navigation-drawer
+        v-if="this.watermark != null"
+        :v-model="true"
+        absolute
+        right
+        dark
+        color="rgba(0, 0, 0, 0)"
+      >
+        <v-list-item>
+          <v-layout pt-4 pr-4 justify-end>
+            <img :src="watermark" width="100" style="opacity:0.5" />
+          </v-layout>
+        </v-list-item>
+      </v-navigation-drawer>
+
       <v-btn
         v-if="this.chapterList.length != 0 && !drawer"
         @click.stop="drawer = !drawer"
@@ -92,7 +107,15 @@ export default {
   components: {
     AnswerOverlay
   },
-  props: ["title", "src", "thumbnail", "chapterList", "questionList", "user"],
+  props: [
+    "title",
+    "src",
+    "thumbnail",
+    "watermark",
+    "chapterList",
+    "questionList",
+    "user"
+  ],
   data: () => ({
     controlVisibility: true,
     drawer: true,

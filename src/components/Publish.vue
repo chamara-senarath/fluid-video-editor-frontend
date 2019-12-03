@@ -7,6 +7,7 @@
           :title="title"
           :src="src"
           :thumbnail="thumbnail"
+          :watermark="watermark"
           :chapterList="chapterList"
           :questionList="this.questionList"
           :user="{
@@ -38,6 +39,7 @@ export default {
       title: "",
       src: null,
       thumbnail: null,
+      watermark: null,
       chapterList: [],
       questionList: []
     };
@@ -47,7 +49,8 @@ export default {
       "getChapterMarks",
       "getSplashScreenObject",
       "getVideoObject",
-      "getQuestionMarks"
+      "getQuestionMarks",
+      "getWatermark"
     ]),
     downloadEmbedCode() {}
   },
@@ -58,6 +61,7 @@ export default {
     this.chapterList = this.getChapterMarks();
     this.questionList = this.getQuestionMarks();
     this.thumbnail = this.getSplashScreenObject().data;
+    this.watermark = this.getWatermark();
   }
 };
 </script>
