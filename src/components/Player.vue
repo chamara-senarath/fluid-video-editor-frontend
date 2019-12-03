@@ -79,7 +79,7 @@
           v-for="(item, i) in chapterList"
           :key="i"
           @click="playChapter(i)"
-          :class="i == playingChapter ? 'chapterRibbon' : 'rgba(0, 0, 0, 0.4)'"
+          :class="i == playingChapter ? 'chapterRibbon' : ''"
         >
           <v-list-item-icon>
             <span>{{ secondToHHMMSS(item.startTime) }}</span>
@@ -97,15 +97,20 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <v-layout mt-10 ml-4>
+        <QuestionGroup :questions="questionList"></QuestionGroup>
+      </v-layout>
     </v-navigation-drawer>
   </div>
 </template>
 <script>
 import AnswerOverlay from "@/components/AnswerOverlay";
+import QuestionGroup from "@/components/QuestionGroup";
 
 export default {
   components: {
-    AnswerOverlay
+    AnswerOverlay,
+    QuestionGroup
   },
   props: [
     "title",

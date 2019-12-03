@@ -60,10 +60,6 @@
                     dense
                     suffix="Seconds"
                   ></v-select>
-                  <small class="orange--text"
-                    >*leave select time duration empty if time duration for the
-                    question is not needed</small
-                  >
                 </v-layout>
               </v-form>
             </v-layout>
