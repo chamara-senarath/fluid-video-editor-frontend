@@ -5,11 +5,10 @@
     </v-layout>
     <v-layout row>
       <v-chip
-        disabled
         v-for="(question, index) in questions"
         :key="index"
         class="ma-2"
-        color="teal"
+        :color="`rgba(0,150,136,${opacity})`"
         text-color="white"
       >
         Q{{ index + 1 }}
@@ -23,6 +22,6 @@
 
 <script>
 export default {
-  props: ["questions"]
+  props: ["questions", "opacity"]
 };
 </script>

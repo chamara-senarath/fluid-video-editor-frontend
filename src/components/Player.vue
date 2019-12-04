@@ -39,7 +39,7 @@
       <v-btn
         v-if="this.chapterList.length != 0 && !drawer"
         @click.stop="drawer = !drawer"
-        color="rgba(0, 0, 0, 0.4)"
+        color="`rgba(0,0,0,${panelOpacity})`"
         depressed
         dark
         absolute
@@ -83,7 +83,11 @@
           v-for="(item, i) in chapterList"
           :key="i"
           @click="playChapter(i)"
-          :class="i == playingChapter ? 'chapterRibbon' : ''"
+          :style="
+            i == playingChapter
+              ? `background-color:rgba(13, 71, 161,${panelOpacity}`
+              : ''
+          "
         >
           <v-list-item-icon>
             <span>{{ secondToHHMMSS(item.startTime) }}</span>
@@ -102,7 +106,10 @@
         </v-list-item>
       </v-list>
       <v-layout mt-10 ml-4>
-        <QuestionGroup :questions="questionList"></QuestionGroup>
+        <QuestionGroup
+          :questions="questionList"
+          :opacity="panelOpacity"
+        ></QuestionGroup>
       </v-layout>
     </v-navigation-drawer>
   </div>
@@ -206,9 +213,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.chapterRibbon {
-  background-color: rgba(13, 71, 161, 0.3);
-}
-</style>

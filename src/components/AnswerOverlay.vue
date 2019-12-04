@@ -1,12 +1,12 @@
 <template>
   <v-overlay :absolute="true" :value="overlay">
-    <v-card>
+    <v-card color="rgba(0,0,0,0.7)">
       <v-card-text class="title white--text font-regular">
         {{ question.question }}
       </v-card-text>
       <v-card-text>
         <v-layout column justify-center>
-          <v-layout row>
+          <v-layout row justify-center>
             <v-flex
               pa-2
               xs6
