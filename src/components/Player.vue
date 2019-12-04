@@ -1,6 +1,6 @@
 <template>
   <div class="overflow-hidden" style="position: relative;">
-    <v-layout>
+    <v-layout @mousewheel="changeOpacity">
       <vue-plyr
         @timeupdate="videoTimeUpdated"
         :emit="['timeupdate']"
@@ -53,7 +53,7 @@
       v-model="drawer"
       absolute
       dark
-      color="rgba(0, 0, 0, 0.4)"
+      :color="`rgba(0,0,0,${panelOpacity})`"
     >
       <v-list-item v-if="user != null">
         <v-list-item-avatar>
@@ -123,6 +123,7 @@ export default {
   ],
   data: () => ({
     controlVisibility: true,
+    panelOpacity: 0.4,
     drawer: true,
     player: null,
     duration: null,
@@ -159,6 +160,14 @@ export default {
       this.player.pause();
       this.currentQuestion = this.questionList[i];
       this.answerOverlay = true;
+    },
+    changeOpacity(e) {
+      if (e.shiftKey && e.wheelDeltaY > 0 && this.panelOpacity <= 0.8) {
+        this.panelOpacity += 0.05;
+      }
+      if (e.shiftKey && e.wheelDeltaY < 0 && this.panelOpacity > 0.3) {
+        this.panelOpacity -= 0.05;
+      }
     }
   },
   watch: {
