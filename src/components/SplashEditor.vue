@@ -5,10 +5,13 @@
         <div ref="canvas">
           <v-card
             outlined
+            :ripple="false"
+            :hover="false"
             elevation="5"
             width="1280px"
             height="720px"
-            :color="bgColor"
+            @click.ctrl="selectedElement = 'bg'"
+            :color="backgroundColor"
           >
             <v-layout>
               <Moveable
@@ -19,9 +22,12 @@
                 @drag="handleDrag"
               >
                 <span
+                  :ref="title.id"
                   v-show="!title.edit"
                   @dblclick="title.edit = true"
+                  @click="changeTitleColor(title.id)"
                   :class="convertFontSize(title.size)"
+                  :style="`color:${title.color}`"
                   >{{ title.text }}</span
                 >
                 <v-layout
@@ -106,8 +112,8 @@
           </v-layout>
           <v-layout mb-4>
             <v-layout column>
-              <span class="caption">Background Color</span>
-              <v-color-picker v-model="bgColor"></v-color-picker>
+              <span class="caption">Color Picker</span>
+              <v-color-picker v-model="selectedColor"></v-color-picker>
             </v-layout>
           </v-layout>
           <v-layout mb-4>
@@ -189,6 +195,9 @@ export default {
     logo: null,
     enableWatermark: false,
     aspectRatio: null,
+    selectedElement: "bg",
+    backgroundColor: "white",
+
     //
     types: ["hex", "hexa", "rgba", "hsla", "hsva"],
     type: "hex",
@@ -226,7 +235,7 @@ export default {
     duration: 0
   }),
   computed: {
-    bgColor: {
+    selectedColor: {
       get() {
         return this[this.type];
       },
@@ -290,6 +299,9 @@ export default {
       }
       title.edit = false;
     },
+    changeTitleColor(id) {
+      this.selectedElement = id;
+    },
     deleteTitle(id) {
       this.titleList = this.titleList.filter(title => title.id != id);
     },
@@ -346,6 +358,17 @@ export default {
     logofile(value) {
       if (value == null) {
         this.logo = null;
+      }
+    },
+    selectedColor(value) {
+      if (this.selectedElement == "bg") {
+        this.backgroundColor = value;
+      } else {
+        for (let i = 0; i < this.titleList.length; i++) {
+          if (this.titleList[i].id == this.selectedElement) {
+            this.titleList[i].color = value;
+          }
+        }
       }
     }
   },

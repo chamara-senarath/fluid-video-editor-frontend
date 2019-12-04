@@ -1,6 +1,10 @@
 <template>
-  <div class="overflow-hidden" style="position: relative;">
-    <v-layout @mousewheel="changeOpacity">
+  <div
+    @mousewheel="changeOpacity"
+    class="overflow-hidden"
+    style="position: relative;"
+  >
+    <v-layout>
       <vue-plyr
         @timeupdate="videoTimeUpdated"
         :emit="['timeupdate']"
@@ -162,10 +166,20 @@ export default {
       this.answerOverlay = true;
     },
     changeOpacity(e) {
-      if (e.shiftKey && e.wheelDeltaY > 0 && this.panelOpacity <= 0.8) {
+      if (
+        e.shiftKey &&
+        e.wheelDeltaY > 0 &&
+        this.panelOpacity <= 0.8 &&
+        this.drawer
+      ) {
         this.panelOpacity += 0.05;
       }
-      if (e.shiftKey && e.wheelDeltaY < 0 && this.panelOpacity > 0.3) {
+      if (
+        e.shiftKey &&
+        e.wheelDeltaY < 0 &&
+        this.panelOpacity > 0.3 &&
+        this.drawer
+      ) {
         this.panelOpacity -= 0.05;
       }
     }
