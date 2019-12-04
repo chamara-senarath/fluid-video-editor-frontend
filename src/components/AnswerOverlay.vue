@@ -2,26 +2,33 @@
   <v-overlay :absolute="true" :value="overlay">
     <v-card>
       <v-card-text>
+        {{ question.question }}
+      </v-card-text>
+      <v-card-text>
         <v-layout column justify-center>
           <v-layout column justify-center>
-            <v-radio-group v-model="option">
-              <template v-slot:label>
-                <div>
-                  {{ question.question }}
-                </div>
-              </template>
-              <v-radio
-                v-for="option in question.options"
+            <v-layout row>
+              <v-flex
+                pa-2
+                md6
+                v-for="(option, index) in question.options"
                 :key="option.id"
-                :value="option.text"
               >
-                <template v-slot:label>
-                  <div>
+                <v-card
+                  :color="colors[index]"
+                  min-height="100"
+                  @click="selectedOption = option.text"
+                >
+                  <v-card-title>
                     <strong>{{ option.text }}</strong>
-                  </div>
-                </template>
-              </v-radio>
-            </v-radio-group>
+                    <v-icon v-if="selectedOption == option.text" right
+                      >fa fa-bullseye</v-icon
+                    >
+                  </v-card-title>
+                </v-card>
+              </v-flex>
+            </v-layout>
+
             <v-progress-linear
               v-if="question.duration != 0"
               :value="timerValue"
@@ -58,7 +65,17 @@ export default {
   props: ["overlay", "question"],
   data() {
     return {
-      option: null,
+      colors: [
+        "pink lighten-1",
+        "purple lighten-1",
+        "red lighten-1",
+        "blue lighten-1",
+        "indigo lighten-1",
+        "deep-purple lighten-1",
+        "teal lighten-1",
+        "cyan lighten-1"
+      ],
+      selectedOption: null,
       timerValue: null,
       interval: null
     };
@@ -70,7 +87,7 @@ export default {
     },
     answer() {
       this.question.checked = true;
-      if (this.option == this.question.answer) {
+      if (this.selectedOption == this.question.answer) {
         this.question.correct = true;
       }
       this.changeOverlayState(false);

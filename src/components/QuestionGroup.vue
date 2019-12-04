@@ -1,7 +1,7 @@
 <template>
   <v-layout column>
     <v-layout>
-      <strong class="title">Questions</strong>
+      <strong class="title white--text">Questions</strong>
     </v-layout>
     <v-layout row>
       <v-chip
