@@ -2,20 +2,38 @@
   <v-container>
     <v-layout row>
       <v-layout>
-        <Player
-          v-if="this.thumbnail != null"
-          :title="title"
-          :src="src"
-          :thumbnail="thumbnail"
-          :watermark="watermark"
-          :chapterList="chapterList"
-          :questionList="this.questionList"
-          :user="{
-            name: 'Chamara Senarath',
-            avatar:
-              'https://icon-library.net/images/avatar-icon-png/avatar-icon-png-8.jpg'
-          }"
-        ></Player>
+        <v-row justify="center">
+          <v-dialog v-model="embedDialog" persistent max-width="400">
+            <v-card>
+              <v-card-title class="headline"
+                >Your Embed Code is here!</v-card-title
+              >
+              <v-card-text>{{ embedCode }}</v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="green darken-1" text @click="embedDialog = false"
+                  >Done</v-btn
+                >
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+        <v-responsive :aspect-ratio="16 / 9">
+          <Player
+            v-if="this.thumbnail != null"
+            :title="title"
+            :src="src"
+            :thumbnail="thumbnail"
+            :watermark="watermark"
+            :chapterList="chapterList"
+            :questionList="this.questionList"
+            :user="{
+              name: 'Chamara Senarath',
+              avatar:
+                'https://icon-library.net/images/avatar-icon-png/avatar-icon-png-8.jpg'
+            }"
+          ></Player>
+        </v-responsive>
       </v-layout>
       <v-layout mt-3 column align-center justify-center>
         <v-btn dark color="blue darken-3" @click="downloadEmbedCode"
@@ -36,6 +54,8 @@ export default {
   },
   data() {
     return {
+      embedDialog: false,
+      embedCode: "<href='fdsfsdfsd'>",
       title: "",
       src: null,
       thumbnail: null,
@@ -52,7 +72,9 @@ export default {
       "getQuestionMarks",
       "getWatermark"
     ]),
-    downloadEmbedCode() {}
+    downloadEmbedCode() {
+      this.embedDialog = true;
+    }
   },
 
   mounted() {

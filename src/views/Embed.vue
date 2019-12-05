@@ -42,12 +42,13 @@ export default {
   },
 
   mounted() {
+    let vid = this.$route.params.vid;
+    this.src = "http://10.16.1.77/api/video/file?id=" + vid;
     this.title = this.getVideoObject().title;
-    this.src =
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
     this.chapterList = this.getChapterMarks();
     this.questionList = this.getQuestionMarks();
     this.thumbnail = this.getSplashScreenObject().data;
+    console.log(this.$route.params);
   }
 };
 </script>

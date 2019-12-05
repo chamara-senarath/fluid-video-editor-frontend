@@ -1,105 +1,103 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-layout row>
-      <v-flex md9 mr-10>
+      <v-flex md9 mr-10 ml-3>
         <div ref="canvas">
-          <v-card
-            outlined
-            :ripple="false"
-            :hover="false"
-            elevation="5"
-            width="1280px"
-            height="720px"
+          <v-sheet
+            style="outline-style: dotted;"
+            tile
             @click.ctrl="selectedElement = 'bg'"
             :color="backgroundColor"
           >
-            <v-layout>
-              <Moveable
-                v-for="title in titleList"
-                :key="title.id"
-                :class="title.edit ? 'fixed' : 'moveable'"
-                v-bind="moveable"
-                @drag="handleDrag"
-              >
-                <span
-                  :ref="title.id"
-                  v-show="!title.edit"
-                  @dblclick="title.edit = true"
-                  @click="changeTitleColor(title.id)"
-                  :class="convertFontSize(title.size)"
-                  :style="`color:${title.color}`"
-                  >{{ title.text }}</span
+            <v-responsive :aspect-ratio="16 / 9">
+              <v-layout>
+                <Moveable
+                  v-for="title in titleList"
+                  :key="title.id"
+                  :class="title.edit ? 'fixed' : 'moveable'"
+                  v-bind="moveable"
+                  @drag="handleDrag"
                 >
-                <v-layout
-                  row
-                  align-baseline
-                  v-show="title.edit"
-                  @mouseleave="title.edit = false"
-                >
-                  <v-flex>
-                    <v-text-field
-                      v-model="title.text"
-                      clearable
-                      autofocus
-                      outlined
-                      @focus="
-                        title.text == 'Enter your text here'
-                          ? (title.text = '')
-                          : (title.text = title.text)
-                      "
-                      @keypress.enter="changeTitle(title)"
-                    ></v-text-field>
-                  </v-flex>
+                  <span
+                    :ref="title.id"
+                    v-show="!title.edit"
+                    @dblclick="title.edit = true"
+                    @click="changeTitleColor(title.id)"
+                    :class="convertFontSize(title.size)"
+                    :style="`color:${title.color}`"
+                    >{{ title.text }}</span
+                  >
+                  <v-layout
+                    row
+                    align-baseline
+                    v-show="title.edit"
+                    @mouseleave="title.edit = false"
+                  >
+                    <v-flex>
+                      <v-text-field
+                        v-model="title.text"
+                        clearable
+                        autofocus
+                        outlined
+                        @focus="
+                          title.text == 'Enter your text here'
+                            ? (title.text = '')
+                            : (title.text = title.text)
+                        "
+                        @keypress.enter="changeTitle(title)"
+                      ></v-text-field>
+                    </v-flex>
 
-                  <v-flex>
-                    <v-menu offset-y>
-                      <template v-slot:activator="{ on }">
-                        <v-btn
-                          class="mx-2"
-                          depressed
-                          dark
-                          small
-                          color="primary"
-                          v-on="on"
-                        >
-                          <v-icon left>mdi-format-size</v-icon
-                          >{{ title.size }}</v-btn
-                        >
-                      </template>
-                      <v-list>
-                        <v-list-item
-                          v-for="(item, index) in fontSizes"
-                          :key="index"
-                          @click="title.size = item"
-                          @mouseover="title.size = item"
-                        >
-                          <v-list-item-title>{{ item }}</v-list-item-title>
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
-                  </v-flex>
-                  <v-flex>
-                    <v-btn
-                      @click="deleteTitle(title.id)"
-                      dark
-                      color="blue darken-3"
-                      class="mx-2"
-                      small
-                      ><v-icon small dark>fa fa-trash-alt</v-icon></v-btn
-                    >
-                  </v-flex>
-                </v-layout>
-              </Moveable>
-              <Moveable
-                class="moveable"
-                v-bind="moveable"
-                @drag="handleDrag"
-                v-if="logo != null"
-              >
-                <span><img class="logo" ref="logoImage" :src="logo"/></span>
-              </Moveable>
-            </v-layout>
-          </v-card>
+                    <v-flex>
+                      <v-menu offset-y>
+                        <template v-slot:activator="{ on }">
+                          <v-btn
+                            class="mx-2"
+                            depressed
+                            dark
+                            small
+                            color="primary"
+                            v-on="on"
+                          >
+                            <v-icon left>mdi-format-size</v-icon
+                            >{{ title.size }}</v-btn
+                          >
+                        </template>
+                        <v-list>
+                          <v-list-item
+                            v-for="(item, index) in fontSizes"
+                            :key="index"
+                            @click="title.size = item"
+                            @mouseover="title.size = item"
+                          >
+                            <v-list-item-title>{{ item }}</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
+                    </v-flex>
+                    <v-flex>
+                      <v-btn
+                        @click="deleteTitle(title.id)"
+                        dark
+                        color="blue darken-3"
+                        class="mx-2"
+                        small
+                        ><v-icon small dark>fa fa-trash-alt</v-icon></v-btn
+                      >
+                    </v-flex>
+                  </v-layout>
+                </Moveable>
+                <Moveable
+                  class="moveable"
+                  v-bind="moveable"
+                  @drag="handleDrag"
+                  v-if="logo != null"
+                >
+                  <span><img class="logo" ref="logoImage" :src="logo"/></span>
+                </Moveable>
+              </v-layout>
+            </v-responsive>
+          </v-sheet>
         </div>
       </v-flex>
 
@@ -332,9 +330,7 @@ export default {
     async canvasToData() {
       const canvas = this.$refs.canvas;
       const options = {
-        type: "dataURL",
-        width: 1280,
-        height: 720
+        type: "dataURL"
       };
       this.canvasData = await this.$html2canvas(canvas, options);
     },

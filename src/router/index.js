@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Upload from "../views/Upload.vue";
 import Search from "../views/Search.vue";
-import Video from "../views/Video.vue";
+import Embed from "../views/Embed.vue";
 
 Vue.use(VueRouter);
 
@@ -18,9 +18,9 @@ const routes = [
     component: Upload
   },
   {
-    path: "/video",
-    name: "video",
-    component: Video
+    path: "/embed/:vid/:uid",
+    name: "Embed",
+    component: Embed
   }
 ];
 
