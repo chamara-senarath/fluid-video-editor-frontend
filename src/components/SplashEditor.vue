@@ -27,6 +27,7 @@
                     :style="`color:${title.color}`"
                     >{{ title.text }}</span
                   >
+
                   <v-layout
                     row
                     align-baseline
@@ -313,19 +314,12 @@ export default {
       }
     },
     resizeLogo(type) {
-      // let width = this.$refs.logoImage.width;
-      // let height = this.$refs.logoImage.height;
-      // this.aspectRatio = width / height;
-      // let newWidth;
-      // let newHeight;
       if (type == "+") {
         this.$refs.logoImage.width = this.$refs.logoImage.width + 10;
       }
       if (type == "-") {
         this.$refs.logoImage.width = this.$refs.logoImage.width - 10;
       }
-      // this.$refs.logoImage.width = newHeight * this.aspectRatio;
-      // this.$refs.logoImage.height = newWidth / this.aspectRatio;
     },
     async canvasToData() {
       const canvas = this.$refs.canvas;

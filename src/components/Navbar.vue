@@ -19,40 +19,59 @@
         hide-details
       />
       <v-spacer></v-spacer>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            v-on="on"
+            color="rgba(0,0,0,0.3)"
+            small
+            fab
+            depressed
+            @click="$vuetify.theme.dark = !$vuetify.theme.dark"
+          >
+            <v-icon small>{{
+              $vuetify.theme.dark ? "fa fa-moon" : "fa fa-sun"
+            }}</v-icon>
+          </v-btn>
+        </template>
+        <span>Dark Mode Toggle</span>
+      </v-tooltip>
 
-      <v-btn
-        color="rgba(0,0,0,0.3)"
-        small
-        fab
-        depressed
-        @click="$vuetify.theme.dark = !$vuetify.theme.dark"
-      >
-        <v-icon small>{{
-          $vuetify.theme.dark ? "fa fa-moon" : "fa fa-sun"
-        }}</v-icon>
-      </v-btn>
-      <v-btn
-        color="rgba(0,0,0,0.3)"
-        fab
-        small
-        v-if="isLogged"
-        depressed
-        :to="$route.name == 'upload' ? '/' : '/upload'"
-      >
-        <v-icon small>{{
-          $route.name == "upload" ? "fa fa-search" : "fa fa-upload"
-        }}</v-icon>
-      </v-btn>
-      <v-btn
-        color="rgba(0,0,0,0.3)"
-        fab
-        small
-        v-if="isLogged"
-        depressed
-        @click="logout"
-      >
-        <v-icon small>fa fa-sign-out-alt</v-icon>
-      </v-btn>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            v-on="on"
+            color="rgba(0,0,0,0.3)"
+            fab
+            small
+            v-if="isLogged"
+            depressed
+            :to="$route.name == 'upload' ? '/' : '/upload'"
+          >
+            <v-icon small>{{
+              $route.name == "upload" ? "fa fa-search" : "fa fa-upload"
+            }}</v-icon>
+          </v-btn>
+        </template>
+        <span>{{ $route.name == "upload" ? "Search" : "Upload" }}</span>
+      </v-tooltip>
+
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            v-on="on"
+            color="rgba(0,0,0,0.3)"
+            fab
+            small
+            v-if="isLogged"
+            depressed
+            @click="logout"
+          >
+            <v-icon small>fa fa-sign-out-alt</v-icon>
+          </v-btn>
+        </template>
+        <span>Logout</span>
+      </v-tooltip>
     </v-app-bar>
 
     <v-navigation-drawer v-if="getUser" v-model="drawer" app>
