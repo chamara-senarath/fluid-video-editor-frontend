@@ -85,7 +85,7 @@
 
 <script>
 export default {
-  props: ["dialog", "startTime"],
+  props: ["dialog", "startTime", "editableQuestion"],
   data() {
     return {
       timeDurations: [0, 2, 3, 5, 10, 15],
@@ -141,14 +141,30 @@ export default {
         duration: this.duration == null ? 0 : this.duration,
         startTime: this.startTime,
         correct: false,
+        points: this.points,
         checked: false
       };
-      this.$emit("questionsMark", questionMark);
+      if (this.editableQuestion == null) {
+        this.$emit("saveQuestionsMark", questionMark); //save
+      } else {
+        questionMark = { ...questionMark, id: this.editableQuestion.id };
+        this.$emit("updateQuestionMark", questionMark);
+      }
       this.changeDialogState(false);
       this.question = null;
       this.options = [];
       this.answer = null;
       this.duration = null;
+      this.points = null;
+    }
+  },
+  mounted() {
+    if (this.editableQuestion != null) {
+      this.question = this.editableQuestion.question;
+      this.options = this.editableQuestion.options;
+      this.answer = this.editableQuestion.answer;
+      this.duration = this.editableQuestion.duration;
+      this.points = this.editableQuestion.points;
     }
   }
 };

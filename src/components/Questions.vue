@@ -1,10 +1,13 @@
 <template>
   <v-container>
     <QuestionMaker
+      v-if="this.dialogBox"
       :startTime="startTime"
       :dialog="dialogBox"
+      :editableQuestion="editableQuestion"
       @dialogStatus="changeDialogState"
-      @questionsMark="createQuestionMarks"
+      @saveQuestionsMark="createQuestionMarks"
+      @updateQuestionMark="updateQuestionMark"
     ></QuestionMaker>
     <v-layout row justify-space-around>
       <v-flex md8>
@@ -52,6 +55,17 @@
                   ><v-icon small dark>fa fa-trash-alt</v-icon></v-btn
                 >
               </v-flex>
+              <v-flex md2>
+                <v-btn
+                  @click="editQuestionMark(questionsMark.id)"
+                  dark
+                  color="red darken-3"
+                  class="mx-2"
+                  fab
+                  small
+                  ><v-icon small dark>fa fa-edit</v-icon></v-btn
+                >
+              </v-flex>
             </v-layout>
             <v-layout column align-center>
               <v-flex>
@@ -80,7 +94,8 @@ export default {
       dialogBox: false,
       player: null,
       startTime: null,
-      questionsMarks: []
+      questionsMarks: [],
+      editableQuestion: null
     };
   },
   methods: {
@@ -108,6 +123,8 @@ export default {
       return result;
     },
     addQuestionMark() {
+      this.editableQuestion = null;
+
       this.player.pause();
       this.startTime = this.player.currentTime;
       let questionMarkExist = false;
@@ -125,10 +142,28 @@ export default {
       let id = this.create_UUID();
       this.questionsMarks.push({ ...val, id });
     },
+    updateQuestionMark(val) {
+      let id = val.id;
+      for (let i = 0; i < this.questionsMarks.length; i++) {
+        if (this.questionsMarks[i].id == id) {
+          this.questionsMarks[i] = val;
+        }
+      }
+      this.editableQuestion = null;
+    },
     deleteQuestionMark(id) {
       this.questionsMarks = this.questionsMarks.filter(
         questionMark => questionMark.id != id
       );
+    },
+    editQuestionMark(id) {
+      this.player.pause();
+      this.questionsMarks.forEach(item => {
+        if (item.id == id) {
+          this.editableQuestion = item;
+        }
+      });
+      this.changeDialogState(true);
     },
     validate() {
       this.setQuestionMarks(this.questionsMarks);
