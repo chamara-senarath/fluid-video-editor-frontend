@@ -24,7 +24,9 @@
                     @dblclick="title.edit = true"
                     @click="changeTitleColor(title.id)"
                     :class="convertFontSize(title.size)"
-                    :style="`color:${title.color}`"
+                    :style="
+                      `color:${title.color};font-family:${title.font.font}`
+                    "
                     >{{ title.text }}</span
                   >
 
@@ -76,6 +78,37 @@
                         </v-list>
                       </v-menu>
                     </v-flex>
+
+                    <v-flex>
+                      <v-menu offset-y>
+                        <template v-slot:activator="{ on }">
+                          <v-btn
+                            class="mx-2"
+                            depressed
+                            dark
+                            small
+                            color="primary"
+                            v-on="on"
+                          >
+                            <v-icon left>fa fa-font</v-icon
+                            >{{ title.font.name }}</v-btn
+                          >
+                        </template>
+                        <v-list>
+                          <v-list-item
+                            v-for="(font, index) in fontFamilies"
+                            :key="index"
+                            @click="title.font = font"
+                            @mouseover="title.font = font"
+                          >
+                            <v-list-item-title>{{
+                              font.name
+                            }}</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
+                    </v-flex>
+
                     <v-flex>
                       <v-btn
                         @click="deleteTitle(title.id)"
@@ -190,6 +223,20 @@ export default {
     text: null,
     titleList: [],
     fontSizes: ["H1", "H2", "H3", "H4", "H5", "H6"],
+    fontFamilies: [
+      {
+        name: "Roboto",
+        font: "'Roboto', sans-serif;"
+      },
+      {
+        name: "Open Sans",
+        font: "'Open Sans', sans-serif;"
+      },
+      {
+        name: "Lato",
+        font: "'Lato', sans-serif;"
+      }
+    ],
     logofile: null,
     logo: null,
     enableWatermark: false,
@@ -288,6 +335,10 @@ export default {
         id: id,
         text: "Enter your text here",
         size: "H1",
+        font: {
+          name: "Open Sans",
+          font: "'Open Sans', sans-serif;"
+        },
         edit: false
       };
       this.titleList.push(title);
@@ -301,6 +352,7 @@ export default {
     changeTitleColor(id) {
       this.selectedElement = id;
     },
+    changeTitleFont() {},
     deleteTitle(id) {
       this.titleList = this.titleList.filter(title => title.id != id);
     },
@@ -368,12 +420,11 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped>
 .moveable {
   position: relative;
   text-align: center;
   color: black;
-  font-family: Arial, Helvetica, sans-serif;
   font-size: 40px;
   font-weight: 100;
   letter-spacing: 1px;
@@ -381,8 +432,10 @@ export default {
 .fixed {
   position: absolute;
 }
+
 .moveable span {
   position: absolute;
+
   white-space: nowrap;
 }
 .logo {

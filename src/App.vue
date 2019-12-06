@@ -5,7 +5,7 @@
       <router-view></router-view>
     </v-content>
     <v-footer v-if="$route.name != 'video'" color="blue darken-3" app>
-      <span class="white--text mx-auto">Last Modified Date: 2019/12/05</span>
+      <span class="white--text mx-auto">Last Modified Date: 2019/12/06</span>
     </v-footer>
   </v-app>
 </template>
