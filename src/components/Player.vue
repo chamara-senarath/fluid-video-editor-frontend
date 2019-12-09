@@ -210,7 +210,6 @@ export default {
       ) {
         if (!this.isFullscreen) {
           document.documentElement.style.overflow = "hidden";
-
           this.fullScreenWidth = window.screen.width;
           if (elem.requestFullscreen) {
             elem.requestFullscreen();
@@ -278,9 +277,12 @@ export default {
   },
   mounted() {
     this.normalScreenWidth = window.innerWidth;
-    this.$refs.player.player.elements.buttons.pip.hidden = true;
     // this.$refs.player.player.elements.buttons.fullscreen.hidden = true;
-    this.$refs.player.player.config.fullscreen.enabled = false;
+    this.$refs.player.player.config.fullscreen = {
+      enabled: false,
+      fallback: false,
+      iosNative: false
+    };
     this.player = this.$refs.player.player;
   },
   destroyed() {

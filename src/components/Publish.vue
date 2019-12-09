@@ -54,6 +54,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import axios from "axios";
 
 import Player from "@/components/Player";
 export default {
@@ -86,13 +87,21 @@ export default {
     preview() {}
   },
 
-  mounted() {
+  async mounted() {
     this.title = this.getVideoObject().title;
     this.src = this.getVideoObject().file;
     this.chapterList = this.getChapterMarks();
     this.questionList = this.getQuestionMarks();
     this.thumbnail = this.getSplashScreenObject().data;
     this.watermark = this.getWatermark();
+
+    let Obj = {
+      id: this.getVideoObject().id,
+      splashDuration: this.getSplashScreenObject().duration,
+      chapterMarks: this.chapterList,
+      questions: this.questionList
+    };
+    await axios.patch("http://10.16.1.77/api/video", Obj);
   }
 };
 </script>

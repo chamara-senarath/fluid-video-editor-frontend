@@ -6,6 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     video: {
+      id: null,
       title: null,
       file: null
     },
@@ -36,6 +37,7 @@ export default new Vuex.Store({
   },
   mutations: {
     setVideoObject: (state, payload) => {
+      state.video.id = payload.id;
       state.video.title = payload.title;
       state.video.file = payload.file;
     },

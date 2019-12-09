@@ -118,6 +118,7 @@ export default {
         let videoURL = "http://10.16.1.77/api/video/file?id=" + res.data.id;
 
         let video = {
+          id: res.data.id,
           title: res.data.title,
           file: videoURL
         };

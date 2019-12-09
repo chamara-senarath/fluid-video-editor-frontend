@@ -48,15 +48,12 @@ export default {
   mounted() {
     let vid = this.$route.params.vid;
     axios.get("http://10.16.1.77/api/video?id=" + vid).then(video => {
-      console.log(video.data);
       this.title = video.data.title;
       this.chapterList = video.data.chapterMarks;
       this.questionList = video.data.questions;
       this.src = "http://10.16.1.77/api/video/file?id=" + vid;
       this.thumbnail = null;
     });
-
-    console.log(this.$route.params);
   }
 };
 </script>
