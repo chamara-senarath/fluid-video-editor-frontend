@@ -18,6 +18,7 @@
             </v-card>
           </v-dialog>
         </v-row>
+
         <v-responsive :aspect-ratio="16 / 9">
           <Player
             v-if="this.thumbnail != null"

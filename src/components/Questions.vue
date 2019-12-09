@@ -44,7 +44,18 @@
                   readonly
                 ></v-text-field>
               </v-flex>
-              <v-flex md2>
+              <v-flex md1>
+                <v-btn
+                  @click="editQuestionMark(questionsMark.id)"
+                  dark
+                  color="yellow darken-3"
+                  class="mx-2"
+                  fab
+                  small
+                  ><v-icon small dark>fa fa-edit</v-icon></v-btn
+                >
+              </v-flex>
+              <v-flex md1>
                 <v-btn
                   @click="deleteQuestionMark(questionsMark.id)"
                   dark
@@ -53,17 +64,6 @@
                   fab
                   small
                   ><v-icon small dark>fa fa-trash-alt</v-icon></v-btn
-                >
-              </v-flex>
-              <v-flex md2>
-                <v-btn
-                  @click="editQuestionMark(questionsMark.id)"
-                  dark
-                  color="red darken-3"
-                  class="mx-2"
-                  fab
-                  small
-                  ><v-icon small dark>fa fa-edit</v-icon></v-btn
                 >
               </v-flex>
             </v-layout>

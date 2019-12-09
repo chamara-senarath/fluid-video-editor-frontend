@@ -14,6 +14,7 @@
           <source :src="src" type="video/mp4" size="720" />
         </video>
       </vue-plyr>
+
       <AnswerOverlay
         v-if="currentQuestion != null"
         @state="changeAnswerOverlayState"

@@ -53,7 +53,10 @@
                     label="Select Points"
                     dense
                   ></v-select>
+                  <v-switch v-model="isTimed" label="Timed Question">
+                  </v-switch>
                   <v-select
+                    v-if="isTimed"
                     v-model="duration"
                     :items="timeDurations"
                     label="Select Time Duration"
@@ -75,7 +78,7 @@
             color="blue darken-1"
             text
             @click="save"
-            >Save</v-btn
+            >{{ editableQuestion == null ? "Save" : "Update" }}</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -88,11 +91,12 @@ export default {
   props: ["dialog", "startTime", "editableQuestion"],
   data() {
     return {
-      timeDurations: [0, 2, 3, 5, 10, 15],
+      timeDurations: [2, 3, 5, 10, 15],
       pointsList: [10, 20, 50, 100, 200],
       question: null,
       options: [],
       answer: null,
+      isTimed: false,
       duration: null,
       points: null,
       rules: {
@@ -150,10 +154,14 @@ export default {
         questionMark = { ...questionMark, id: this.editableQuestion.id };
         this.$emit("updateQuestionMark", questionMark);
       }
+      this.exit();
+    },
+    exit() {
       this.changeDialogState(false);
       this.question = null;
       this.options = [];
       this.answer = null;
+      this.isTimed = false;
       this.duration = null;
       this.points = null;
     }
