@@ -142,7 +142,9 @@ export default {
         question: this.question,
         options: this.options,
         answer: this.answer,
-        duration: this.duration == null ? 0 : this.duration,
+        isTimed: this.isTimed,
+        duration:
+          this.duration == null || this.isTimed == false ? 0 : this.duration,
         startTime: this.startTime,
         correct: false,
         points: this.points,
@@ -171,6 +173,7 @@ export default {
       this.question = this.editableQuestion.question;
       this.options = this.editableQuestion.options;
       this.answer = this.editableQuestion.answer;
+      this.isTimed = this.editableQuestion.isTimed;
       this.duration = this.editableQuestion.duration;
       this.points = this.editableQuestion.points;
     }

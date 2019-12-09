@@ -13,26 +13,27 @@
               v-for="(option, index) in question.options"
               :key="option.id"
             >
-              <v-card
-                :color="colors[index]"
-                min-height="100"
-                max-height="150"
-                @click="selectedOption = option.text"
-              >
-                <v-card-title>
-                  <v-layout column align-end>
-                    <v-icon
-                      color="black"
-                      small
-                      v-if="selectedOption == option.text"
-                      >fa fa-bullseye</v-icon
-                    >
-                  </v-layout>
-                </v-card-title>
-                <v-card-text class="subtitle-1 white--text font-regular">
-                  <strong>{{ option.text }}</strong>
-                </v-card-text>
-              </v-card>
+              <v-responsive>
+                <v-card
+                  :color="colors[index]"
+                  min-height="30"
+                  @click="selectedOption = option.text"
+                >
+                  <v-card-title>
+                    <v-layout column align-end>
+                      <v-icon
+                        color="black"
+                        small
+                        v-if="selectedOption == option.text"
+                        >fa fa-bullseye</v-icon
+                      >
+                    </v-layout>
+                  </v-card-title>
+                  <v-card-text class="subtitle-1 white--text font-regular">
+                    <strong>{{ option.text }}</strong>
+                  </v-card-text>
+                </v-card>
+              </v-responsive>
             </v-flex>
           </v-layout>
 

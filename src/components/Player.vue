@@ -1,14 +1,19 @@
 <template>
   <div
     @mousewheel="changeOpacity"
-    class="overflow-hidden"
-    style="position: relative;"
+    @keydown.enter="toggleFullscreen"
+    @dblclick="toggleFullscreen"
   >
     <v-layout>
       <vue-plyr
         @timeupdate="videoTimeUpdated"
         :emit="['timeupdate']"
         ref="player"
+        :style="
+          `width:${
+            isFullscreen ? fullScreenWidth + 'px' : normalScreenWidth + 'px'
+          };`
+        "
       >
         <video :poster="thumbnail" size="720">
           <source :src="src" type="video/mp4" size="720" />
@@ -40,9 +45,10 @@
       <v-btn
         v-if="this.chapterList.length != 0 && !drawer"
         @click.stop="drawer = !drawer"
-        color="`rgba(0,0,0,${panelOpacity})`"
+        :color="`rgba(0,0,0,${panelOpacity})`"
         depressed
         dark
+        tile
         absolute
       >
         <v-icon left dark color="white">fa fa-list-ul</v-icon>
@@ -141,7 +147,10 @@ export default {
     duration: null,
     playingChapter: 0,
     answerOverlay: false,
-    currentQuestion: null
+    currentQuestion: null,
+    isFullscreen: false,
+    fullScreenWidth: null,
+    normalScreenWidth: null
   }),
   methods: {
     secondToHHMMSS(time) {
@@ -190,6 +199,60 @@ export default {
       ) {
         this.panelOpacity -= 0.05;
       }
+    },
+    toggleFullscreen: function() {
+      var elem = document.documentElement;
+      if (
+        document.fullscreenEnabled ||
+        document.webkitFullscreenEnabled ||
+        document.mozFullScreenEnabled ||
+        document.msFullscreenEnabled
+      ) {
+        if (!this.isFullscreen) {
+          document.documentElement.style.overflow = "hidden";
+
+          this.fullScreenWidth = window.screen.width;
+          if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+            this.isFullscreen = true;
+            return;
+          } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+            this.isFullscreen = true;
+            return;
+          } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+            this.isFullscreen = true;
+            return;
+          } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
+            this.isFullscreen = true;
+            return;
+          }
+        } else {
+          document.documentElement.style.overflow = "auto";
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+            this.isFullscreen = false;
+            return;
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+            this.isFullscreen = false;
+            return;
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+            this.isFullscreen = false;
+            return;
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+            this.isFullscreen = false;
+            return;
+          }
+        }
+      }
+    },
+    handleResize() {
+      this.fullScreenWidth = window.innerWidth;
     }
   },
   watch: {
@@ -209,8 +272,21 @@ export default {
       }
     }
   },
+  created() {
+    window.addEventListener("resize", this.handleResize);
+    this.handleResize();
+  },
   mounted() {
+    this.normalScreenWidth = window.innerWidth;
+    this.$refs.player.player.elements.buttons.pip.hidden = true;
+    // this.$refs.player.player.elements.buttons.fullscreen.hidden = true;
+    this.$refs.player.player.config.fullscreen.enabled = false;
     this.player = this.$refs.player.player;
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.handleResize);
   }
 };
 </script>
+
+<style scoped></style>

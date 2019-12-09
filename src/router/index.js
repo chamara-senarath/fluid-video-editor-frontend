@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import Upload from "../views/Upload.vue";
 import Search from "../views/Search.vue";
 import Embed from "../views/Embed.vue";
-import Test from "../components/Test.vue";
+import Test from "../views/Test.vue";
 
 Vue.use(VueRouter);
 

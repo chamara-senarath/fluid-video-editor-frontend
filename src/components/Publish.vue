@@ -37,9 +37,16 @@
         </v-responsive>
       </v-layout>
       <v-layout mt-3 column align-center justify-center>
-        <v-btn dark color="blue darken-3" @click="downloadEmbedCode"
-          >Download Embed Code <v-icon right>fa fa-download</v-icon></v-btn
-        >
+        <v-layout>
+          <v-btn dark color="green darken-3" @click="preview"
+            >Preview <v-icon right>fa fa-play-circle</v-icon></v-btn
+          >
+        </v-layout>
+        <v-layout mt-2>
+          <v-btn dark color="blue darken-3" @click="downloadEmbedCode"
+            >Download Embed Code <v-icon right>fa fa-download</v-icon></v-btn
+          >
+        </v-layout>
       </v-layout>
     </v-layout>
   </v-container>
@@ -75,7 +82,8 @@ export default {
     ]),
     downloadEmbedCode() {
       this.embedDialog = true;
-    }
+    },
+    preview() {}
   },
 
   mounted() {

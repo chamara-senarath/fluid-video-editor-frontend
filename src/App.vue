@@ -4,8 +4,8 @@
     <v-content>
       <router-view></router-view>
     </v-content>
-    <v-footer v-if="$route.name != 'video'" color="blue darken-3" app>
-      <span class="white--text mx-auto">Last Modified Date: 2019/12/06</span>
+    <v-footer v-if="$route.name != 'Embed'" color="blue darken-3" app>
+      <span class="white--text mx-auto">Last Modified Date: 2019/12/09</span>
     </v-footer>
   </v-app>
 </template>
