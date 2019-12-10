@@ -203,16 +203,21 @@ export default {
       }
     });
 
-    var watermarkBlob = await fetch(this.watermark).then(r => r.blob());
-    console.log(watermarkBlob);
     //post watermark
-    const formDataWatermark = new FormData();
-    formDataWatermark.append("watermark", watermarkBlob);
-    await axios.post(this.API_URL + "/api/video/watermark", formDataWatermark, {
-      params: {
-        id: id
-      }
-    });
+    if (this.watermark != null) {
+      var watermarkBlob = await fetch(this.watermark).then(r => r.blob());
+      const formDataWatermark = new FormData();
+      formDataWatermark.append("watermark", watermarkBlob);
+      await axios.post(
+        this.API_URL + "/api/video/watermark",
+        formDataWatermark,
+        {
+          params: {
+            id: id
+          }
+        }
+      );
+    }
   }
 };
 </script>

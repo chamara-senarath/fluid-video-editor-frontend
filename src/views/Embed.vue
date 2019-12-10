@@ -55,7 +55,12 @@ export default {
       this.questionList = video.data.questions;
       this.src = this.API_URL + "/api/video/file?id=" + vid;
       this.thumbnail = this.API_URL + "/api/video/splash?id=" + vid;
-      this.watermark = this.API_URL + "/api/video/watermark?id=" + vid;
+      axios
+        .get(this.API_URL + "/api/video/watermark?id=" + vid)
+        .then(result => {
+          if (result)
+            this.watermark = this.API_URL + "/api/video/watermark?id=" + vid;
+        });
     });
   }
 };
