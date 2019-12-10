@@ -84,10 +84,38 @@ export default {
     downloadEmbedCode() {
       this.embedDialog = true;
     },
-    preview() {}
+    preview() {},
+    b64toBlob(b64Data, contentType, sliceSize) {
+      contentType = contentType || "";
+      sliceSize = sliceSize || 512;
+
+      var byteCharacters = atob(b64Data);
+      var byteArrays = [];
+
+      for (
+        var offset = 0;
+        offset < byteCharacters.length;
+        offset += sliceSize
+      ) {
+        var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+        var byteNumbers = new Array(slice.length);
+        for (var i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        var byteArray = new Uint8Array(byteNumbers);
+
+        byteArrays.push(byteArray);
+      }
+
+      var blob = new Blob(byteArrays, { type: contentType });
+      return blob;
+    }
   },
 
   async mounted() {
+    let id = this.getVideoObject().id;
     this.title = this.getVideoObject().title;
     this.src = this.getVideoObject().file;
     this.chapterList = this.getChapterMarks();
@@ -96,12 +124,28 @@ export default {
     this.watermark = this.getWatermark();
 
     let Obj = {
-      id: this.getVideoObject().id,
+      id: id,
       splashDuration: this.getSplashScreenObject().duration,
       chapterMarks: this.chapterList,
       questions: this.questionList
     };
     await axios.patch("http://10.16.1.77/api/video", Obj);
+
+    var ImageURL = this.thumbnail;
+    var block = ImageURL.split(";");
+    var contentType = block[0].split(":")[1];
+    var realData = block[1].split(",")[1];
+
+    // Convert it to a blob to upload
+    var blob = this.b64toBlob(realData, contentType);
+
+    const formData = new FormData();
+    formData.append("splash", blob);
+    await axios.post("http://10.16.1.77/api/video/splash", formData, {
+      params: {
+        id: id
+      }
+    });
   }
 };
 </script>

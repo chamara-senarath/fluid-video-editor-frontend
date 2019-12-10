@@ -52,7 +52,7 @@ export default {
       this.chapterList = video.data.chapterMarks;
       this.questionList = video.data.questions;
       this.src = "http://10.16.1.77/api/video/file?id=" + vid;
-      this.thumbnail = null;
+      this.thumbnail = "http://10.16.1.77/api/video/splash?id=" + vid;
     });
   }
 };
