@@ -10,6 +10,16 @@ Vue.use(VueHtml2Canvas);
 Vue.use(VuePlyr);
 Vue.config.productionTip = false;
 
+Vue.mixin({
+  data: function() {
+    return {
+      get API_URL() {
+        return "http://10.16.1.77";
+      }
+    };
+  }
+});
+
 new Vue({
   router,
   store,

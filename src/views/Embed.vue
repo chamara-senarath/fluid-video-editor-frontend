@@ -49,13 +49,13 @@ export default {
 
   mounted() {
     let vid = this.$route.query.vid; //use params instead of query to use forwars
-    axios.get("http://10.16.1.77/api/video?id=" + vid).then(video => {
+    axios.get(this.API_URL + "/api/video?id=" + vid).then(video => {
       this.title = video.data.title;
       this.chapterList = video.data.chapterMarks;
       this.questionList = video.data.questions;
-      this.src = "http://10.16.1.77/api/video/file?id=" + vid;
-      this.thumbnail = "http://10.16.1.77/api/video/splash?id=" + vid;
-      this.watermark = "http://10.16.1.77/api/video/watermark?id=" + vid;
+      this.src = this.API_URL + "/api/video/file?id=" + vid;
+      this.thumbnail = this.API_URL + "/api/video/splash?id=" + vid;
+      this.watermark = this.API_URL + "/api/video/watermark?id=" + vid;
     });
   }
 };

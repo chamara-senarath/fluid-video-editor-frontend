@@ -103,19 +103,19 @@ export default {
       try {
         this.overlay = true;
         this.uploaded = false;
-        let res = await axios.post("http://10.16.1.77/api/video", {
+        let res = await axios.post(this.API_URL + "/api/video", {
           title: this.video.title
         });
 
         const formData = new FormData();
         formData.append("videoFile", this.video.file);
-        await axios.post("http://10.16.1.77/api/video/file", formData, {
+        await axios.post(this.API_URL + "/api/video/file", formData, {
           params: {
             id: res.data.id
           }
         });
 
-        let videoURL = "http://10.16.1.77/api/video/file?id=" + res.data.id;
+        let videoURL = this.API_URL + "/api/video/file?id=" + res.data.id;
 
         let video = {
           id: res.data.id,

@@ -1,72 +1,82 @@
 <template>
   <v-container>
     <v-layout row>
-      <v-layout>
-        <v-row justify="center">
-          <v-dialog v-model="embedDialog" persistent max-width="400">
-            <v-card>
-              <v-card-title class="headline"
-                >Your Embed Code is here!</v-card-title
-              >
-              <v-card-text>
-                <v-layout row>
-                  <v-layout justify-center>
-                    <v-alert
-                      v-model="showCopied"
-                      dense
-                      type="success"
-                      mode="appear-class"
-                    >
-                      Copied Embed code to Clipboard
-                    </v-alert>
-                  </v-layout>
-                  <v-layout justify-end>
-                    <v-btn text icon color="pink">
-                      <v-icon @click="copyToClipboard">fa fa-clipboard</v-icon>
-                    </v-btn>
-                  </v-layout>
-                </v-layout>
-              </v-card-text>
-              <v-card-text>{{ embedCode }}</v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="green darken-1" text @click="embedDialog = false"
-                  >Done</v-btn
-                >
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </v-row>
-
-        <v-responsive :aspect-ratio="16 / 9">
-          <Player
-            v-if="this.thumbnail != null"
-            :title="title"
-            :src="src"
-            :thumbnail="thumbnail"
-            :watermark="watermark"
-            :chapterList="chapterList"
-            :questionList="this.questionList"
-            :user="{
-              name: 'Chamara Senarath',
-              avatar:
-                'https://icon-library.net/images/avatar-icon-png/avatar-icon-png-8.jpg'
-            }"
-          ></Player>
-        </v-responsive>
-      </v-layout>
-      <v-layout mt-3 column align-center justify-center>
+      <v-flex xs8>
         <v-layout>
-          <v-btn dark color="green darken-3" @click="preview"
-            >Preview <v-icon right>fa fa-play-circle</v-icon></v-btn
-          >
+          <v-row justify="center">
+            <v-dialog v-model="embedDialog" persistent max-width="400">
+              <v-card>
+                <v-card-title class="headline"
+                  >Your Embed Code is here!</v-card-title
+                >
+                <v-card-text>
+                  <v-layout row>
+                    <v-layout justify-center>
+                      <v-alert
+                        v-model="showCopied"
+                        dense
+                        type="success"
+                        mode="appear-class"
+                      >
+                        Copied Embed code to Clipboard
+                      </v-alert>
+                    </v-layout>
+                    <v-layout justify-end>
+                      <v-btn text icon color="pink">
+                        <v-icon @click="copyToClipboard"
+                          >fa fa-clipboard</v-icon
+                        >
+                      </v-btn>
+                    </v-layout>
+                  </v-layout>
+                </v-card-text>
+                <v-card-text>{{ embedCode }}</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="green darken-1"
+                    text
+                    @click="embedDialog = false"
+                    >Done</v-btn
+                  >
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-row>
+
+          <v-responsive :aspect-ratio="16 / 9">
+            <Player
+              v-if="this.thumbnail != null"
+              :title="title"
+              :src="src"
+              :thumbnail="thumbnail"
+              :watermark="watermark"
+              :chapterList="chapterList"
+              :questionList="this.questionList"
+              :user="{
+                name: 'Chamara Senarath',
+                avatar:
+                  'https://icon-library.net/images/avatar-icon-png/avatar-icon-png-8.jpg'
+              }"
+            ></Player>
+          </v-responsive>
         </v-layout>
-        <v-layout mt-2>
-          <v-btn dark color="blue darken-3" @click="downloadEmbedCode"
-            >Download Embed Code <v-icon right>fa fa-download</v-icon></v-btn
-          >
+      </v-flex>
+
+      <v-flex xs4>
+        <v-layout column pl-3>
+          <v-layout>
+            <v-btn block dark color="green darken-3" @click="preview"
+              >Preview <v-icon right>fa fa-play-circle</v-icon></v-btn
+            >
+          </v-layout>
+          <v-layout mt-2>
+            <v-btn block dark color="blue darken-3" @click="downloadEmbedCode"
+              >Download Embed Code <v-icon right>fa fa-download</v-icon></v-btn
+            >
+          </v-layout>
         </v-layout>
-      </v-layout>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
@@ -102,7 +112,7 @@ export default {
       "getWatermark"
     ]),
     downloadEmbedCode() {
-      let url = "http://10.16.1.77/embed?vid=" + this.getVideoObject().id;
+      let url = this.API_URL + "/embed?vid=" + this.getVideoObject().id;
       let code =
         '<iframe width="300" height="200" allow="fullscreen" src="' +
         url +
@@ -112,7 +122,7 @@ export default {
     },
     preview() {
       window.open(
-        "http://10.16.1.77/embed?vid=" + this.getVideoObject().id,
+        this.API_URL + "/embed?vid=" + this.getVideoObject().id,
         "_blank"
       );
     },
@@ -181,13 +191,13 @@ export default {
       chapterMarks: this.chapterList,
       questions: this.questionList
     };
-    await axios.patch("http://10.16.1.77/api/video", Obj);
+    await axios.patch(this.API_URL + "/api/video", Obj);
 
     var thumbnailBlob = this.b64toBlob(this.thumbnail);
     //post splash
     const formDataSplash = new FormData();
     formDataSplash.append("splash", thumbnailBlob);
-    await axios.post("http://10.16.1.77/api/video/splash", formDataSplash, {
+    await axios.post(this.API_URL + "/api/video/splash", formDataSplash, {
       params: {
         id: id
       }
@@ -198,15 +208,11 @@ export default {
     //post watermark
     const formDataWatermark = new FormData();
     formDataWatermark.append("watermark", watermarkBlob);
-    await axios.post(
-      "http://10.16.1.77/api/video/watermark",
-      formDataWatermark,
-      {
-        params: {
-          id: id
-        }
+    await axios.post(this.API_URL + "/api/video/watermark", formDataWatermark, {
+      params: {
+        id: id
       }
-    );
+    });
   }
 };
 </script>
