@@ -85,7 +85,10 @@ export default {
       this.embedDialog = true;
     },
     preview() {},
-    b64toBlob(b64Data, contentType, sliceSize) {
+    b64toBlob(ImageURL, sliceSize) {
+      var block = ImageURL.split(";");
+      var contentType = block[0].split(":")[1];
+      var b64Data = block[1].split(",")[1];
       contentType = contentType || "";
       sliceSize = sliceSize || 512;
 
@@ -111,6 +114,17 @@ export default {
 
       var blob = new Blob(byteArrays, { type: contentType });
       return blob;
+    },
+    dataURLtoBlob(dataurl) {
+      var arr = dataurl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
     }
   },
 
@@ -122,7 +136,6 @@ export default {
     this.questionList = this.getQuestionMarks();
     this.thumbnail = this.getSplashScreenObject().data;
     this.watermark = this.getWatermark();
-
     let Obj = {
       id: id,
       splashDuration: this.getSplashScreenObject().duration,
@@ -131,21 +144,30 @@ export default {
     };
     await axios.patch("http://10.16.1.77/api/video", Obj);
 
-    var ImageURL = this.thumbnail;
-    var block = ImageURL.split(";");
-    var contentType = block[0].split(":")[1];
-    var realData = block[1].split(",")[1];
-
-    // Convert it to a blob to upload
-    var blob = this.b64toBlob(realData, contentType);
-
-    const formData = new FormData();
-    formData.append("splash", blob);
-    await axios.post("http://10.16.1.77/api/video/splash", formData, {
+    var thumbnailBlob = this.b64toBlob(this.thumbnail);
+    //post splash
+    const formDataSplash = new FormData();
+    formDataSplash.append("splash", thumbnailBlob);
+    await axios.post("http://10.16.1.77/api/video/splash", formDataSplash, {
       params: {
         id: id
       }
     });
+
+    var watermarkBlob = await fetch(this.watermark).then(r => r.blob());
+    console.log(watermarkBlob);
+    //post watermark
+    const formDataWatermark = new FormData();
+    formDataWatermark.append("watermark", watermarkBlob);
+    await axios.post(
+      "http://10.16.1.77/api/video/watermark",
+      formDataWatermark,
+      {
+        params: {
+          id: id
+        }
+      }
+    );
   }
 };
 </script>

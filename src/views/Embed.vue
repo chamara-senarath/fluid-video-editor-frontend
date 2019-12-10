@@ -5,6 +5,7 @@
       :title="title"
       :src="src"
       :thumbnail="thumbnail"
+      :watermark="watermark"
       :chapterList="chapterList"
       :questionList="this.questionList"
       :user="{
@@ -31,6 +32,7 @@ export default {
       title: "",
       src: null,
       thumbnail: null,
+      watermark: null,
       chapterList: [],
       questionList: []
     };
@@ -53,6 +55,7 @@ export default {
       this.questionList = video.data.questions;
       this.src = "http://10.16.1.77/api/video/file?id=" + vid;
       this.thumbnail = "http://10.16.1.77/api/video/splash?id=" + vid;
+      this.watermark = "http://10.16.1.77/api/video/watermark?id=" + vid;
     });
   }
 };
