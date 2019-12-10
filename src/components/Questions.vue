@@ -44,7 +44,7 @@
                   readonly
                 ></v-text-field>
               </v-flex>
-              <v-flex md1>
+              <v-flex md2>
                 <v-btn
                   @click="editQuestionMark(questionsMark.id)"
                   dark
@@ -55,7 +55,7 @@
                   ><v-icon small dark>fa fa-edit</v-icon></v-btn
                 >
               </v-flex>
-              <v-flex md1>
+              <v-flex md2>
                 <v-btn
                   @click="deleteQuestionMark(questionsMark.id)"
                   dark

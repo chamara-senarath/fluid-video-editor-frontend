@@ -129,7 +129,9 @@
                   @drag="handleDrag"
                   v-if="logo != null"
                 >
-                  <span><img class="logo" ref="logoImage" :src="logo"/></span>
+                  <span @mousewheel="resizeLogo"
+                    ><img class="logo" ref="logoImage" :src="logo"
+                  /></span>
                 </Moveable>
               </v-layout>
             </v-responsive>
@@ -183,27 +185,6 @@
                     hide-details
                   ></v-switch>
                 </v-form>
-              </v-layout>
-              <v-layout v-if="logo != null" mt-3>
-                <v-btn
-                  class="mx-2"
-                  fab
-                  dark
-                  small
-                  color="primary"
-                  @click="resizeLogo('+')"
-                >
-                  <v-icon dark>mdi-plus</v-icon> </v-btn
-                ><v-btn
-                  class="mx-2"
-                  fab
-                  dark
-                  small
-                  color="primary"
-                  @click="resizeLogo('-')"
-                >
-                  <v-icon dark>mdi-minus</v-icon>
-                </v-btn>
               </v-layout>
             </v-layout>
           </v-layout>
@@ -367,11 +348,11 @@ export default {
         this.logo = URL.createObjectURL(file);
       }
     },
-    resizeLogo(type) {
-      if (type == "+") {
+    resizeLogo(e) {
+      if (e.shiftKey && e.wheelDeltaY > 0) {
         this.$refs.logoImage.width = this.$refs.logoImage.width + 10;
       }
-      if (type == "-") {
+      if (e.shiftKey && e.wheelDeltaY < 0 && this.$refs.logoImage.width > 20) {
         this.$refs.logoImage.width = this.$refs.logoImage.width - 10;
       }
     },
