@@ -8,6 +8,25 @@
               <v-card-title class="headline"
                 >Your Embed Code is here!</v-card-title
               >
+              <v-card-text>
+                <v-layout row>
+                  <v-layout justify-center>
+                    <v-alert
+                      v-model="showCopied"
+                      dense
+                      type="success"
+                      mode="appear-class"
+                    >
+                      Copied Embed code to Clipboard
+                    </v-alert>
+                  </v-layout>
+                  <v-layout justify-end>
+                    <v-btn text icon color="pink">
+                      <v-icon @click="copyToClipboard">fa fa-clipboard</v-icon>
+                    </v-btn>
+                  </v-layout>
+                </v-layout>
+              </v-card-text>
               <v-card-text>{{ embedCode }}</v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -65,6 +84,7 @@ export default {
     return {
       embedDialog: false,
       embedCode: "<href='fdsfsdfsd'>",
+      showCopied: false,
       title: "",
       src: null,
       thumbnail: null,
@@ -82,9 +102,20 @@ export default {
       "getWatermark"
     ]),
     downloadEmbedCode() {
+      let url = "http://10.16.1.77/embed?vid=" + this.getVideoObject().id;
+      let code =
+        '<iframe width="300" height="200" allow="fullscreen" src="' +
+        url +
+        '"></iframe>';
+      this.embedCode = code;
       this.embedDialog = true;
     },
-    preview() {},
+    preview() {
+      window.open(
+        "http://10.16.1.77/embed?vid=" + this.getVideoObject().id,
+        "_blank"
+      );
+    },
     b64toBlob(ImageURL, sliceSize) {
       var block = ImageURL.split(";");
       var contentType = block[0].split(":")[1];
@@ -125,6 +156,14 @@ export default {
         u8arr[n] = bstr.charCodeAt(n);
       }
       return new Blob([u8arr], { type: mime });
+    },
+    async copyToClipboard() {
+      try {
+        await navigator.clipboard.writeText(this.embedCode);
+        this.showCopied = true;
+      } catch (err) {
+        console.error("Failed to copy: ", err);
+      }
     }
   },
 

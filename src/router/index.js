@@ -18,8 +18,13 @@ const routes = [
     name: "upload",
     component: Upload
   },
+  // {
+  //   path: "/embed/:vid/:uid",
+  //   name: "Embed",
+  //   component: Embed
+  // },
   {
-    path: "/embed/:vid/:uid",
+    path: "/embed",
     name: "Embed",
     component: Embed
   },

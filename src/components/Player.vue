@@ -1,5 +1,7 @@
 <template>
   <div
+    class="overflow-hidden"
+    style="position: relative;"
     @mousewheel="changeOpacity"
     @keydown.enter="toggleFullscreen"
     @dblclick="toggleFullscreen"
