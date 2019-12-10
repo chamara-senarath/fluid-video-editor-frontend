@@ -112,6 +112,7 @@ export default {
       "getWatermark"
     ]),
     downloadEmbedCode() {
+      this.showCopied = false;
       let url = this.API_URL + "/embed?vid=" + this.getVideoObject().id;
       let code =
         '<iframe width="300" height="200" allow="fullscreen" src="' +

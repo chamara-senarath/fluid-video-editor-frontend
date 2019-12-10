@@ -124,14 +124,26 @@
                   </v-layout>
                 </Moveable>
                 <Moveable
+                  v-for="(image, index) in imageList"
+                  :key="image.id"
                   class="moveable"
                   v-bind="moveable"
                   @drag="handleDrag"
-                  v-if="logo != null"
                 >
-                  <span @mousewheel="resizeLogo"
-                    ><img class="logo" ref="logoImage" :src="logo"
+                  <span @mousewheel="resizeLogo($event, index)"
+                    ><img class="logo" :ref="`image${index}`" :src="image.data"
                   /></span>
+                  <v-layout v-if="false">
+                    <v-btn
+                      block
+                      @click="deleteTitle(title.id)"
+                      dark
+                      color="red darken-3"
+                      class="mx-2"
+                      small
+                      ><v-icon small dark>fa fa-trash-alt</v-icon></v-btn
+                    >
+                  </v-layout>
                 </Moveable>
               </v-layout>
             </v-responsive>
@@ -141,10 +153,20 @@
 
       <v-flex md2>
         <v-layout column justify-center wrap>
-          <v-layout my-3>
+          <v-layout>
             <v-btn dark color="blue darken-3" block @click="addNewTitle"
               >Add New Title <v-icon right>fa fa-plus</v-icon></v-btn
             >
+          </v-layout>
+          <v-layout my-3>
+            <v-file-input
+              ref="imageSelect"
+              :rules="rules.logo"
+              accept="image/png, image/jpeg"
+              placeholder="Add New Image"
+              @change="addNewImage"
+              hidden
+            ></v-file-input>
           </v-layout>
           <v-layout mb-4>
             <v-layout column>
@@ -205,6 +227,7 @@ export default {
   data: () => ({
     text: null,
     titleList: [],
+    imageList: [],
     fontSizes: ["H1", "H2", "H3", "H4", "H5", "H6"],
     fontFamilies: [
       {
@@ -339,6 +362,23 @@ export default {
     deleteTitle(id) {
       this.titleList = this.titleList.filter(title => title.id != id);
     },
+    addNewImage(file) {
+      if (
+        file &&
+        file.name &&
+        ["jpg", "jpeg", "png"].includes(file.name.split(".")[1])
+      ) {
+        let img = {
+          id: this.create_UUID(),
+          data: URL.createObjectURL(file),
+          edit: false
+        };
+        this.imageList.push(img);
+      }
+    },
+    deleteImage(id) {
+      this.imageList = this.imageList.filter(image => image.id != id);
+    },
     selectLogo(file) {
       if (
         file &&
@@ -348,12 +388,13 @@ export default {
         this.logo = URL.createObjectURL(file);
       }
     },
-    resizeLogo(e) {
+    resizeLogo(e, id) {
+      let element = eval("this.$refs.image" + id);
       if (e.shiftKey && e.wheelDeltaY > 0) {
-        this.$refs.logoImage.width = this.$refs.logoImage.width + 10;
+        element[0].width = element[0].width + 10;
       }
-      if (e.shiftKey && e.wheelDeltaY < 0 && this.$refs.logoImage.width > 20) {
-        this.$refs.logoImage.width = this.$refs.logoImage.width - 10;
+      if (e.shiftKey && e.wheelDeltaY < 0 && element[0].width > 20) {
+        element[0].width = element[0].width - 10;
       }
     },
     async canvasToData() {

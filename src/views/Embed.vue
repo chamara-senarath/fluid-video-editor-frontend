@@ -43,8 +43,7 @@ export default {
       "getSplashScreenObject",
       "getVideoObject",
       "getQuestionMarks"
-    ]),
-    downloadEmbedCode() {}
+    ])
   },
 
   mounted() {
