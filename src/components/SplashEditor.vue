@@ -31,12 +31,11 @@
                   >
 
                   <v-layout
-                    row
-                    align-baseline
+                    column
                     v-show="title.edit"
                     @mouseleave="title.edit = false"
                   >
-                    <v-flex>
+                    <v-layout>
                       <v-text-field
                         v-model="title.text"
                         clearable
@@ -49,16 +48,17 @@
                         "
                         @keypress.enter="changeTitle(title)"
                       ></v-text-field>
-                    </v-flex>
+                    </v-layout>
 
-                    <v-flex>
-                      <v-menu offset-y>
+                    <v-layout style="z-index:10000;">
+                      <v-menu offset-x>
                         <template v-slot:activator="{ on }">
                           <v-btn
                             class="mx-2"
                             depressed
                             dark
                             small
+                            block
                             color="primary"
                             v-on="on"
                           >
@@ -77,12 +77,13 @@
                           </v-list-item>
                         </v-list>
                       </v-menu>
-                    </v-flex>
+                    </v-layout>
 
-                    <v-flex>
-                      <v-menu offset-y>
+                    <v-layout mt-1 style="z-index:10000;">
+                      <v-menu offset-x>
                         <template v-slot:activator="{ on }">
                           <v-btn
+                            block
                             class="mx-2"
                             depressed
                             dark
@@ -107,18 +108,19 @@
                           </v-list-item>
                         </v-list>
                       </v-menu>
-                    </v-flex>
+                    </v-layout>
 
-                    <v-flex>
+                    <v-layout mt-1 style="z-index:10000;">
                       <v-btn
+                        block
                         @click="deleteTitle(title.id)"
                         dark
-                        color="blue darken-3"
+                        color="red darken-3"
                         class="mx-2"
                         small
                         ><v-icon small dark>fa fa-trash-alt</v-icon></v-btn
                       >
-                    </v-flex>
+                    </v-layout>
                   </v-layout>
                 </Moveable>
                 <Moveable
