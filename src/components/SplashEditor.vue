@@ -145,6 +145,23 @@
                     >
                   </v-layout>
                 </Moveable>
+                <Moveable
+                  v-if="logo.file"
+                  class="moveable"
+                  :style="
+                    `position: absolute;top: 8px;right: ${logo.width + 10}px;`
+                  "
+                  v-bind="moveable"
+                >
+                  <span @mousewheel="resizeWatermark"
+                    ><img
+                      ref="watermark"
+                      :width="`${logo.width}`"
+                      :style="`opacity:${logo.opacity / 100}`"
+                      class="logo"
+                      :src="logo.file"
+                  /></span>
+                </Moveable>
               </v-layout>
             </v-responsive>
           </v-sheet>
@@ -159,22 +176,37 @@
             >
           </v-layout>
           <v-layout my-3>
+            <input
+              type="file"
+              ref="file"
+              style="display: none"
+              @change="addNewImage"
+            />
+            <v-btn dark color="blue darken-3" block @click="$refs.file.click()"
+              >Add new image <v-icon right>fa fa-plus</v-icon></v-btn
+            >
+          </v-layout>
+          <v-layout>
             <v-file-input
-              ref="imageSelect"
+              ref="logoSelect"
+              clearable
+              color="blue darken-3"
               :rules="rules.logo"
               accept="image/png, image/jpeg"
-              placeholder="Add New Image"
-              @change="addNewImage"
-              hidden
+              placeholder="Select a Watermark"
+              prepend-icon="mdi-camera"
+              label="Watermark (Optional)"
+              @change="selectLogo"
+              v-model="logofile"
             ></v-file-input>
           </v-layout>
-          <v-layout mb-4>
-            <v-layout column>
-              <span class="caption">Color Picker</span>
-              <v-color-picker v-model="selectedColor"></v-color-picker>
-            </v-layout>
+          <v-layout>
+            <v-slider
+              v-model="logo.opacity"
+              prepend-icon="fa fa-adjust"
+            ></v-slider>
           </v-layout>
-          <v-layout mb-4>
+          <v-layout>
             <v-text-field
               label="Duration"
               suffix="seconds"
@@ -182,32 +214,14 @@
               type="number"
             ></v-text-field>
           </v-layout>
-          <v-layout mb-10>
-            <v-layout column justify-center>
-              <v-layout>
-                <v-form>
-                  <v-file-input
-                    ref="logoSelect"
-                    clearable
-                    color="blue darken-3"
-                    :rules="rules.logo"
-                    accept="image/png, image/jpeg"
-                    placeholder="Select a Logo"
-                    prepend-icon="mdi-camera"
-                    label="Logo"
-                    @change="selectLogo"
-                    v-model="logofile"
-                  ></v-file-input>
-                  <v-switch
-                    v-if="logo != null"
-                    v-model="enableWatermark"
-                    label="Make the logo as the video watermark"
-                    value
-                    input-value="true"
-                    hide-details
-                  ></v-switch>
-                </v-form>
-              </v-layout>
+          <v-layout>
+            <v-layout column>
+              <span class="caption">Color Picker</span>
+              <v-color-picker
+                hide-mode-switch
+                hide-inputs
+                v-model="selectedColor"
+              ></v-color-picker>
             </v-layout>
           </v-layout>
         </v-layout>
@@ -243,9 +257,13 @@ export default {
         font: "'Lato', sans-serif;"
       }
     ],
+    imageFile: null,
     logofile: null,
-    logo: null,
-    enableWatermark: false,
+    logo: {
+      file: null,
+      opacity: 100,
+      width: 100
+    },
     aspectRatio: null,
     selectedElement: "bg",
     backgroundColor: "white",
@@ -362,7 +380,8 @@ export default {
     deleteTitle(id) {
       this.titleList = this.titleList.filter(title => title.id != id);
     },
-    addNewImage(file) {
+    addNewImage(event) {
+      let file = event.srcElement.files[0];
       if (
         file &&
         file.name &&
@@ -385,7 +404,7 @@ export default {
         file.name &&
         ["jpg", "jpeg", "png"].includes(file.name.split(".")[1])
       ) {
-        this.logo = URL.createObjectURL(file);
+        this.logo.file = URL.createObjectURL(file);
       }
     },
     resizeLogo(e, id) {
@@ -396,6 +415,18 @@ export default {
       if (e.shiftKey && e.wheelDeltaY < 0 && element[0].width > 20) {
         element[0].width = element[0].width - 10;
       }
+    },
+    resizeWatermark() {
+      //TODO change the logic
+      // if (e.shiftKey && e.wheelDeltaY > 0) {
+      //   this.$refs.watermark.width = this.$refs.watermark.width + 10;
+      // }
+      // if (
+      //   this.$refs.watermark.shiftKey &&
+      //   this.$refs.watermark.wheelDeltaY < 0
+      // ) {
+      //   this.$refs.watermark.width = this.$refs.watermark.width - 10;
+      // }
     },
     async canvasToData() {
       const canvas = this.$refs.canvas;
@@ -411,7 +442,7 @@ export default {
           data: this.canvasData,
           duration: this.duration
         });
-        if (this.enableWatermark) {
+        if (this.logo.file) {
           this.setWatermark(this.logo);
         } else {
           this.setWatermark(null);
@@ -423,7 +454,7 @@ export default {
   watch: {
     logofile(value) {
       if (value == null) {
-        this.logo = null;
+        this.logo.file = null;
       }
     },
     selectedColor(value) {

@@ -189,6 +189,10 @@ export default {
     let Obj = {
       id: id,
       splashDuration: this.getSplashScreenObject().duration,
+      watermark: {
+        opacity: this.watermark.opacity,
+        width: this.watermark.width
+      },
       chapterMarks: this.chapterList,
       questions: this.questionList
     };
@@ -206,7 +210,7 @@ export default {
 
     //post watermark
     if (this.watermark != null) {
-      var watermarkBlob = await fetch(this.watermark).then(r => r.blob());
+      var watermarkBlob = await fetch(this.watermark.file).then(r => r.blob());
       const formDataWatermark = new FormData();
       formDataWatermark.append("watermark", watermarkBlob);
       await axios.post(

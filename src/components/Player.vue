@@ -30,7 +30,7 @@
       ></AnswerOverlay>
 
       <v-navigation-drawer
-        v-if="this.watermark != null"
+        v-if="this.watermark.file != null"
         :v-model="true"
         absolute
         right
@@ -39,7 +39,11 @@
       >
         <v-list-item>
           <v-layout pt-4 pr-4 justify-end>
-            <img :src="watermark" width="100" style="opacity:0.5" />
+            <img
+              :src="watermark.file"
+              :width="watermark.width"
+              :style="`opacity:${watermark.opacity / 100}`"
+            />
           </v-layout>
         </v-list-item>
       </v-navigation-drawer>
