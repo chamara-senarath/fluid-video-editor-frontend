@@ -32,7 +32,11 @@ export default {
       title: "",
       src: null,
       thumbnail: null,
-      watermark: null,
+      watermark: {
+        file: null,
+        opacity: null,
+        width: null
+      },
       chapterList: [],
       questionList: []
     };
@@ -52,13 +56,17 @@ export default {
       this.title = video.data.title;
       this.chapterList = video.data.chapterMarks;
       this.questionList = video.data.questions;
+      this.watermark.opacity = video.data.watermark.opacity;
+      this.watermark.width = video.data.watermark.width;
+      console.log(this.watermark);
       this.src = this.API_URL + "/api/video/file?id=" + vid;
       this.thumbnail = this.API_URL + "/api/video/splash?id=" + vid;
       axios
         .get(this.API_URL + "/api/video/watermark?id=" + vid)
         .then(result => {
           if (result)
-            this.watermark = this.API_URL + "/api/video/watermark?id=" + vid;
+            this.watermark.file =
+              this.API_URL + "/api/video/watermark?id=" + vid;
         });
     });
   }

@@ -130,13 +130,16 @@
                   v-bind="moveable"
                   @drag="handleDrag"
                 >
-                  <span @mousewheel="resizeLogo($event, index)"
+                  <span
+                    @dblclick="image.edit = true"
+                    @click="image.edit = false"
+                    @mousewheel="resizeLogo($event, index)"
                     ><img class="logo" :ref="`image${index}`" :src="image.data"
                   /></span>
-                  <v-layout v-if="false">
+                  <v-layout v-if="image.edit == true">
                     <v-btn
-                      block
-                      @click="deleteTitle(title.id)"
+                      fab
+                      @click="deleteImage(image.id)"
                       dark
                       color="red darken-3"
                       class="mx-2"
@@ -179,6 +182,7 @@
             <input
               type="file"
               ref="file"
+              accept=".png,.jpg,.jpeg/image"
               style="display: none"
               @change="addNewImage"
             />
@@ -202,6 +206,7 @@
           </v-layout>
           <v-layout>
             <v-slider
+              v-if="this.logo.file != null"
               v-model="logo.opacity"
               prepend-icon="fa fa-adjust"
             ></v-slider>
@@ -382,6 +387,7 @@ export default {
     },
     addNewImage(event) {
       let file = event.srcElement.files[0];
+      console.log("hit");
       if (
         file &&
         file.name &&
@@ -393,6 +399,7 @@ export default {
           edit: false
         };
         this.imageList.push(img);
+        this.$refs.file.value = "";
       }
     },
     deleteImage(id) {
@@ -409,10 +416,10 @@ export default {
     },
     resizeLogo(e, id) {
       let element = eval("this.$refs.image" + id);
-      if (e.shiftKey && e.wheelDeltaY > 0) {
+      if (e.wheelDeltaY > 0) {
         element[0].width = element[0].width + 10;
       }
-      if (e.shiftKey && e.wheelDeltaY < 0 && element[0].width > 20) {
+      if (e.wheelDeltaY < 0 && element[0].width > 20) {
         element[0].width = element[0].width - 10;
       }
     },
@@ -452,6 +459,9 @@ export default {
     }
   },
   watch: {
+    imageList(val) {
+      console.log(val);
+    },
     logofile(value) {
       if (value == null) {
         this.logo.file = null;

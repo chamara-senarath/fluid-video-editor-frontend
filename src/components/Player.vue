@@ -30,7 +30,7 @@
       ></AnswerOverlay>
 
       <v-navigation-drawer
-        v-if="this.watermark.file != null"
+        v-if="this.watermark.file != null && this.duration > 0.1"
         :v-model="true"
         absolute
         right
