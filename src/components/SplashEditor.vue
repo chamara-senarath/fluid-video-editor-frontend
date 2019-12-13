@@ -23,11 +23,17 @@
                     v-show="!title.edit"
                     @dblclick="title.edit = true"
                     @click="changeTitleColor(title.id)"
-                    :class="convertFontSize(title.size)"
-                    :style="
-                      `color:${title.color};font-family:${title.font.font}`
-                    "
-                    >{{ title.text }}</span
+                    :class="convertSize(title.size)"
+                    :style="`color:${title.color}`"
+                    ><span :class="`font${title.font.id}`"
+                      >{{ title.text
+                      }}<v-icon
+                        @click="title.edit = true"
+                        right
+                        v-if="selectedElement == title.id"
+                        >fa fa-pencil-alt</v-icon
+                      ></span
+                    ></span
                   >
 
                   <v-layout
@@ -72,6 +78,11 @@
                             :key="index"
                             @click="title.size = item"
                             @mouseover="title.size = item"
+                            :style="
+                              title.size == item
+                                ? 'background-color:rgba(13, 71, 161,0.8)'
+                                : ''
+                            "
                           >
                             <v-list-item-title>{{ item }}</v-list-item-title>
                           </v-list-item>
@@ -101,6 +112,11 @@
                             :key="index"
                             @click="title.font = font"
                             @mouseover="title.font = font"
+                            :style="
+                              title.font == font
+                                ? 'background-color:rgba(13, 71, 161,0.8)'
+                                : ''
+                            "
                           >
                             <v-list-item-title>{{
                               font.name
@@ -219,6 +235,19 @@
               type="number"
             ></v-text-field>
           </v-layout>
+          <v-layout row justify-center>
+            <v-chip label class="mt-1" color="indigo" text-color="white">
+              <v-avatar left>
+                <v-icon small>fa fa-pencil-alt</v-icon>
+              </v-avatar>
+              <span
+                style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"
+              >
+                Selected Element :
+                {{ selectedElementText | truncate(20, "...") }}
+              </span>
+            </v-chip>
+          </v-layout>
           <v-layout>
             <v-layout column>
               <span class="caption">Color Picker</span>
@@ -238,28 +267,49 @@
 import Moveable from "vue-moveable";
 import { Frame } from "scenejs";
 import { mapMutations } from "vuex";
-
 export default {
   components: {
     Moveable
   },
   data: () => ({
+    fontSize: "display-2",
+    fontFamiy: "font2",
     text: null,
     titleList: [],
     imageList: [],
     fontSizes: ["H1", "H2", "H3", "H4", "H5", "H6"],
     fontFamilies: [
       {
-        name: "Roboto",
-        font: "'Roboto', sans-serif;"
+        id: 1,
+        name: "Lato"
       },
       {
-        name: "Open Sans",
-        font: "'Open Sans', sans-serif;"
+        id: 2,
+        name: "Lora"
       },
       {
-        name: "Lato",
-        font: "'Lato', sans-serif;"
+        id: 3,
+        name: "Montserrat Alternates"
+      },
+      {
+        id: 4,
+        name: "Oswald"
+      },
+      {
+        id: 5,
+        name: "Open Sans"
+      },
+      {
+        id: 6,
+        name: "PT Sans"
+      },
+      {
+        id: 7,
+        name: "Raleway"
+      },
+      {
+        id: 8,
+        name: "Slabo 27px"
       }
     ],
     imageFile: null,
@@ -317,6 +367,20 @@ export default {
       set(v) {
         this[this.type] = v;
       }
+    },
+    selectedElementText() {
+      let text = "None";
+      if (this.selectedElement == "bg") {
+        text = "Background";
+      } else {
+        let el = this.titleList.filter(
+          title => title.id == this.selectedElement
+        );
+        if (el[0] != null) {
+          text = el[0].text;
+        }
+      }
+      return text;
     }
   },
   methods: {
@@ -342,7 +406,7 @@ export default {
     setTransform(target) {
       target.style.cssText = this.$frame.toCSS();
     },
-    convertFontSize(size) {
+    convertSize(size) {
       switch (size) {
         case "H1":
           return "display-3";
@@ -365,8 +429,8 @@ export default {
         text: "Enter your text here",
         size: "H1",
         font: {
-          name: "Open Sans",
-          font: "'Open Sans', sans-serif;"
+          id: 1,
+          name: "Open Sans"
         },
         edit: false
       };
@@ -381,7 +445,6 @@ export default {
     changeTitleColor(id) {
       this.selectedElement = id;
     },
-    changeTitleFont() {},
     deleteTitle(id) {
       this.titleList = this.titleList.filter(title => title.id != id);
     },
@@ -416,10 +479,10 @@ export default {
     },
     resizeLogo(e, id) {
       let element = eval("this.$refs.image" + id);
-      if (e.wheelDeltaY > 0) {
+      if (e.shiftKey && e.wheelDeltaY > 0) {
         element[0].width = element[0].width + 10;
       }
-      if (e.wheelDeltaY < 0 && element[0].width > 20) {
+      if (e.shiftKey && e.wheelDeltaY < 0 && element[0].width > 20) {
         element[0].width = element[0].width - 10;
       }
     },
@@ -458,6 +521,7 @@ export default {
       return true;
     }
   },
+
   watch: {
     imageList(val) {
       console.log(val);
@@ -486,6 +550,33 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css?family=Lato|Lora|Montserrat+Alternates|Open+Sans|Oswald|PT+Sans|Raleway|Slabo+27px&display=swap");
+
+.font1 {
+  font-family: "Lato", sans-serif;
+}
+.font2 {
+  font-family: "Lora", serif;
+}
+.font3 {
+  font-family: "Montserrat Alternates", sans-serif;
+}
+.font4 {
+  font-family: "Oswald", sans-serif;
+}
+.font5 {
+  font-family: "Open Sans", sans-serif;
+}
+.font6 {
+  font-family: "PT Sans", sans-serif;
+}
+.font7 {
+  font-family: "Raleway", sans-serif;
+}
+.font8 {
+  font-family: "Slabo 27px", serif;
+}
+
 .moveable {
   position: relative;
   text-align: center;
