@@ -260,6 +260,7 @@
               suffix="seconds"
               v-model="duration"
               type="number"
+              min="1"
             ></v-text-field>
           </v-layout>
           <v-layout row justify-center>
@@ -275,7 +276,7 @@
               </span>
             </v-chip>
           </v-layout>
-          <v-layout>
+          <v-layout mt-3>
             <v-layout column>
               <span class="caption">Color Picker</span>
               <v-color-picker

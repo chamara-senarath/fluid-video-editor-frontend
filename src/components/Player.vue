@@ -103,16 +103,20 @@
           "
         >
           <v-list-item-icon>
-            <span>{{ secondToHHMMSS(item.startTime) }}</span>
+            <span style="font-weight: 300;">{{
+              secondToHHMMSS(item.startTime)
+            }}</span>
           </v-list-item-icon>
 
           <v-list-item-content>
             <v-list-item-title>
               <v-tooltip right>
                 <template v-slot:activator="{ on }">
-                  <strong v-on="on">{{ item.text }}</strong>
+                  <span style="font-weight: 300;" v-on="on">{{
+                    item.text
+                  }}</span>
                 </template>
-                <strong>{{ item.text }}</strong>
+                <span style="font-weight: 300;">{{ item.text }}</span>
               </v-tooltip></v-list-item-title
             >
           </v-list-item-content>

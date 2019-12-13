@@ -47,12 +47,14 @@
                     :rules="[v => !!v || 'Correct answer is required']"
                     dense
                   ></v-select>
-                  <v-select
+                  <v-text-field
+                    prepend-icon="fa fa-coins"
                     v-model="points"
-                    :items="pointsList"
-                    label="Select Points"
+                    type="Number"
+                    min="0"
+                    label="Enter Points"
                     dense
-                  ></v-select>
+                  ></v-text-field>
                   <v-switch v-model="isTimed" label="Timed Question">
                   </v-switch>
                   <v-select
@@ -91,7 +93,6 @@ export default {
   props: ["dialog", "startTime", "editableQuestion"],
   data() {
     return {
-      timeDurations: [2, 3, 5, 10, 15],
       pointsList: [10, 20, 50, 100, 200],
       question: null,
       options: [],
@@ -105,6 +106,15 @@ export default {
         ]
       }
     };
+  },
+  computed: {
+    timeDurations() {
+      let arr = [];
+      for (let i = 1; i <= 50; i++) {
+        arr.push(i);
+      }
+      return arr;
+    }
   },
   methods: {
     create_UUID() {
@@ -147,7 +157,7 @@ export default {
           this.duration == null || this.isTimed == false ? 0 : this.duration,
         startTime: this.startTime,
         correct: false,
-        points: this.points,
+        points: this.points == null ? 0 : this.points,
         checked: false
       };
       if (this.editableQuestion == null) {
