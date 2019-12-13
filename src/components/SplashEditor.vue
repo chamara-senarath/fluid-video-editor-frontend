@@ -189,24 +189,51 @@
 
       <v-flex md2>
         <v-layout column justify-center wrap>
-          <v-layout>
-            <v-btn dark color="blue darken-3" block @click="addNewTitle"
-              >Add New Title <v-icon right>fa fa-plus</v-icon></v-btn
-            >
+          <v-layout row justify-start>
+            <v-flex xs2>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    v-on="on"
+                    depressed
+                    small
+                    fab
+                    dark
+                    color="blue darken-3"
+                    @click="addNewTitle"
+                    ><v-icon small>fa fa-heading</v-icon></v-btn
+                  >
+                </template>
+                <span>Add new title</span>
+              </v-tooltip>
+            </v-flex>
+
+            <v-flex xs2>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <input
+                    type="file"
+                    ref="file"
+                    accept=".png,.jpg,.jpeg/image"
+                    style="display: none"
+                    @change="addNewImage"
+                  />
+                  <v-btn
+                    v-on="on"
+                    small
+                    depressed
+                    fab
+                    dark
+                    color="blue darken-3"
+                    @click="$refs.file.click()"
+                    ><v-icon small>fa fa-image</v-icon></v-btn
+                  >
+                </template>
+                <span>Add new image</span>
+              </v-tooltip>
+            </v-flex>
           </v-layout>
-          <v-layout my-3>
-            <input
-              type="file"
-              ref="file"
-              accept=".png,.jpg,.jpeg/image"
-              style="display: none"
-              @change="addNewImage"
-            />
-            <v-btn dark color="blue darken-3" block @click="$refs.file.click()"
-              >Add new image <v-icon right>fa fa-plus</v-icon></v-btn
-            >
-          </v-layout>
-          <v-layout>
+          <v-layout mt-4>
             <v-file-input
               ref="logoSelect"
               clearable
