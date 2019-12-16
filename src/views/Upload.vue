@@ -98,7 +98,7 @@
           </v-layout>
           <v-layout justify-end>
             <v-btn depressed fab small color="primary" @click="clickNext">
-              <v-icon>fa fa-folder-plus</v-icon>
+              <v-icon small>fa fa-upload</v-icon>
             </v-btn>
           </v-layout>
         </v-layout>

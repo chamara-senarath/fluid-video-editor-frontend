@@ -8,6 +8,7 @@ import VuePlyr from "vue-plyr";
 
 Vue.use(VueHtml2Canvas);
 Vue.use(VuePlyr);
+
 Vue.config.productionTip = false;
 
 var filter = function(text, length, clamp) {

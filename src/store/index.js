@@ -17,7 +17,11 @@ export default new Vuex.Store({
     watermark: {
       file: null,
       opacity: null,
-      width: null
+      widthRatio: null,
+      position: {
+        leftRatio: null,
+        topRatio: null
+      }
     },
     chapterMarks: [],
     questionMarks: []
@@ -58,7 +62,8 @@ export default new Vuex.Store({
     setWatermark: (state, payload) => {
       state.watermark.file = payload.file;
       state.watermark.opacity = payload.opacity;
-      state.watermark.width = payload.width;
+      state.watermark.widthRatio = payload.widthRatio;
+      state.watermark.position = payload.position;
     }
   },
   actions: {},

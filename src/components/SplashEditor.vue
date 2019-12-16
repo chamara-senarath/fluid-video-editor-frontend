@@ -171,6 +171,7 @@
                     `position: absolute;top: 8px;right: ${logo.width + 10}px;`
                   "
                   v-bind="moveable"
+                  @drag="handleDrag"
                 >
                   <span @mousewheel="resizeWatermark"
                     ><img
@@ -345,7 +346,9 @@ export default {
     logo: {
       file: null,
       opacity: 100,
-      width: 100
+      width: 100,
+      widthRatio: 1,
+      position: null
     },
     aspectRatio: null,
     selectedElement: "bg",
@@ -478,7 +481,6 @@ export default {
     },
     addNewImage(event) {
       let file = event.srcElement.files[0];
-      console.log("hit");
       if (
         file &&
         file.name &&
@@ -514,17 +516,41 @@ export default {
         element[0].width = element[0].width - 10;
       }
     },
-    resizeWatermark() {
+    resizeWatermark(e) {
       //TODO change the logic
-      // if (e.shiftKey && e.wheelDeltaY > 0) {
-      //   this.$refs.watermark.width = this.$refs.watermark.width + 10;
-      // }
-      // if (
-      //   this.$refs.watermark.shiftKey &&
-      //   this.$refs.watermark.wheelDeltaY < 0
-      // ) {
-      //   this.$refs.watermark.width = this.$refs.watermark.width - 10;
-      // }
+      if (e.shiftKey && e.wheelDeltaY > 0) {
+        this.$refs.watermark.width = this.$refs.watermark.width + 10;
+      }
+      if (
+        this.$refs.watermark.shiftKey &&
+        this.$refs.watermark.wheelDeltaY < 0
+      ) {
+        this.$refs.watermark.width = this.$refs.watermark.width - 10;
+      }
+    },
+    genarateRatio() {
+      let canvasWidth = this.$refs.canvas.getBoundingClientRect().width;
+      let canvasHeight = this.$refs.canvas.getBoundingClientRect().height;
+
+      let objWidth = this.$refs.watermark.getBoundingClientRect().width;
+      let objLeft =
+        this.$refs.watermark.getBoundingClientRect().left -
+        this.$refs.canvas.getBoundingClientRect().left;
+      let objTop =
+        this.$refs.watermark.getBoundingClientRect().top -
+        this.$refs.canvas.getBoundingClientRect().top;
+
+      let leftRatio = objLeft / canvasWidth;
+      let topRatio = objTop / canvasHeight;
+      let widthRatio = objWidth / canvasWidth;
+      let position = {
+        leftRatio: leftRatio,
+        topRatio: topRatio
+      };
+      return {
+        position: position,
+        widthRatio: widthRatio
+      };
     },
     async canvasToData() {
       const canvas = this.$refs.canvas;
@@ -535,13 +561,20 @@ export default {
     },
 
     validate() {
+      let watermarkPosition = this.genarateRatio().position;
+      let watermarkWidthRatio = this.genarateRatio().widthRatio;
       this.canvasToData().then(() => {
         this.setSplashScreenObject({
           data: this.canvasData,
           duration: this.duration
         });
         if (this.logo.file) {
-          this.setWatermark(this.logo);
+          let logo = {
+            ...this.logo,
+            position: watermarkPosition,
+            widthRatio: watermarkWidthRatio
+          };
+          this.setWatermark(logo);
         } else {
           this.setWatermark(null);
         }

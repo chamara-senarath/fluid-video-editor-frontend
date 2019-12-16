@@ -186,12 +186,14 @@ export default {
     this.questionList = this.getQuestionMarks();
     this.thumbnail = this.getSplashScreenObject().data;
     this.watermark = this.getWatermark();
+    console.log(this.watermark.widthRatio, this.watermark.position);
     let Obj = {
       id: id,
       splashDuration: this.getSplashScreenObject().duration,
       watermark: {
         opacity: this.watermark.opacity,
-        width: this.watermark.width
+        widthRatio: this.watermark.widthRatio,
+        position: this.watermark.position
       },
       chapterMarks: this.chapterList,
       questions: this.questionList

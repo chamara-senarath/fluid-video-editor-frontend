@@ -5,6 +5,7 @@
     @mousewheel="changeOpacity"
     @keydown.enter="toggleFullscreen"
     @dblclick="toggleFullscreen"
+    ref="playerView"
   >
     <v-layout>
       <vue-plyr
@@ -21,7 +22,18 @@
           <source :src="src" type="video/mp4" size="720" />
         </video>
       </vue-plyr>
-
+      <div
+        v-if="this.watermark.file != null && this.duration > 0"
+        :style="
+          `position:absolute;top:${watermarkStyle.top}px;left:${watermarkStyle.left}px;`
+        "
+      >
+        <img
+          :src="watermark.file"
+          :width="watermarkStyle.width"
+          :style="`opacity:${watermark.opacity / 100}`"
+        />
+      </div>
       <AnswerOverlay
         v-if="currentQuestion != null"
         @state="changeAnswerOverlayState"
@@ -29,7 +41,7 @@
         :question="currentQuestion"
       ></AnswerOverlay>
 
-      <v-navigation-drawer
+      <!-- <v-navigation-drawer
         v-if="this.watermark.file != null && this.duration > 0.1"
         :v-model="true"
         absolute
@@ -46,7 +58,7 @@
             />
           </v-layout>
         </v-list-item>
-      </v-navigation-drawer>
+      </v-navigation-drawer> -->
 
       <v-btn
         v-if="this.chapterList.length != 0 && !drawer"
@@ -72,12 +84,12 @@
       dark
       :color="`rgba(0,0,0,${panelOpacity})`"
     >
-      <v-list-item v-if="user != null">
+      <v-list-item>
         <v-list-item-avatar>
           <v-img :src="user.avatar"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-content>
+        <v-list-item-content v-if="user != null">
           <v-list-item-title>{{ user.name }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -152,6 +164,7 @@ export default {
   data: () => ({
     controlVisibility: true,
     panelOpacity: 0.4,
+    watermarkStyle: null,
     drawer: true,
     player: null,
     duration: null,
@@ -168,6 +181,18 @@ export default {
       date.setSeconds(time);
       var result = date.toISOString().substr(11, 8);
       return result;
+    },
+    genarateWatermarkStyle({ leftRatio, topRatio }, widthRatio) {
+      let playerWidth = this.$refs.playerView.getBoundingClientRect().width;
+      let playerHeight = this.$refs.playerView.getBoundingClientRect().height;
+      let left = playerWidth * leftRatio;
+      let top = playerHeight * topRatio;
+      let width = playerWidth * widthRatio;
+      return {
+        left: left,
+        top: top,
+        width: width
+      };
     },
     playChapter(index) {
       this.player.currentTime = this.chapterList[index].startTime;
@@ -266,6 +291,12 @@ export default {
   },
   watch: {
     duration(value) {
+      if (value > 0 && this.watermarkStyle == null) {
+        this.watermarkStyle = this.genarateWatermarkStyle(
+          this.watermark.position,
+          this.watermark.widthRatio
+        );
+      }
       for (let i = 0; i < this.chapterList.length; i++) {
         if (value >= this.chapterList[i].startTime) {
           this.playingChapter = i;
@@ -296,6 +327,7 @@ export default {
     this.player = this.$refs.player.player;
   },
   destroyed() {
+    this.watermarkStyle = null;
     window.removeEventListener("resize", this.handleResize);
   }
 };
