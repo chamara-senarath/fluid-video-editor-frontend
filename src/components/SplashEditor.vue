@@ -12,31 +12,34 @@
             <v-responsive :aspect-ratio="16 / 9">
               <v-layout>
                 <Moveable
-                  v-for="title in titleList"
+                  :style="`${title.align.style}`"
+                  v-for="(title, titleIndex) in titleList"
                   :key="title.id"
                   :class="title.edit ? 'fixed' : 'moveable'"
                   v-bind="moveable"
                   @drag="handleDrag"
                 >
                   <span
-                    :ref="title.id"
-                    v-show="!title.edit"
                     @dblclick="title.edit = true"
                     @click="changeTitleColor(title.id)"
                     :class="convertSize(title.size)"
-                    :style="`color:${title.color}`"
-                    ><span :class="`font${title.font.id}`"
-                      >{{ title.text
-                      }}<v-icon
-                        @click="title.edit = true"
-                        right
-                        v-if="selectedElement == title.id"
-                        >fa fa-pencil-alt</v-icon
-                      ></span
+                    :style="`color:${title.color};`"
+                    ><span
+                      :ref="`title${titleIndex}`"
+                      :style="
+                        `outline-style: ${
+                          selectedElement == title.id && title.text
+                            ? 'dotted'
+                            : 'none'
+                        };outline-color:red;`
+                      "
+                      :class="`font${title.font.id}`"
+                      >{{ title.text }}</span
                     ></span
                   >
 
                   <v-layout
+                    mt-3
                     column
                     v-show="title.edit"
                     @mouseleave="title.edit = false"
@@ -121,6 +124,39 @@
                             <v-list-item-title>{{
                               font.name
                             }}</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
+                    </v-layout>
+
+                    <v-layout style="z-index:10000;">
+                      <v-menu offset-x>
+                        <template v-slot:activator="{ on }">
+                          <v-btn
+                            class="mx-2"
+                            depressed
+                            dark
+                            small
+                            block
+                            color="primary"
+                            v-on="on"
+                          >
+                            <v-icon left>mdi-format-size</v-icon
+                            >{{ title.align.value }}</v-btn
+                          >
+                        </template>
+                        <v-list>
+                          <v-list-item
+                            v-for="(item, index) in alignments"
+                            :key="index"
+                            @click="setTextAlignment(titleIndex, item)"
+                            :style="
+                              title.align.value == item
+                                ? 'background-color:rgba(13, 71, 161,0.8)'
+                                : ''
+                            "
+                          >
+                            <v-list-item-title>{{ item }}</v-list-item-title>
                           </v-list-item>
                         </v-list>
                       </v-menu>
@@ -306,6 +342,7 @@ export default {
     text: null,
     titleList: [],
     imageList: [],
+    alignments: ["left", "center", "right"],
     fontSizes: ["H1", "H2", "H3", "H4", "H5", "H6"],
     fontFamilies: [
       {
@@ -418,14 +455,13 @@ export default {
     ...mapMutations(["setSplashScreenObject", "setWatermark"]),
     create_UUID() {
       var dt = new Date().getTime();
-      var uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
-        /[xy]/g,
-        function(c) {
-          var r = (dt + Math.random() * 16) % 16 | 0;
-          dt = Math.floor(dt / 16);
-          return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
-        }
-      );
+      var uuid = "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(/[xy]/g, function(
+        c
+      ) {
+        var r = (dt + Math.random() * 16) % 16 | 0;
+        dt = Math.floor(dt / 16);
+        return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
+      });
       return uuid;
     },
 
@@ -463,9 +499,34 @@ export default {
           id: 1,
           name: "Open Sans"
         },
+        align: {
+          value: "left",
+          style: null
+        },
         edit: false
       };
       this.titleList.push(title);
+    },
+    setTextAlignment(index, align) {
+      let textItem = this.titleList[index];
+      let el = eval("this.$refs.title" + index + "[0]");
+      let elWidth = el.getBoundingClientRect().width;
+      let canvasWidth = this.$refs.canvas.getBoundingClientRect().width;
+
+      if (align == "left") {
+        textItem.align.value = "left";
+        textItem.align.style = "left:0px;";
+      }
+      if (align == "right") {
+        let right = canvasWidth - elWidth;
+        textItem.align.value = "right";
+        textItem.align.style = "left:" + right + "px;";
+      }
+      if (align == "center") {
+        let center = canvasWidth / 2 - elWidth / 2;
+        textItem.align.value = "center";
+        textItem.align.style = "left:" + center + "px;";
+      }
     },
     changeTitle(title) {
       if (title.text == null) {
@@ -521,10 +582,7 @@ export default {
       if (e.shiftKey && e.wheelDeltaY > 0) {
         this.$refs.watermark.width = this.$refs.watermark.width + 10;
       }
-      if (
-        this.$refs.watermark.shiftKey &&
-        this.$refs.watermark.wheelDeltaY < 0
-      ) {
+      if (e.shiftKey && e.wheelDeltaY < 0) {
         this.$refs.watermark.width = this.$refs.watermark.width - 10;
       }
     },
@@ -561,6 +619,7 @@ export default {
     },
 
     validate() {
+      this.selectedElement = null;
       let watermarkPosition = null;
       let watermarkWidthRatio = null;
       if (this.logo.file) {
@@ -644,11 +703,7 @@ export default {
 
 .moveable {
   position: relative;
-  text-align: center;
   color: black;
-  font-size: 40px;
-  font-weight: 100;
-  letter-spacing: 1px;
 }
 .fixed {
   position: absolute;
@@ -656,7 +711,6 @@ export default {
 
 .moveable span {
   position: absolute;
-
   white-space: nowrap;
 }
 .logo {
