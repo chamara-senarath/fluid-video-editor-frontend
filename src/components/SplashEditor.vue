@@ -561,8 +561,12 @@ export default {
     },
 
     validate() {
-      let watermarkPosition = this.genarateRatio().position;
-      let watermarkWidthRatio = this.genarateRatio().widthRatio;
+      let watermarkPosition = null;
+      let watermarkWidthRatio = null;
+      if (this.logo.file) {
+        watermarkPosition = this.genarateRatio().position;
+        watermarkWidthRatio = this.genarateRatio().widthRatio;
+      }
       this.canvasToData().then(() => {
         this.setSplashScreenObject({
           data: this.canvasData,

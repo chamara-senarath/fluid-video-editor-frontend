@@ -186,7 +186,7 @@ export default {
     this.questionList = this.getQuestionMarks();
     this.thumbnail = this.getSplashScreenObject().data;
     this.watermark = this.getWatermark();
-    console.log(this.watermark.widthRatio, this.watermark.position);
+    console.log(this.watermark);
     let Obj = {
       id: id,
       splashDuration: this.getSplashScreenObject().duration,

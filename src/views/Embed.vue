@@ -32,11 +32,7 @@ export default {
       title: "",
       src: null,
       thumbnail: null,
-      watermark: {
-        file: null,
-        opacity: null,
-        width: null
-      },
+      watermark: null,
       chapterList: [],
       questionList: []
     };
@@ -56,9 +52,7 @@ export default {
       this.title = video.data.title;
       this.chapterList = video.data.chapterMarks;
       this.questionList = video.data.questions;
-      this.watermark.opacity = video.data.watermark.opacity;
-      this.watermark.width = video.data.watermark.width;
-      console.log(this.watermark);
+      this.watermark = video.data.watermark;
       this.src = this.API_URL + "/api/video/file?id=" + vid;
       this.thumbnail = this.API_URL + "/api/video/splash?id=" + vid;
       axios

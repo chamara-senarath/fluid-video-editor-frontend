@@ -10,7 +10,8 @@
     <v-layout>
       <vue-plyr
         @timeupdate="videoTimeUpdated"
-        :emit="['timeupdate']"
+        @play="onPlayVideo"
+        :emit="['timeupdate', 'play']"
         ref="player"
         :style="
           `width:${
@@ -23,7 +24,7 @@
         </video>
       </vue-plyr>
       <div
-        v-if="this.watermark.file != null && this.duration > 0"
+        v-if="this.watermarkStyle != null"
         :style="
           `position:absolute;top:${watermarkStyle.top}px;left:${watermarkStyle.left}px;`
         "
@@ -40,25 +41,6 @@
         :overlay="answerOverlay"
         :question="currentQuestion"
       ></AnswerOverlay>
-
-      <!-- <v-navigation-drawer
-        v-if="this.watermark.file != null && this.duration > 0.1"
-        :v-model="true"
-        absolute
-        right
-        dark
-        color="rgba(0, 0, 0, 0)"
-      >
-        <v-list-item>
-          <v-layout pt-4 pr-4 justify-end>
-            <img
-              :src="watermark.file"
-              :width="watermark.width"
-              :style="`opacity:${watermark.opacity / 100}`"
-            />
-          </v-layout>
-        </v-list-item>
-      </v-navigation-drawer> -->
 
       <v-btn
         v-if="this.chapterList.length != 0 && !drawer"
@@ -201,6 +183,12 @@ export default {
     videoTimeUpdated: function() {
       this.duration = this.player.currentTime;
     },
+    onPlayVideo() {
+      this.watermarkStyle = this.genarateWatermarkStyle(
+        this.watermark.position,
+        this.watermark.widthRatio
+      );
+    },
     hideControls() {
       setTimeout(() => {
         this.controlVisibility = false;
@@ -291,12 +279,6 @@ export default {
   },
   watch: {
     duration(value) {
-      if (value > 0 && this.watermarkStyle == null) {
-        this.watermarkStyle = this.genarateWatermarkStyle(
-          this.watermark.position,
-          this.watermark.widthRatio
-        );
-      }
       for (let i = 0; i < this.chapterList.length; i++) {
         if (value >= this.chapterList[i].startTime) {
           this.playingChapter = i;
@@ -327,7 +309,6 @@ export default {
     this.player = this.$refs.player.player;
   },
   destroyed() {
-    this.watermarkStyle = null;
     window.removeEventListener("resize", this.handleResize);
   }
 };

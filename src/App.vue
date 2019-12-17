@@ -5,7 +5,7 @@
       <router-view></router-view>
     </v-content>
     <v-footer v-if="$route.name != 'Embed'" color="blue darken-3" app>
-      <span class="white--text mx-auto">Last Modified Date: 2019/12/13</span>
+      <span class="white--text mx-auto">Last Modified Date: 2019/12/16</span>
     </v-footer>
   </v-app>
 </template>
