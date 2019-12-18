@@ -19,14 +19,9 @@
           };`
         "
       >
-        <video :poster="thumbnail" size="720">
-          <source
-            v-if="is_intro"
-            :src="thumbnail"
-            type="video/png"
-            size="720"
-          />
-          <source v-if="!is_intro" :src="src" type="video/mp4" size="720" />
+        <video :poster="thumbnail">
+          <source v-if="is_intro" :src="thumbnail" type="video/png" />
+          <source v-if="!is_intro" :src="src" type="video/mp4" />
         </video>
       </vue-plyr>
 

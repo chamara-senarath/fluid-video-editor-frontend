@@ -129,7 +129,7 @@
                       </v-menu>
                     </v-layout>
 
-                    <v-layout style="z-index:10000;">
+                    <v-layout mt-1 style="z-index:10000;">
                       <v-menu offset-x>
                         <template v-slot:activator="{ on }">
                           <v-btn
@@ -141,7 +141,8 @@
                             color="primary"
                             v-on="on"
                           >
-                            <v-icon left>mdi-format-size</v-icon
+                            <v-icon left
+                              >fa fa-align-{{ title.align.value }}</v-icon
                             >{{ title.align.value }}</v-btn
                           >
                         </template>
