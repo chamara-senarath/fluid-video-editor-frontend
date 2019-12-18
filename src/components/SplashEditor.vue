@@ -44,7 +44,7 @@
                     v-show="title.edit"
                     @mouseleave="title.edit = false"
                   >
-                    <v-layout>
+                    <v-layout style="z-index:10000;">
                       <v-text-field
                         v-model="title.text"
                         clearable
