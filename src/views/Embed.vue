@@ -5,6 +5,7 @@
       :title="title"
       :src="src"
       :thumbnail="thumbnail"
+      :splashDuration="splashDuration"
       :watermark="watermark"
       :chapterList="chapterList"
       :questionList="this.questionList"
@@ -32,6 +33,7 @@ export default {
       title: "",
       src: null,
       thumbnail: null,
+      splashDuration: null,
       watermark: null,
       chapterList: [],
       questionList: []
@@ -53,6 +55,7 @@ export default {
       this.chapterList = video.data.chapterMarks;
       this.questionList = video.data.questions;
       this.watermark = video.data.watermark;
+      this.splashDuration = video.data.splashDuration;
       this.src = this.API_URL + "/api/video/file?id=" + vid;
       this.thumbnail = this.API_URL + "/api/video/splash?id=" + vid;
       axios

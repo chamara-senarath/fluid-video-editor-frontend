@@ -20,9 +20,37 @@
         "
       >
         <video :poster="thumbnail" size="720">
-          <source :src="src" type="video/mp4" size="720" />
+          <source
+            v-if="is_intro"
+            :src="thumbnail"
+            type="video/png"
+            size="720"
+          />
+          <source v-if="!is_intro" :src="src" type="video/mp4" size="720" />
         </video>
       </vue-plyr>
+
+      <transition name="fade">
+        <div v-if="is_intro" style="position:absolute;right:0px">
+          <v-btn
+            transition="slide-x-transition"
+            :color="`rgba(0,0,0,${panelOpacity})`"
+            depressed
+            dark
+            tile
+            @click="
+              () => {
+                is_intro = false;
+                this.player.play();
+              }
+            "
+          >
+            <v-icon left small>fa fa-info-circle</v-icon>
+            Skip Intro
+          </v-btn>
+        </div>
+      </transition>
+
       <div
         v-if="this.watermarkStyle != null"
         :style="
@@ -138,6 +166,7 @@ export default {
     "title",
     "src",
     "thumbnail",
+    "splashDuration",
     "watermark",
     "chapterList",
     "questionList",
@@ -155,7 +184,8 @@ export default {
     currentQuestion: null,
     isFullscreen: false,
     fullScreenWidth: null,
-    normalScreenWidth: null
+    normalScreenWidth: null,
+    is_intro: true
   }),
   methods: {
     secondToHHMMSS(time) {
@@ -180,10 +210,18 @@ export default {
       this.player.currentTime = this.chapterList[index].startTime;
       this.player.pause();
     },
+    playIntro(duration) {
+      setTimeout(() => {
+        this.is_intro = false;
+      }, duration * 1000);
+    },
     videoTimeUpdated: function() {
       this.duration = this.player.currentTime;
     },
     onPlayVideo() {
+      if (this.duration < 1) {
+        this.playIntro(this.splashDuration);
+      }
       this.watermarkStyle = this.genarateWatermarkStyle(
         this.watermark.position,
         this.watermark.widthRatio
@@ -314,4 +352,12 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+</style>

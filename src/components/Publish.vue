@@ -50,6 +50,7 @@
               :title="title"
               :src="src"
               :thumbnail="thumbnail"
+              :splashDuration="splashDuration"
               :watermark="watermark"
               :chapterList="chapterList"
               :questionList="this.questionList"
@@ -98,6 +99,7 @@ export default {
       title: "",
       src: null,
       thumbnail: null,
+      splashDuration: null,
       watermark: null,
       chapterList: [],
       questionList: []
@@ -185,8 +187,8 @@ export default {
     this.chapterList = this.getChapterMarks();
     this.questionList = this.getQuestionMarks();
     this.thumbnail = this.getSplashScreenObject().data;
+    this.splashDuration = this.getSplashScreenObject().duration;
     this.watermark = this.getWatermark();
-    console.log(this.watermark);
     let Obj = {
       id: id,
       splashDuration: this.getSplashScreenObject().duration,
