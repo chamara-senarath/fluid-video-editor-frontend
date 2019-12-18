@@ -71,7 +71,7 @@
       ></AnswerOverlay>
 
       <v-btn
-        v-if="this.chapterList.length != 0 && !drawer"
+        v-if="this.chapterList.length != 0 && !drawer && !is_intro"
         @click.stop="drawer = !drawer"
         :color="`rgba(0,0,0,${panelOpacity})`"
         depressed
@@ -88,7 +88,7 @@
     </v-layout>
 
     <v-navigation-drawer
-      v-if="this.chapterList.length != 0"
+      v-if="this.chapterList.length != 0 && !is_intro"
       v-model="drawer"
       absolute
       dark
