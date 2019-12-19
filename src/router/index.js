@@ -4,7 +4,7 @@ import Upload from "../views/Upload.vue";
 import Search from "../views/Search.vue";
 import Embed from "../views/Embed.vue";
 import Test from "../views/Test.vue";
-
+import Insight from "../views/Insight.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -32,6 +32,11 @@ const routes = [
     path: "/test",
     name: "Test",
     component: Test
+  },
+  {
+    path: "/insight",
+    name: "Insight",
+    component: Insight
   }
 ];
 

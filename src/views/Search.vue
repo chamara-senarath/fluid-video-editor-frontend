@@ -8,16 +8,41 @@
         v-for="thumbnail in thumbnailList"
         :key="thumbnail.id"
       >
-        <v-card @click="gotoVideo(thumbnail.id)">
-          <v-img :src="thumbnail.img" height="194"></v-img>
-          <v-card-title>
-            {{ thumbnail.title }}
-          </v-card-title>
-          <v-progress-linear
-            :value="thumbnail.completed"
-            color="red"
-          ></v-progress-linear>
-        </v-card>
+        <v-hover v-slot:default="{ hover }">
+          <v-card>
+            <v-img :src="thumbnail.img" height="194">
+              <v-expand-transition>
+                <div
+                  v-if="hover"
+                  class=" transition-fast-in-fast-out black  v-card--reveal"
+                  style="height: 30%;"
+                >
+                  <v-container>
+                    <v-layout row>
+                      <v-flex px-1 xs6>
+                        <v-btn block :to="{ name: 'Insight' }"
+                          ><v-icon left>fa fa-chart-line</v-icon>Insights</v-btn
+                        >
+                      </v-flex>
+                      <v-flex px-1 xs6>
+                        <v-btn block
+                          ><v-icon left>fa fa-edit</v-icon>Edit</v-btn
+                        >
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                </div>
+              </v-expand-transition>
+            </v-img>
+            <v-card-title>
+              {{ thumbnail.title }}
+            </v-card-title>
+            <v-progress-linear
+              :value="thumbnail.completed"
+              color="red"
+            ></v-progress-linear>
+          </v-card>
+        </v-hover>
       </v-flex>
     </v-layout>
   </v-container>
@@ -86,3 +111,12 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.v-card--reveal {
+  bottom: 0;
+  opacity: 0.8;
+  position: absolute;
+  width: 100%;
+}
+</style>
