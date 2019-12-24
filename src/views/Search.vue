@@ -35,7 +35,7 @@
               </v-expand-transition>
             </v-img>
             <v-card-title>
-              <v-column>
+              <v-layout column>
                 {{ thumbnail.title }}
 
                 <v-row align="center" class="mx-0">
@@ -52,7 +52,7 @@
                     4.5 ({{ thumbnail.rates }})
                   </div>
                 </v-row>
-              </v-column>
+              </v-layout>
             </v-card-title>
           </v-card>
         </v-hover>

@@ -11,7 +11,7 @@
 
       <v-spacer></v-spacer>
       <v-text-field
-        v-if="$route.name != 'upload'"
+        v-if="$route.name == 'Search' || $route.name == 'User'"
         placeholder="Search..."
         single-line
         append-icon="fa fa-search"
@@ -65,6 +65,7 @@
             small
             v-if="isLogged"
             depressed
+            to="user"
             @click="logout"
           >
             <v-icon small>fa fa-sign-out-alt</v-icon>
@@ -135,7 +136,10 @@ export default {
     };
   },
   methods: {
-    logout() {}
+    logout() {
+      this.drawer = false;
+      this.isLogged = false;
+    }
   }
 };
 </script>

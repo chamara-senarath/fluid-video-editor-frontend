@@ -1,5 +1,9 @@
 <template>
   <v-container>
+    <TemplateBuilder
+      @setTemplate="setTemplate"
+      :chooseTemplate="chooseTemplate"
+    ></TemplateBuilder>
     <v-layout row>
       <v-flex md9 mr-10 ml-3>
         <div ref="canvas">
@@ -270,6 +274,23 @@
                 <span>Add new image</span>
               </v-tooltip>
             </v-flex>
+            <v-flex xs2>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    v-on="on"
+                    depressed
+                    small
+                    fab
+                    dark
+                    color="blue darken-3"
+                    @click="chooseTemplate = true"
+                    ><v-icon small>fa fa-film</v-icon></v-btn
+                  >
+                </template>
+                <span>Choose a Template</span>
+              </v-tooltip>
+            </v-flex>
           </v-layout>
           <v-layout mt-4>
             <v-file-input
@@ -331,13 +352,16 @@
 </template>
 <script>
 import Moveable from "vue-moveable";
+import TemplateBuilder from "@/components/TemplateBuilder";
 import { Frame } from "scenejs";
 import { mapMutations } from "vuex";
 export default {
   components: {
-    Moveable
+    Moveable,
+    TemplateBuilder
   },
   data: () => ({
+    chooseTemplate: false,
     fontSize: "display-2",
     fontFamiy: "font2",
     text: null,
@@ -465,7 +489,10 @@ export default {
       });
       return uuid;
     },
-
+    setTemplate(val) {
+      console.log(val);
+      this.chooseTemplate = false;
+    },
     handleDrag({ target, left, top }) {
       this.$frame.set("left", `${left}px`);
       this.$frame.set("top", `${top}px`);
