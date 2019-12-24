@@ -2,9 +2,12 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Upload from "../views/Upload.vue";
 import Search from "../views/Search.vue";
+import User from "../views/User.vue";
 import Embed from "../views/Embed.vue";
 import Test from "../views/Test.vue";
 import Insight from "../views/Insight.vue";
+import Report from "../views/Report.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -12,6 +15,11 @@ const routes = [
     path: "/",
     name: "home",
     component: Search
+  },
+  {
+    path: "/user",
+    name: "User",
+    component: User
   },
   {
     path: "/upload",
@@ -28,15 +36,21 @@ const routes = [
     name: "Embed",
     component: Embed
   },
-  {
-    path: "/test",
-    name: "Test",
-    component: Test
-  },
+
   {
     path: "/insight",
     name: "Insight",
     component: Insight
+  },
+  {
+    path: "/report",
+    name: "Report",
+    component: Report
+  },
+  {
+    path: "/test",
+    name: "Test",
+    component: Test
   }
 ];
 

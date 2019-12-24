@@ -1,5 +1,9 @@
 <template>
   <v-container fluid>
+    <EditRange
+      @saveRange="saveRange"
+      :editRangeDialog="editRangeDialog"
+    ></EditRange>
     <v-layout row>
       <v-flex v-for="(card, index) in cardList" :key="index" xs12 md3 pa-2>
         <v-card dark :color="`${card.color} lighten-1`">
@@ -29,7 +33,20 @@
       >
         <v-card color="white">
           <v-card-title class="black--text">
-            Views By {{ pieChart.title }}
+            <v-layout row justify-space-between>
+              <v-flex xs8> Views By {{ pieChart.title }} </v-flex>
+              <v-spacer></v-spacer>
+              <v-flex xs3>
+                <v-btn
+                  dark
+                  @click="editRangeDialog = true"
+                  small
+                  v-if="pieChart.title == 'Age'"
+                  color="blue"
+                  >Edit Range</v-btn
+                >
+              </v-flex>
+            </v-layout>
           </v-card-title>
           <VueApexCharts
             type="donut"
@@ -45,13 +62,15 @@
 
 <script>
 import VueApexCharts from "vue-apexcharts";
-
+import EditRange from "@/components/EditRange";
 export default {
   components: {
-    VueApexCharts
+    VueApexCharts,
+    EditRange
   },
   data() {
     return {
+      editRangeDialog: false,
       cardList: [
         {
           title: "Total Views",
@@ -102,6 +121,12 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    saveRange(val) {
+      this.editRangeDialog = false;
+      console.log(val);
+    }
   }
 };
 </script>

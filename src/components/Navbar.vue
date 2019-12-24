@@ -130,7 +130,7 @@ export default {
       items: [
         { title: "Search", icon: "fa fa-search", path: "/" },
         { title: "Upload", icon: "fa fa-upload", path: "/upload" },
-        { title: "Insight", icon: "fa fa-chart-line", path: "/insight" }
+        { title: "Insight", icon: "fa fa-chart-line", path: "/report" }
       ]
     };
   },
