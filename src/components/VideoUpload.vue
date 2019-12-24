@@ -9,7 +9,7 @@
         >
       </v-snackbar>
       <v-flex>
-        <v-img src="uploadFile.png" width="300"></v-img>
+        <v-img src="uploadFile.png" width="200"></v-img>
       </v-flex>
     </v-layout>
     <v-overlay :value="overlay">
@@ -39,6 +39,78 @@
         :rules="rules.videoTitle"
       ></v-text-field>
 
+      <v-autocomplete
+        prepend-icon="fa fa-feather-alt"
+        v-model="authors"
+        :items="people"
+        chips
+        color="blue-grey lighten-2"
+        label="Author"
+        item-text="name"
+        item-value="name"
+        :rules="rules.author"
+        multiple
+      >
+        <template v-slot:selection="data">
+          <v-chip
+            v-bind="data.attrs"
+            :input-value="data.selected"
+            close
+            @click="data.select"
+            @click:close="remove(authors, data.item)"
+          >
+            <v-avatar left>
+              <v-img :src="data.item.avatar"></v-img>
+            </v-avatar>
+            {{ data.item.name }}
+          </v-chip>
+        </template>
+        <template v-slot:item="data">
+          <template v-if="typeof data.item !== 'object'">
+            <v-list-item-content v-text="data.item"></v-list-item-content>
+          </template>
+          <template v-else>
+            <v-list-item-avatar>
+              <img :src="data.item.avatar" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title v-html="data.item.name"></v-list-item-title>
+              <v-list-item-subtitle
+                v-html="data.item.team"
+              ></v-list-item-subtitle>
+            </v-list-item-content>
+          </template>
+        </template>
+      </v-autocomplete>
+
+      <v-combobox
+        prepend-icon="fa fa-tag"
+        v-model="tags"
+        :items="tagList"
+        label="Tags"
+        multiple
+        chips
+        :rules="rules.tags"
+      >
+        <template v-slot:selection="data">
+          <v-chip
+            :key="JSON.stringify(data.item)"
+            v-bind="data.attrs"
+            :input-value="data.selected"
+            close
+            @click="data.select"
+            @click:close="data.parent.selectItem(data.item)"
+          >
+            <v-avatar
+              class="accent white--text"
+              left
+              v-text="data.item.slice(0, 1).toUpperCase()"
+            ></v-avatar>
+            {{ data.item | upperFirst }}
+          </v-chip>
+        </template>
+      </v-combobox>
+
       <v-btn @click="clickUpload" class="primary" block
         >Upload<v-icon small right>fa fa-upload</v-icon></v-btn
       >
@@ -52,7 +124,32 @@ import axios from "axios";
 
 export default {
   data() {
+    const srcs = {
+      1: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+      2: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
+      3: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
+      4: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
+      5: "https://cdn.vuetifyjs.com/images/lists/5.jpg"
+    };
     return {
+      autoUpdate: true,
+      authors: [],
+      tags: [],
+      tagList: ["C#", "Java", "Python"],
+      people: [
+        { header: "DIPS" },
+        { name: "Janaka Peiris", team: "DIPS", avatar: srcs[1] },
+        { name: "Kugathasan Shanjeeva", team: "DIPS", avatar: srcs[2] },
+        { name: "Lahiru Amarathunga", team: "DIPS", avatar: srcs[2] },
+        { name: "Anushka Eranga", team: "DIPS", avatar: srcs[2] },
+        { name: "Sajini Danusha", team: "DIPS", avatar: srcs[3] },
+        { name: "Madhavi Liyanapathirana", team: "DIPS", avatar: srcs[4] },
+        { divider: true },
+        { header: "Layup" },
+        { name: "Dino Corera", team: "Layup", avatar: srcs[1] },
+        { name: "Jane Smith ", team: "Layup", avatar: srcs[5] },
+        { name: "Sandra Williams", team: "Layup", avatar: srcs[3] }
+      ],
       snackbarMessage: null,
       snackbar: false,
       feedback: null,
@@ -66,6 +163,10 @@ export default {
         videoTitle: [
           value => (value && value.length > 0) || "Video Title can not be empty"
         ],
+        author: [
+          value => (value && value.length > 0) || "Author Name can not be empty"
+        ],
+        tags: [value => (value && value.length > 0) || "Tags can not be empty"],
         videoData: [
           value => {
             if (value && value.name) {
@@ -141,6 +242,10 @@ export default {
         return;
       }
       return true; //TODO implement validation
+    },
+    remove(arr, item) {
+      const index = arr.indexOf(item.name);
+      if (index >= 0) arr.splice(index, 1);
     }
   }
 };

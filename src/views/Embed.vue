@@ -66,6 +66,35 @@ export default {
               this.API_URL + "/api/video/watermark?id=" + vid;
         });
     });
+    let uid = "5dfb38e7f77174033c7b032b";
+    vid = "5dfaf16e7287010c140bfa3d";
+    axios
+      .get(this.API_URL + "/api/insight/user?uid=" + uid + "&vid=" + vid)
+      .then(result => {
+        console.log(result);
+        let userInsight = result.data.questions;
+        //alter objects
+        let tempQuestionList = [];
+        this.questionList.forEach(question => {
+          userInsight.forEach(questionInsight => {
+            let q = {
+              question: question.question,
+              options: question.options,
+              answer: question.answer,
+              duration: question.duration,
+              startTime: question.startTime,
+              points: question.points,
+              is_answered: questionInsight.is_answered,
+              is_skipped: questionInsight.is_skipped,
+              is_correct: questionInsight.is_correct,
+              isTimed: question.duration == null || 0 ? false : true
+            };
+            tempQuestionList.push(q);
+          });
+          this.questionList = tempQuestionList;
+          console.log(this.questionList);
+        });
+      });
   }
 };
 </script>

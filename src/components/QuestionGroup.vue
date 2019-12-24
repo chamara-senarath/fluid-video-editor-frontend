@@ -8,11 +8,15 @@
         v-for="(question, index) in questions"
         :key="index"
         class="ma-2"
-        :color="`rgba(0,150,136,${opacity})`"
+        :color="
+          question.is_answered
+            ? `rgba(0,150,136,${opacity})`
+            : `rgba(84,110,122,${opacity})`
+        "
         text-color="white"
       >
         Q{{ index + 1 }}
-        <v-avatar right v-if="question.checked">
+        <v-avatar right v-if="question.is_correct">
           <v-icon>mdi-checkbox-marked-circle</v-icon>
         </v-avatar>
       </v-chip>

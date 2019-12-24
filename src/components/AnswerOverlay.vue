@@ -93,14 +93,14 @@ export default {
       this.timerValue = 0;
     },
     answer() {
-      this.question.checked = true;
+      this.question.is_answered = true;
       if (this.selectedOption == this.question.answer) {
-        this.question.correct = true;
+        this.question.is_correct = true;
       }
       this.changeOverlayState(false);
     },
     skip() {
-      this.question.checked = true;
+      this.question.is_skipped = true;
       this.changeOverlayState(false);
     },
     timer() {

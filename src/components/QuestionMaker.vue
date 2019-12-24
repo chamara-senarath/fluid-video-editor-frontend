@@ -93,7 +93,6 @@ export default {
   props: ["dialog", "startTime", "editableQuestion"],
   data() {
     return {
-      pointsList: [10, 20, 50, 100, 200],
       question: null,
       options: [],
       answer: null,
@@ -152,13 +151,14 @@ export default {
         question: this.question,
         options: this.options,
         answer: this.answer,
-        isTimed: this.isTimed,
         duration:
           this.duration == null || this.isTimed == false ? 0 : this.duration,
         startTime: this.startTime,
-        correct: false,
-        points: this.points == null ? 0 : this.points,
-        checked: false
+        is_answered: false,
+        is_skipped: false,
+        is_correct: false,
+        isTimed: this.isTimed,
+        points: this.points == null ? 0 : this.points
       };
       if (this.editableQuestion == null) {
         this.$emit("saveQuestionsMark", questionMark); //save

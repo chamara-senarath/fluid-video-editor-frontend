@@ -129,7 +129,8 @@ export default {
         "https://images.wallpaperscraft.com/image/corn_field_summer_124670_3840x2400.jpg",
       items: [
         { title: "Search", icon: "fa fa-search", path: "/" },
-        { title: "Upload", icon: "fa fa-upload", path: "/upload" }
+        { title: "Upload", icon: "fa fa-upload", path: "/upload" },
+        { title: "Insight", icon: "fa fa-chart-line", path: "/insight" }
       ]
     };
   },

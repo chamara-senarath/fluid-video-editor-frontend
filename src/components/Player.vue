@@ -320,7 +320,7 @@ export default {
       for (let i = 0; i < this.questionList.length; i++) {
         if (
           value >= this.questionList[i].startTime &&
-          !this.questionList[i].checked
+          !(this.questionList[i].is_answered || this.questionList[i].is_skipped)
         ) {
           this.displayQuestion(i);
         }
