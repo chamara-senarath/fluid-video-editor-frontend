@@ -46,7 +46,8 @@
                     mt-3
                     column
                     v-show="title.edit"
-                    @mouseleave="title.edit = false"
+                    @mouseleave="hideEdit(title)"
+                    @mouseover="disableTimer"
                   >
                     <v-layout style="z-index:2147483638;">
                       <v-text-field
@@ -154,7 +155,7 @@
                           <v-list-item
                             v-for="(item, index) in alignments"
                             :key="index"
-                            @click="setTextAlignment(titleIndex, item, 'top')"
+                            @click="setTextAlignment(titleIndex, item, null)"
                             :style="
                               title.align.value == item
                                 ? 'background-color:rgba(13, 71, 161,0.8)'
@@ -361,6 +362,7 @@ export default {
     TemplateBuilder
   },
   data: () => ({
+    timer: null,
     chooseTemplate: false,
     fontSize: "display-2",
     fontFamiy: "font2",
@@ -562,6 +564,14 @@ export default {
         edit: false
       };
       this.titleList.push(title);
+    },
+    hideEdit(title) {
+      this.timer = setTimeout(() => {
+        title.edit = false;
+      }, 300);
+    },
+    disableTimer() {
+      clearInterval(this.timer);
     },
     setTextAlignment(index, alignX, alignY) {
       let textItem = this.titleList[index];
