@@ -9,14 +9,23 @@
             </v-flex>
             <v-flex>
               <v-layout column align-end>
-                <v-btn
-                  :disabled="selectedTemplate == null"
-                  :dark="selectedTemplate != null"
-                  small
-                  color="green darken-1"
-                  @click="buildTemplate"
-                  >Choose</v-btn
-                >
+                <v-row>
+                  <v-flex>
+                    <v-btn
+                      :disabled="selectedTemplate == null"
+                      :dark="selectedTemplate != null"
+                      small
+                      color="green darken-1"
+                      @click="buildTemplate"
+                      >Choose</v-btn
+                    >
+                  </v-flex>
+                  <v-flex ml-3>
+                    <v-icon @click="buildTemplate" color="red"
+                      >fa fa-times-circle</v-icon
+                    >
+                  </v-flex>
+                </v-row>
               </v-layout>
             </v-flex>
           </v-layout>
@@ -44,7 +53,7 @@
                   </v-layout>
                 </v-card-title>
                 <v-card-text>
-                  <v-img height="40vh" :src="template.src"></v-img>
+                  <v-img :src="template.src"></v-img>
                 </v-card-text>
               </v-card>
             </v-flex>
@@ -64,26 +73,55 @@ export default {
       templates: [
         {
           name: "Template 1",
-          src: "https://picsum.photos/id/179/800/800"
+          src: "/template1.png"
         },
         {
-          name: "Template 1",
-          src: "https://picsum.photos/id/179/800/800"
+          name: "Template 2",
+          src: "/template1.png"
         },
         {
-          name: "Template 1",
-          src: "https://picsum.photos/id/179/800/800"
+          name: "Template 3",
+          src: "/template1.png"
         },
         {
-          name: "Template 1",
-          src: "https://picsum.photos/id/179/800/800"
+          name: "Template 4",
+          src: "/template1.png"
         }
       ]
     };
   },
   methods: {
     buildTemplate() {
-      this.$emit("setTemplate");
+      let template = null;
+      if (this.selectedTemplate == 0) {
+        let text1 = {
+          text: "Your title here",
+          position: {
+            x: "center",
+            y: "top"
+          },
+          font: {
+            id: 1,
+            name: "Open Sans"
+          },
+          size: "H1"
+        };
+        let text2 = {
+          text: "Your footer here",
+          position: {
+            x: "center",
+            y: "bottom"
+          },
+          font: {
+            id: 1,
+            name: "Open Sans"
+          },
+          size: "H6"
+        };
+
+        template = [text1, text2];
+      }
+      this.$emit("setTemplate", template);
     }
   }
 };

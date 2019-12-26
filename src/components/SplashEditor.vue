@@ -154,7 +154,7 @@
                           <v-list-item
                             v-for="(item, index) in alignments"
                             :key="index"
-                            @click="setTextAlignment(titleIndex, item)"
+                            @click="setTextAlignment(titleIndex, item, 'top')"
                             :style="
                               title.align.value == item
                                 ? 'background-color:rgba(13, 71, 161,0.8)'
@@ -489,8 +489,31 @@ export default {
       });
       return uuid;
     },
-    setTemplate(val) {
-      console.log(val);
+    setTemplate(template) {
+      template.forEach(text => {
+        let id = this.create_UUID();
+        let title = {
+          id: id,
+          text: text.text,
+          size: text.size,
+          font: text.font,
+          align: {
+            value: null,
+            style: null
+          },
+          edit: false
+        };
+        this.titleList.push(title);
+      });
+      for (let i = 0; i < template.length; i++) {
+        this.$nextTick(() => {
+          this.setTextAlignment(
+            i,
+            template[i].position.x,
+            template[i].position.y
+          );
+        });
+      }
       this.chooseTemplate = false;
     },
     handleDrag({ target, left, top }) {
@@ -535,25 +558,34 @@ export default {
       };
       this.titleList.push(title);
     },
-    setTextAlignment(index, align) {
+    setTextAlignment(index, alignX, alignY) {
       let textItem = this.titleList[index];
       let el = eval("this.$refs.title" + index + "[0]");
       let elWidth = el.getBoundingClientRect().width;
+      let elHeight = el.getBoundingClientRect().height;
       let canvasWidth = this.$refs.canvas.getBoundingClientRect().width;
+      let canvasHeight = this.$refs.canvas.getBoundingClientRect().height;
 
-      if (align == "left") {
+      if (alignX == "left") {
         textItem.align.value = "left";
         textItem.align.style = "left:0px;";
       }
-      if (align == "right") {
+      if (alignX == "right") {
         let right = canvasWidth - elWidth;
         textItem.align.value = "right";
         textItem.align.style = "left:" + right + "px;";
       }
-      if (align == "center") {
+      if (alignX == "center") {
         let center = canvasWidth / 2 - elWidth / 2;
         textItem.align.value = "center";
         textItem.align.style = "left:" + center + "px;";
+      }
+      if (alignY == "top") {
+        textItem.align.style = textItem.align.style + "top:0px;";
+      }
+      if (alignY == "bottom") {
+        let bottom = canvasHeight - elHeight;
+        textItem.align.style = textItem.align.style + "top:" + bottom + "px;";
       }
     },
     changeTitle(title) {
