@@ -48,7 +48,7 @@
                     v-show="title.edit"
                     @mouseleave="title.edit = false"
                   >
-                    <v-layout style="z-index:10000;">
+                    <v-layout style="z-index:2147483638;">
                       <v-text-field
                         v-model="title.text"
                         clearable
@@ -63,7 +63,7 @@
                       ></v-text-field>
                     </v-layout>
 
-                    <v-layout style="z-index:10000;">
+                    <v-layout style="z-index:2147483638;">
                       <v-menu offset-x>
                         <template v-slot:activator="{ on }">
                           <v-btn
@@ -97,7 +97,7 @@
                       </v-menu>
                     </v-layout>
 
-                    <v-layout mt-1 style="z-index:10000;">
+                    <v-layout mt-1 style="z-index:2147483638;">
                       <v-menu offset-x>
                         <template v-slot:activator="{ on }">
                           <v-btn
@@ -133,7 +133,7 @@
                       </v-menu>
                     </v-layout>
 
-                    <v-layout mt-1 style="z-index:10000;">
+                    <v-layout mt-1 style="z-index:2147483638;">
                       <v-menu offset-x>
                         <template v-slot:activator="{ on }">
                           <v-btn
@@ -167,7 +167,7 @@
                       </v-menu>
                     </v-layout>
 
-                    <v-layout mt-1 style="z-index:10000;">
+                    <v-layout mt-1 style="z-index:2147483638;">
                       <v-btn
                         block
                         @click="deleteTitle(title.id)"
@@ -490,6 +490,11 @@ export default {
       return uuid;
     },
     setTemplate(template) {
+      if (template == null) {
+        this.chooseTemplate = false;
+        return;
+      }
+      this.titleList = [];
       template.forEach(text => {
         let id = this.create_UUID();
         let title = {
@@ -585,6 +590,10 @@ export default {
       }
       if (alignY == "bottom") {
         let bottom = canvasHeight - elHeight;
+        textItem.align.style = textItem.align.style + "top:" + bottom + "px;";
+      }
+      if (alignY == "center") {
+        let bottom = (canvasHeight - elHeight) / 2;
         textItem.align.style = textItem.align.style + "top:" + bottom + "px;";
       }
     },

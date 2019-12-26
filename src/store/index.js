@@ -60,10 +60,10 @@ export default new Vuex.Store({
       state.questionMarks = payload;
     },
     setWatermark: (state, payload) => {
-      state.watermark.file = payload.file;
       state.watermark.opacity = payload.opacity;
       state.watermark.widthRatio = payload.widthRatio;
       state.watermark.position = payload.position;
+      state.watermark.file = payload.file;
     }
   },
   actions: {},

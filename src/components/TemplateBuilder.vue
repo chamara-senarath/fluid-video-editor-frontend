@@ -1,8 +1,22 @@
 <template>
   <v-row justify="center">
+    <v-layout
+      v-if="templates.length == 0 || templates == null"
+      column
+      align-center
+    >
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+      <span>Loading...</span>
+    </v-layout>
     <v-dialog :value="chooseTemplate" persistent max-width="60vw">
       <v-card>
-        <v-card-title class="headline">
+        <v-card-title
+          class="headline blue-grey darken-3
+ white--text"
+          style="position: -webkit-sticky;
+  position: sticky;
+  top: 0;z-index:1000"
+        >
           <v-layout row>
             <v-flex>
               Choose a Template
@@ -20,8 +34,8 @@
                       >Choose</v-btn
                     >
                   </v-flex>
-                  <v-flex ml-3>
-                    <v-icon @click="buildTemplate" color="red"
+                  <v-flex mx-3>
+                    <v-icon @click="close" color="red"
                       >fa fa-times-circle</v-icon
                     >
                   </v-flex>
@@ -70,6 +84,7 @@ export default {
   data() {
     return {
       selectedTemplate: null,
+      currentTemplate: 1,
       templates: [
         {
           name: "Template 1",
@@ -77,7 +92,7 @@ export default {
         },
         {
           name: "Template 2",
-          src: "/template1.png"
+          src: "/template2.png"
         },
         {
           name: "Template 3",
@@ -91,8 +106,13 @@ export default {
     };
   },
   methods: {
+    close() {
+      this.selectedTemplate = this.currentTemplate;
+      this.$emit("setTemplate", null);
+    },
     buildTemplate() {
       let template = null;
+      this.currentTemplate = this.selectedTemplate;
       if (this.selectedTemplate == 0) {
         let text1 = {
           text: "Your title here",
@@ -120,6 +140,46 @@ export default {
         };
 
         template = [text1, text2];
+      }
+      if (this.selectedTemplate == 1) {
+        let text1 = {
+          text: "Your title here",
+          position: {
+            x: "center",
+            y: "top"
+          },
+          font: {
+            id: 1,
+            name: "Open Sans"
+          },
+          size: "H1"
+        };
+        let text2 = {
+          text: "Your middle text here",
+          position: {
+            x: "center",
+            y: "center"
+          },
+          font: {
+            id: 1,
+            name: "Open Sans"
+          },
+          size: "H4"
+        };
+        let text3 = {
+          text: "Your footer here",
+          position: {
+            x: "center",
+            y: "bottom"
+          },
+          font: {
+            id: 1,
+            name: "Open Sans"
+          },
+          size: "H6"
+        };
+
+        template = [text1, text2, text3];
       }
       this.$emit("setTemplate", template);
     }
