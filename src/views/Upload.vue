@@ -168,7 +168,6 @@ export default {
         this.stepperCount -= 1;
       }
     }
-  },
-
+  }
 };
 </script>

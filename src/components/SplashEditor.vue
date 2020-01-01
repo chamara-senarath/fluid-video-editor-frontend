@@ -355,7 +355,7 @@
 import Moveable from "vue-moveable";
 import TemplateBuilder from "@/components/TemplateBuilder";
 import { Frame } from "scenejs";
-import { mapMutations,mapGetters } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 export default {
   components: {
     Moveable,
@@ -480,7 +480,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setSplashScreenObject", "setWatermark"]),
-    ...mapGetters(['getSplashScreenObject']),
+    ...mapGetters(["getSplashScreenObject"]),
     create_UUID() {
       var dt = new Date().getTime();
       var uuid = "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(/[xy]/g, function(
@@ -711,7 +711,7 @@ export default {
           data: this.canvasData,
           duration: this.duration
         });
-        if ( this.logo.file) {
+        if (this.logo.file) {
           let logo = {
             ...this.logo,
             position: watermarkPosition,
@@ -749,8 +749,8 @@ export default {
   },
   mounted() {
     this.$frame = new Frame();
-    if(this.getSplashScreenObject().duration!=null){
-      this.duration = this.getSplashScreenObject().duration
+    if (this.getSplashScreenObject().duration != null) {
+      this.duration = this.getSplashScreenObject().duration;
     }
   }
 };

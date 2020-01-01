@@ -187,9 +187,9 @@ export default {
           value => (value && value.length > 0) || "Video Title can not be empty"
         ],
         author: [
-          value => (value && value.length > 0) || "Author Name can not be empty"
+          () => this.authors.length > 0 || "Author Name can not be empty"
         ],
-        tags: [value => (value && value.length > 0) || "Tags can not be empty"],
+        tags: [() => this.tags.length > 0 || "Tags can not be empty"],
         videoData: [
           value => {
             if (value && value.name) {
@@ -210,7 +210,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setVideoObject"]),
-    ...mapGetters(["getVideoObject"]),
+    ...mapGetters(["getVideoObject", "getChapterMarks"]),
     uploadVideo(file) {
       if (
         file &&
@@ -226,8 +226,8 @@ export default {
         return;
       }
       if (this.getVideoObject().file != null) {
-          let video = {
-        ...this.getVideoObject(),
+        let video = {
+          ...this.getVideoObject(),
           authors: this.authors,
           tags: this.tags
         };
@@ -288,9 +288,18 @@ export default {
     uploadNew() {
       this.showConfirmation = true;
     },
-    userAnswer(val) {
+    async userAnswer(val) {
       this.showConfirmation = false;
       if (val == "yes") {
+        if (this.getChapterMarks().length == 0) {
+          try {
+            await axios.delete(
+              this.API_URL + "/api/video/file?id=" + this.getVideoObject().id
+            );
+          } catch (error) {
+            this.feedback = error;
+          }
+        }
         this.$router.go();
       }
     }
@@ -298,8 +307,12 @@ export default {
   mounted() {
     if (this.getVideoObject != null) {
       this.video.title = this.getVideoObject().title;
-      this.authors = this.getVideoObject().authors;
-      this.tags = this.getVideoObject().tags;
+      if (this.getVideoObject().authors.length != 0) {
+        this.authors = this.getVideoObject().authors;
+      }
+      if (this.getVideoObject().tags.length != 0) {
+        this.tags = this.getVideoObject().tags;
+      }
     }
   }
 };
