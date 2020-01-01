@@ -24,8 +24,7 @@ const routes = [
   {
     path: "/upload",
     name: "upload",
-    component: Upload,
-    props: true
+    component: Upload
   },
   // {
   //   path: "/embed/:vid/:uid",

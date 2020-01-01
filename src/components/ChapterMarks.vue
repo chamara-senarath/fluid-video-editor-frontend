@@ -83,7 +83,7 @@ export default {
     };
   },
   methods: {
-    ...mapGetters(["getVideoObject"]),
+    ...mapGetters(["getVideoObject", "getChapterMarks"]),
     ...mapMutations(["setChapterMarks"]),
     create_UUID() {
       var dt = new Date().getTime();
@@ -147,6 +147,9 @@ export default {
   mounted() {
     if (this.file != null) {
       this.player = this.$refs.player.player;
+    }
+    if (this.getChapterMarks().length != 0) {
+      this.chapterMarkList = this.getChapterMarks();
     }
   }
 };

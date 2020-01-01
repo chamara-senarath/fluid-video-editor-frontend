@@ -1,9 +1,5 @@
 <template>
   <v-stepper v-model="stepperCount">
-    <AreYourSureVue
-      :showConfirmation="showConfirmation"
-      @userAnswer="userAnswer"
-    ></AreYourSureVue>
     <v-stepper-header>
       <v-stepper-step :complete="stepperCount > 1" step="1"
         >Upload Video</v-stepper-step
@@ -37,6 +33,7 @@
     <v-stepper-items>
       <v-stepper-content step="1">
         <VideoUpload
+          :isEdit="isEdit"
           @uploaded="
             val => {
               val == true ? (stepperCount += 1) : (stepperCount = 0);
@@ -117,7 +114,6 @@ import SplashEditor from "@/components/SplashEditor";
 import ChapterMarks from "@/components/ChapterMarks";
 import Questions from "@/components/Questions";
 import Publish from "@/components/Publish";
-import AreYourSureVue from "../components/AreYourSure.vue";
 import { mapGetters } from "vuex";
 export default {
   props: ["isEdit"],
@@ -126,14 +122,13 @@ export default {
     SplashEditor,
     ChapterMarks,
     Questions,
-    Publish,
-    AreYourSureVue
+    Publish
   },
   data() {
     return {
       stepperCount: 1,
       showConfirmation: false,
-      blockUpload: true
+      blockUpload: false
     };
   },
   methods: {
@@ -168,33 +163,12 @@ export default {
       }
     },
 
-    userAnswer(val) {
-      if (val == "yes") {
-        this.blockUpload = false;
-        this.clickBack();
-      } else {
-        this.blockUpload = true;
-      }
-      this.showConfirmation = false;
-    },
-
     clickBack() {
-      if (this.stepperCount == 2) {
-        this.showConfirmation = true;
-      }
-      if (this.blockUpload) {
-        return;
-      }
       if (this.stepperCount > 0) {
         this.stepperCount -= 1;
       }
     }
   },
-  mounted() {
-    if (this.isEdit) {
-      this.blockUpload = false;
-      this.stepperCount = 2;
-    }
-  }
+
 };
 </script>

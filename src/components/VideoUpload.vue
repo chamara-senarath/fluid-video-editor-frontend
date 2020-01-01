@@ -1,5 +1,9 @@
 <template>
   <v-container>
+    <AreYouSure
+      :showConfirmation="showConfirmation"
+      @userAnswer="userAnswer"
+    ></AreYouSure>
     <v-layout column align-center>
       <v-snackbar color="blue darken-3" top v-model="snackbar">
         <v-icon color="white">fa fa-check</v-icon>
@@ -21,6 +25,7 @@
     <v-form ref="form">
       <v-alert v-if="feedback" type="error">{{ feedback }}</v-alert>
       <v-file-input
+        v-if="getVideoObject().file == null"
         ref="videoSelect"
         clearable
         color="blue darken-3"
@@ -111,18 +116,35 @@
         </template>
       </v-combobox>
 
-      <v-btn @click="clickUpload" class="primary" block
-        >Upload<v-icon small right>fa fa-upload</v-icon></v-btn
-      >
+      <v-flex>
+        <v-btn
+          @click="clickUpload"
+          :class="getVideoObject().file != null ? 'success' : 'primary'"
+          block
+          >{{ getVideoObject().file != null ? "Update" : "Upload"
+          }}<v-icon small right>{{
+            getVideoObject().file != null ? "fa fa-edit" : "fa fa-upload"
+          }}</v-icon></v-btn
+        >
+      </v-flex>
+      <v-flex mt-2 v-if="getVideoObject().file != null">
+        <v-btn @click="uploadNew" block class="primary"
+          >Upload New<v-icon small right>fa fa-upload</v-icon></v-btn
+        >
+      </v-flex>
     </v-form>
   </v-container>
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import AreYouSure from "@/components/AreYouSure";
+import { mapGetters, mapMutations } from "vuex";
 import axios from "axios";
 
 export default {
+  components: {
+    AreYouSure
+  },
   data() {
     const srcs = {
       1: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
@@ -132,6 +154,7 @@ export default {
       5: "https://cdn.vuetifyjs.com/images/lists/5.jpg"
     };
     return {
+      showConfirmation: false,
       autoUpdate: true,
       authors: [],
       tags: [],
@@ -187,6 +210,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setVideoObject"]),
+    ...mapGetters(["getVideoObject"]),
     uploadVideo(file) {
       if (
         file &&
@@ -199,6 +223,10 @@ export default {
     },
     async clickUpload() {
       if (!this.$refs.form.validate()) {
+        return;
+      }
+      if (this.getVideoObject().file != null) {
+        this.$emit("uploaded", true);
         return;
       }
       try {
@@ -246,6 +274,20 @@ export default {
     remove(arr, item) {
       const index = arr.indexOf(item.name);
       if (index >= 0) arr.splice(index, 1);
+    },
+    uploadNew() {
+      this.showConfirmation = true;
+    },
+    userAnswer(val) {
+      this.showConfirmation = false;
+      if (val == "yes") {
+        this.$router.go();
+      }
+    }
+  },
+  mounted() {
+    if (this.getVideoObject != null) {
+      this.video.title = this.getVideoObject().title;
     }
   }
 };

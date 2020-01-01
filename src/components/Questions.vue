@@ -99,7 +99,7 @@ export default {
     };
   },
   methods: {
-    ...mapGetters(["getVideoObject"]),
+    ...mapGetters(["getVideoObject", "getQuestionMarks"]),
     ...mapMutations(["setQuestionMarks"]),
     changeDialogState(val) {
       this.dialogBox = val;
@@ -179,6 +179,9 @@ export default {
   mounted() {
     if (this.file != null) {
       this.player = this.$refs.player.player;
+    }
+    if (this.getQuestionMarks().length != 0) {
+      this.questionsMarks = this.getQuestionMarks();
     }
   }
 };

@@ -1,9 +1,5 @@
 <template>
   <nav v-if="$route.name != 'Embed'">
-    <AreYourSure
-      :showConfirmation="showConfirmation"
-      @userAnswer="userAnswer"
-    ></AreYourSure>
     <v-app-bar color="blue darken-3" app dark>
       <v-app-bar-nav-icon
         v-if="isLogged"
@@ -50,7 +46,7 @@
             small
             v-if="isLogged"
             depressed
-            @click="switchSearchUpload"
+            :to="$route.name == 'upload' ? '/' : '/upload'"
           >
             <v-icon small>{{
               $route.name == "upload" ? "fa fa-search" : "fa fa-upload"
@@ -118,15 +114,10 @@
 </template>
 
 <script>
-import AreYourSure from "@/components/AreYourSure";
 import { mapGetters } from "vuex";
 export default {
-  components: {
-    AreYourSure
-  },
   data() {
     return {
-      showConfirmation: false,
       isLogged: true, // TODO remove this when implement user login
       getUser: {
         name: "Chamara Senarath",
@@ -150,21 +141,6 @@ export default {
     logout() {
       this.drawer = false;
       this.isLogged = false;
-    },
-    switchSearchUpload() {
-      if (this.$route.name == "upload") {
-        this.showConfirmation = true;
-      } else if (this.$route.name == "Search") {
-        this.$router.push({ path: "/upload" });
-      } else {
-        this.$router.push({ path: "/upload" });
-      }
-    },
-    userAnswer(val) {
-      this.showConfirmation = false;
-      if (val == "yes") {
-        this.$router.push({ path: "/" });
-      }
     }
   }
 };

@@ -26,10 +26,8 @@
                         >
                       </v-flex>
                       <v-flex px-1 xs6>
-                        <v-btn block
-                          ><v-icon left @click="edit(thumbnail.id)"
-                            >fa fa-edit</v-icon
-                          >Edit</v-btn
+                        <v-btn @click="edit(thumbnail.id)" block
+                          ><v-icon left>fa fa-edit</v-icon>Edit</v-btn
                         >
                       </v-flex>
                     </v-layout>
@@ -158,7 +156,7 @@ export default {
           ...video.data.watermark,
           file: watermarkURL
         });
-        this.$router.push({ name: "upload", params: { isEdit: true } });
+        this.$router.push({ name: "upload" });
       });
     }
   }
