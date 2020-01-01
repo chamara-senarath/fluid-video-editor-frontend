@@ -1,13 +1,5 @@
 <template>
   <v-row justify="center">
-    <v-layout
-      v-if="templates.length == 0 || templates == null"
-      column
-      align-center
-    >
-      <v-progress-circular indeterminate size="64"></v-progress-circular>
-      <span>Loading...</span>
-    </v-layout>
     <v-dialog :value="chooseTemplate" persistent max-width="60vw">
       <v-card>
         <v-card-title
@@ -17,7 +9,7 @@
   position: sticky;
   top: 0;z-index:1000"
         >
-          <v-layout row>
+          <v-layout row wrap>
             <v-flex>
               Choose a Template
             </v-flex>
@@ -45,7 +37,7 @@
           </v-layout>
         </v-card-title>
         <v-card-text>
-          <v-layout row>
+          <v-layout row wrap>
             <v-flex
               xs12
               md6
@@ -155,7 +147,7 @@ export default {
           size: "H1"
         };
         let text2 = {
-          text: "Your middle text here",
+          text: "Your content here",
           position: {
             x: "center",
             y: "center"

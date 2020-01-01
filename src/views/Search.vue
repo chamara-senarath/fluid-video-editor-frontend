@@ -1,10 +1,11 @@
 <template>
   <v-container fluid>
-    <v-layout row>
+    <v-layout row wrap>
       <v-flex
         px-3
         py-3
-        md3
+        xs12
+        md4
         v-for="thumbnail in thumbnailList"
         :key="thumbnail.id"
       >
@@ -26,7 +27,9 @@
                       </v-flex>
                       <v-flex px-1 xs6>
                         <v-btn block
-                          ><v-icon left>fa fa-edit</v-icon>Edit</v-btn
+                          ><v-icon left @click="edit(thumbnail.id)"
+                            >fa fa-edit</v-icon
+                          >Edit</v-btn
                         >
                       </v-flex>
                     </v-layout>
@@ -62,12 +65,14 @@
 </template>
 
 <script>
+import axios from "axios";
+import { mapMutations } from "vuex";
 export default {
   data() {
     return {
       thumbnailList: [
         {
-          id: 1,
+          id: "5e0c2fe4cb17d12a501cb16f",
           title: "About DIPS",
           img: "https://picsum.photos/id/179/800/800",
 
@@ -125,6 +130,37 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    ...mapMutations([
+      "setVideoObject",
+      "setSplashScreenObject",
+      "setChapterMarks",
+      "setQuestionMarks",
+      "setWatermark"
+    ]),
+    edit(id) {
+      let videoURL = this.API_URL + "/api/video/file?id=" + id;
+      let watermarkURL = this.API_URL + "/api/video/watermark?id=" + id;
+      axios.get(this.API_URL + "/api/video?id=" + id).then(video => {
+        this.setVideoObject({
+          id: video.data._id,
+          title: video.data.title,
+          file: videoURL
+        });
+        this.setSplashScreenObject({
+          data: null,
+          duration: video.data.splashDuration
+        });
+        this.setChapterMarks(video.data.chapterMarks);
+        this.setQuestionMarks(video.data.questions);
+        this.setWatermark({
+          ...video.data.watermark,
+          file: watermarkURL
+        });
+        this.$router.push({ name: "upload", params: { isEdit: true } });
+      });
+    }
   }
 };
 </script>

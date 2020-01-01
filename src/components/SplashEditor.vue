@@ -710,7 +710,7 @@ export default {
           data: this.canvasData,
           duration: this.duration
         });
-        if (this.logo.file) {
+        if ( this.logo.file) {
           let logo = {
             ...this.logo,
             position: watermarkPosition,

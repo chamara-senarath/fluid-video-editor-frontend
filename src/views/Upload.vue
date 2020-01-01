@@ -120,6 +120,7 @@ import Publish from "@/components/Publish";
 import AreYourSureVue from "../components/AreYourSure.vue";
 import { mapGetters } from "vuex";
 export default {
+  props: ["isEdit"],
   components: {
     VideoUpload,
     SplashEditor,
@@ -187,6 +188,12 @@ export default {
       if (this.stepperCount > 0) {
         this.stepperCount -= 1;
       }
+    }
+  },
+  mounted() {
+    if (this.isEdit) {
+      this.blockUpload = false;
+      this.stepperCount = 2;
     }
   }
 };

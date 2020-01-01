@@ -10,8 +10,7 @@
     <v-layout>
       <vue-plyr
         @timeupdate="videoTimeUpdated"
-        @play="onPlayVideo"
-        :emit="['timeupdate', 'play']"
+        :emit="['timeupdate']"
         ref="player"
         :style="
           `width:${
@@ -312,6 +311,7 @@ export default {
   },
   watch: {
     duration(value) {
+      this.onPlayVideo();
       for (let i = 0; i < this.chapterList.length; i++) {
         if (value >= this.chapterList[i].startTime) {
           this.playingChapter = i;

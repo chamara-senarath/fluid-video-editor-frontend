@@ -60,10 +60,17 @@ export default new Vuex.Store({
       state.questionMarks = payload;
     },
     setWatermark: (state, payload) => {
-      state.watermark.opacity = payload.opacity;
-      state.watermark.widthRatio = payload.widthRatio;
-      state.watermark.position = payload.position;
-      state.watermark.file = payload.file;
+      if (payload == null) {
+        state.watermark.opacity = null;
+        state.watermark.widthRatio = null;
+        state.watermark.position = null;
+        state.watermark.file = null;
+      } else {
+        state.watermark.opacity = payload.opacity;
+        state.watermark.widthRatio = payload.widthRatio;
+        state.watermark.position = payload.position;
+        state.watermark.file = payload.file;
+      }
     }
   },
   actions: {},
