@@ -226,6 +226,12 @@ export default {
         return;
       }
       if (this.getVideoObject().file != null) {
+          let video = {
+        ...this.getVideoObject(),
+          authors: this.authors,
+          tags: this.tags
+        };
+        this.setVideoObject(video);
         this.$emit("uploaded", true);
         return;
       }
@@ -233,7 +239,9 @@ export default {
         this.overlay = true;
         this.uploaded = false;
         let res = await axios.post(this.API_URL + "/api/video", {
-          title: this.video.title
+          title: this.video.title,
+          authors: this.authors,
+          tags: this.tags
         });
 
         const formData = new FormData();
@@ -249,7 +257,9 @@ export default {
         let video = {
           id: res.data.id,
           title: res.data.title,
-          file: videoURL
+          file: videoURL,
+          authors: res.data.authors,
+          tags: res.data.tags
         };
         this.setVideoObject(video);
         this.overlay = false;
@@ -288,6 +298,8 @@ export default {
   mounted() {
     if (this.getVideoObject != null) {
       this.video.title = this.getVideoObject().title;
+      this.authors = this.getVideoObject().authors;
+      this.tags = this.getVideoObject().tags;
     }
   }
 };

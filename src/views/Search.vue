@@ -70,7 +70,7 @@ export default {
     return {
       thumbnailList: [
         {
-          id: "5e0c2fe4cb17d12a501cb16f",
+          id: "5e0c62ba547a6475582a2443",
           title: "About DIPS",
           img: "https://picsum.photos/id/179/800/800",
 
@@ -144,7 +144,9 @@ export default {
         this.setVideoObject({
           id: video.data._id,
           title: video.data.title,
-          file: videoURL
+          file: videoURL,
+          authors: video.data.authors,
+          tags: video.data.tags
         });
         this.setSplashScreenObject({
           data: null,

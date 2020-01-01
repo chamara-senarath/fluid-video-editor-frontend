@@ -97,6 +97,8 @@ export default {
       embedCode: "<href='fdsfsdfsd'>",
       showCopied: false,
       title: "",
+      authors: [],
+      tags: [],
       src: null,
       thumbnail: null,
       splashDuration: null,
@@ -183,6 +185,8 @@ export default {
   async mounted() {
     let id = this.getVideoObject().id;
     this.title = this.getVideoObject().title;
+    this.authors = this.getVideoObject().authors;
+    this.tags = this.getVideoObject().tags;
     this.src = this.getVideoObject().file;
     this.chapterList = this.getChapterMarks();
     this.questionList = this.getQuestionMarks();
@@ -191,6 +195,8 @@ export default {
     this.watermark = this.getWatermark();
     let Obj = {
       id: id,
+      authors: this.authors,
+      tags: this.tags,
       splashDuration: this.getSplashScreenObject().duration,
       watermark: {
         opacity: this.watermark.opacity,

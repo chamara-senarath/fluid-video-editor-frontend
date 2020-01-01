@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
-    <v-layout row justify-center>
-      <v-flex xs12 md4 v-for="(item, index) in watchList" :key="index" pa-2>
+    <v-layout row>
+      <v-flex xs12 md6 lg4 v-for="(item, index) in watchList" :key="index" pa-2>
         <v-card dark :color="`${item.color} lighten-1`">
           <v-card-title :class="`${item.color} darken-1`">
             {{ item.title }}
@@ -14,7 +14,7 @@
                   ><v-img :src="item.img"></v-img
                 ></v-avatar>
               </v-flex>
-              <v-flex xs9 px-3>
+              <v-flex xs9 px-12>
                 <v-layout column>
                   <div class="title">{{ item.video }}</div>
                   <span>Total Views: {{ item.views }} </span>

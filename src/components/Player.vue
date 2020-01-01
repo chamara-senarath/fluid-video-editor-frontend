@@ -216,6 +216,12 @@ export default {
       if (this.duration < 1) {
         this.playIntro(this.splashDuration);
       }
+      if (
+        this.watermark.position == null ||
+        this.watermark.widthRatio == null
+      ) {
+        return;
+      }
       this.watermarkStyle = this.genarateWatermarkStyle(
         this.watermark.position,
         this.watermark.widthRatio

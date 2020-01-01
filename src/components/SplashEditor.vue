@@ -750,7 +750,6 @@ export default {
   mounted() {
     this.$frame = new Frame();
     if(this.getSplashScreenObject().duration!=null){
-      console.log(this.getSplashScreenObject().duration)
       this.duration = this.getSplashScreenObject().duration
     }
   }

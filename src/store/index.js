@@ -8,7 +8,9 @@ export default new Vuex.Store({
     video: {
       id: null,
       title: null,
-      file: null
+      file: null,
+      authors: [],
+      tags: []
     },
     splashScreen: {
       data: "null",
@@ -48,6 +50,8 @@ export default new Vuex.Store({
       state.video.id = payload.id;
       state.video.title = payload.title;
       state.video.file = payload.file;
+      state.video.authors = payload.authors;
+      state.video.tags = payload.tags;
     },
     setSplashScreenObject: (state, payload) => {
       state.splashScreen.data = payload.data;
