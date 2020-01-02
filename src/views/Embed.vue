@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       uid: "5e0d71da4922641fe81a3cbd",
-      vid: null,
+      vid: "null",
       timer: "",
       title: "",
       src: null,
