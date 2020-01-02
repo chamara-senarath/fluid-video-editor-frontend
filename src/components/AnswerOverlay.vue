@@ -94,6 +94,7 @@ export default {
     },
     answer() {
       this.question.is_answered = true;
+      this.question.is_skipped = false;
       if (this.selectedOption == this.question.answer) {
         this.question.is_correct = true;
       }

@@ -291,7 +291,10 @@ export default {
     async userAnswer(val) {
       this.showConfirmation = false;
       if (val == "yes") {
-        if (this.getChapterMarks().length == 0) {
+        if (
+          this.getChapterMarks() == null ||
+          this.getChapterMarks().length == 0
+        ) {
           try {
             await axios.delete(
               this.API_URL + "/api/video/file?id=" + this.getVideoObject().id

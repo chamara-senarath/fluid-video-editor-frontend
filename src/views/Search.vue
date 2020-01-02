@@ -70,7 +70,7 @@ export default {
     return {
       thumbnailList: [
         {
-          id: "5e0c62ba547a6475582a2443",
+          id: "5e0d6fb24922641fe81a3cb5",
           title: "About DIPS",
           img: "https://picsum.photos/id/179/800/800",
 

@@ -30,6 +30,9 @@ export default {
   },
   data() {
     return {
+      uid: "5e0d71da4922641fe81a3cbd",
+      vid: null,
+      timer: "",
       title: "",
       src: null,
       thumbnail: null,
@@ -45,56 +48,74 @@ export default {
       "getSplashScreenObject",
       "getVideoObject",
       "getQuestionMarks"
-    ])
+    ]),
+    saveLog() {
+      let obj = {
+        uid: this.uid,
+        vid: this.vid,
+        questions: this.questionList,
+        checkpoints: []
+      };
+      // console.log(obj);
+      if (this.questionList.length != 0) {
+        axios.post(this.API_URL + "/api/insight/user", obj);
+      }
+    },
+    fetchQuestions(uid, vid) {
+      axios
+        .get(this.API_URL + "/api/insight/user?uid=" + uid + "&vid=" + vid)
+        .then(result => {
+          let userInsight = result.data.questions;
+          //alter objects
+          let tempQuestionList = [];
+          this.questionList.forEach(question => {
+            userInsight.forEach(questionInsight => {
+              if (question._id == questionInsight.qid) {
+                let q = {
+                  qid: questionInsight.qid,
+                  question: question.question,
+                  options: question.options,
+                  answer: question.answer,
+                  duration: question.duration,
+                  startTime: question.startTime,
+                  points: question.points,
+                  is_answered: questionInsight.is_answered,
+                  is_skipped: questionInsight.is_skipped,
+                  is_correct: questionInsight.is_correct,
+                  isTimed: question.duration == null || 0 ? false : true
+                };
+                tempQuestionList.push(q);
+              }
+              this.questionList = tempQuestionList;
+            });
+          });
+          this.timer = setInterval(this.saveLog, 2000);
+        });
+    }
   },
 
   mounted() {
-    let vid = this.$route.query.vid; //use params instead of query to use forwars
-    axios.get(this.API_URL + "/api/video?id=" + vid).then(video => {
+    this.vid = this.$route.query.vid; //use params instead of query to use forwars
+    axios.get(this.API_URL + "/api/video?id=" + this.vid).then(video => {
       this.title = video.data.title;
       this.chapterList = video.data.chapterMarks;
       this.questionList = video.data.questions;
       this.watermark = video.data.watermark;
       this.splashDuration = video.data.splashDuration;
-      this.src = this.API_URL + "/api/video/file?id=" + vid;
-      this.thumbnail = this.API_URL + "/api/video/splash?id=" + vid;
+      this.src = this.API_URL + "/api/video/file?id=" + this.vid;
+      this.thumbnail = this.API_URL + "/api/video/splash?id=" + this.vid;
       axios
-        .get(this.API_URL + "/api/video/watermark?id=" + vid)
+        .get(this.API_URL + "/api/video/watermark?id=" + this.vid)
         .then(result => {
           if (result)
             this.watermark.file =
-              this.API_URL + "/api/video/watermark?id=" + vid;
+              this.API_URL + "/api/video/watermark?id=" + this.vid;
         });
     });
-    let uid = "5dfb38e7f77174033c7b032b";
-    vid = "5dfaf16e7287010c140bfa3d";
-    axios
-      .get(this.API_URL + "/api/insight/user?uid=" + uid + "&vid=" + vid)
-      .then(result => {
-        console.log(result);
-        let userInsight = result.data.questions;
-        //alter objects
-        let tempQuestionList = [];
-        this.questionList.forEach(question => {
-          userInsight.forEach(questionInsight => {
-            let q = {
-              question: question.question,
-              options: question.options,
-              answer: question.answer,
-              duration: question.duration,
-              startTime: question.startTime,
-              points: question.points,
-              is_answered: questionInsight.is_answered,
-              is_skipped: questionInsight.is_skipped,
-              is_correct: questionInsight.is_correct,
-              isTimed: question.duration == null || 0 ? false : true
-            };
-            tempQuestionList.push(q);
-          });
-          this.questionList = tempQuestionList;
-          console.log(this.questionList);
-        });
-      });
+    this.fetchQuestions(this.uid, this.vid);
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   }
 };
 </script>
