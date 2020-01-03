@@ -41,7 +41,7 @@
                   dark
                   @click="editRangeDialog = true"
                   small
-                  v-if="pieChart.title == 'Age'"
+                  v-if="pieChart.title == 'Age' && showPieCharts"
                   color="blue"
                   >Edit Range</v-btn
                 >
@@ -139,29 +139,33 @@ export default {
     },
     async fetchData() {
       this.showPieCharts = false;
-      let result = await axios.get(
-        this.API_URL +
-          `/api/insight/views?vid=${this.vid}&range=${this.rangeList}`
-      );
-      this.cardList[0].value = result.data.totalViews;
-      this.cardList[1].value = result.data.lastWeekViews;
-      this.cardList[2].value = result.data.lastMonthViews;
-      this.cardList[3].value = result.data.lastYearViews;
-      result.data.viewsByGender.forEach(gender => {
-        this.pieChartList[0].options.labels.push(gender.label);
-        this.pieChartList[0].series.push(gender.value);
-      });
-      result.data.viewsByAge.forEach(age => {
-        if (age.value != 0) {
-          this.pieChartList[1].options.labels.push(age.label);
-          this.pieChartList[1].series.push(age.value);
-        }
-      });
-      result.data.viewsByLocation.forEach(location => {
-        this.pieChartList[2].options.labels.push(location.label);
-        this.pieChartList[2].series.push(location.value);
-      });
-      this.showPieCharts = true;
+      try {
+        let result = await axios.get(
+          this.API_URL +
+            `/api/insight/views?vid=${this.vid}&range=${this.rangeList}`
+        );
+        this.cardList[0].value = result.data.totalViews;
+        this.cardList[1].value = result.data.lastWeekViews;
+        this.cardList[2].value = result.data.lastMonthViews;
+        this.cardList[3].value = result.data.lastYearViews;
+        result.data.viewsByGender.forEach(gender => {
+          this.pieChartList[0].options.labels.push(gender.label);
+          this.pieChartList[0].series.push(gender.value);
+        });
+        result.data.viewsByAge.forEach(age => {
+          if (age.value != 0) {
+            this.pieChartList[1].options.labels.push(age.label);
+            this.pieChartList[1].series.push(age.value);
+          }
+        });
+        result.data.viewsByLocation.forEach(location => {
+          this.pieChartList[2].options.labels.push(location.label);
+          this.pieChartList[2].series.push(location.value);
+        });
+        this.showPieCharts = true;
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
   mounted() {
