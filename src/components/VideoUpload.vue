@@ -2,6 +2,7 @@
   <v-container>
     <AreYouSure
       :showConfirmation="showConfirmation"
+      :options="confirmationMessage"
       @userAnswer="userAnswer"
     ></AreYouSure>
     <v-layout column align-center>
@@ -155,6 +156,13 @@ export default {
     };
     return {
       showConfirmation: false,
+      confirmationMessage: {
+        title: "leave this page",
+        content:
+          "If you go back, your saved sates will be deleted. Are you sure you want to leave this page?",
+        yes: "Yes, I am sure",
+        no: "No, Keep me here"
+      },
       autoUpdate: true,
       authors: [],
       tags: [],

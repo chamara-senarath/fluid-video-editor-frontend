@@ -1,5 +1,10 @@
 <template>
   <v-container fluid>
+    <AreYouSure
+      :showConfirmation="showConfirmation"
+      :options="confirmationMessage"
+      @userAnswer="userAnswer"
+    ></AreYouSure>
     <v-layout row wrap>
       <v-flex
         px-3
@@ -58,6 +63,16 @@
                     4.5 ({{ thumbnail.rates }})
                   </div>
                 </v-row>
+                <v-layout row justify-end>
+                  <v-btn
+                    fab
+                    elevation="0"
+                    outlined
+                    small
+                    @click="showConfirmation = true"
+                    ><v-icon color="red" small>fa fa-trash-alt</v-icon></v-btn
+                  >
+                </v-layout>
               </v-layout>
             </v-card-title>
           </v-card>
@@ -69,11 +84,23 @@
 
 <script>
 import axios from "axios";
+import AreYouSure from "@/components/AreYouSure";
 import { mapMutations } from "vuex";
 export default {
+  components: {
+    AreYouSure
+  },
   data() {
     return {
-      thumbnailList: []
+      thumbnailList: [],
+      showConfirmation: false,
+      confirmationMessage: {
+        title: "Delete this video",
+        content:
+          "If you delete the video, this video will be deleted from your uploaded video list. Are you sure?",
+        yes: "Yes, I am sure",
+        no: "No, Keep me here"
+      }
     };
   },
   methods: {
@@ -107,6 +134,18 @@ export default {
         });
         this.$router.push({ name: "upload" });
       });
+    },
+    async userAnswer(val) {
+      if (val == "yes") {
+        try {
+          await axios.delete(
+            this.API_URL + "/api/video/file?id=" + this.getVideoObject().id
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      this.showConfirmation = false;
     }
   },
   async mounted() {
