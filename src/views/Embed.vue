@@ -30,8 +30,8 @@ export default {
   },
   data() {
     return {
-      uid: "5e0d71da4922641fe81a3cbd",
-      vid: "null",
+      uid: null,
+      vid: null,
       timer: "",
       title: "",
       src: null,
@@ -95,7 +95,8 @@ export default {
   },
 
   async mounted() {
-    this.vid = this.$route.query.vid; //use params instead of query to use forwars
+    this.vid = this.$route.query.vid;
+    this.uid = this.$route.query.uid;
     let video = await axios.get(this.API_URL + "/api/video?id=" + this.vid);
     this.title = video.data.title;
     this.chapterList = video.data.chapterMarks;
@@ -113,6 +114,10 @@ export default {
         this.API_URL + "/api/video/watermark?id=" + this.vid;
 
     this.fetchQuestions(this.uid, this.vid);
+    await axios.post(this.API_URL + "/api/insight/video", {
+      vid: this.vid,
+      uid: this.uid
+    });
   },
   beforeDestroy() {
     clearInterval(this.timer);

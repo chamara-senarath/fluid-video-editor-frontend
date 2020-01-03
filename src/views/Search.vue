@@ -11,7 +11,7 @@
       >
         <v-hover v-slot:default="{ hover }">
           <v-card>
-            <v-img :src="thumbnail.img" height="194">
+            <v-img :src="thumbnail.img">
               <v-expand-transition>
                 <div
                   v-if="hover"
@@ -21,7 +21,12 @@
                   <v-container>
                     <v-layout row>
                       <v-flex px-1 xs6>
-                        <v-btn block :to="{ name: 'Insight' }"
+                        <v-btn
+                          block
+                          :to="{
+                            name: 'Insight',
+                            params: { vid: thumbnail.id }
+                          }"
                           ><v-icon left>fa fa-chart-line</v-icon>Insights</v-btn
                         >
                       </v-flex>

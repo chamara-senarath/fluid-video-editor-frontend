@@ -49,8 +49,9 @@
             </v-layout>
           </v-card-title>
           <VueApexCharts
+            v-if="showPieCharts"
             type="donut"
-            height="300px"
+            height="300"
             :options="pieChart.options"
             :series="pieChart.series"
           ></VueApexCharts>
@@ -63,6 +64,7 @@
 <script>
 import VueApexCharts from "vue-apexcharts";
 import EditRange from "@/components/EditRange";
+import axios from "axios";
 export default {
   components: {
     VueApexCharts,
@@ -71,53 +73,56 @@ export default {
   data() {
     return {
       editRangeDialog: false,
+      vid: null,
+      showPieCharts: false,
+      rangeList: [18, 25, 30, 40],
       cardList: [
         {
           title: "Total Views",
           color: "green",
           icon: "clock",
-          value: "1920"
+          value: null
         },
         {
           title: "Views in Last Week",
           color: "purple",
           icon: "clock",
-          value: "18"
+          value: null
         },
         {
           title: "Views in Last Month",
           color: "red",
           icon: "clock",
-          value: "120"
+          value: null
         },
         {
           title: "Views in Last Year",
           color: "blue",
           icon: "clock",
-          value: "900"
+          value: null
         }
       ],
       pieChartList: [
         {
           title: "Gender",
           options: {
-            labels: ["Male", "Female"]
+            labels: []
           },
-          series: [44, 56]
+          series: []
         },
         {
           title: "Age",
           options: {
-            labels: ["18-25", "25-30", "30-40", "40+"]
+            labels: []
           },
-          series: [54, 60, 41, 17]
+          series: []
         },
         {
           title: "Location",
           options: {
-            labels: ["Colombo", "Kandy", "Galle", "Matale"]
+            labels: []
           },
-          series: [44, 65, 46, 17]
+          series: []
         }
       ]
     };
@@ -125,7 +130,44 @@ export default {
   methods: {
     saveRange(val) {
       this.editRangeDialog = false;
-      console.log(val);
+      this.rangeList = val.toString();
+      for (let i = 0; i < 3; i++) {
+        this.pieChartList[i].options.labels = [];
+        this.pieChartList[i].series = [];
+      }
+      this.fetchData();
+    },
+    async fetchData() {
+      this.showPieCharts = false;
+      let result = await axios.get(
+        this.API_URL +
+          `/api/insight/views?vid=${this.vid}&range=${this.rangeList}`
+      );
+      this.cardList[0].value = result.data.totalViews;
+      this.cardList[1].value = result.data.lastWeekViews;
+      this.cardList[2].value = result.data.lastMonthViews;
+      this.cardList[3].value = result.data.lastYearViews;
+      result.data.viewsByGender.forEach(gender => {
+        this.pieChartList[0].options.labels.push(gender.label);
+        this.pieChartList[0].series.push(gender.value);
+      });
+      result.data.viewsByAge.forEach(age => {
+        if (age.value != 0) {
+          this.pieChartList[1].options.labels.push(age.label);
+          this.pieChartList[1].series.push(age.value);
+        }
+      });
+      result.data.viewsByLocation.forEach(location => {
+        this.pieChartList[2].options.labels.push(location.label);
+        this.pieChartList[2].series.push(location.value);
+      });
+      this.showPieCharts = true;
+    }
+  },
+  mounted() {
+    this.vid = this.$route.params.vid;
+    if (this.vid != null) {
+      this.fetchData();
     }
   }
 };
