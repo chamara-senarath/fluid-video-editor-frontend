@@ -229,9 +229,11 @@
           </v-sheet>
         </div>
       </v-flex>
-
       <v-flex md2>
         <v-layout column justify-center wrap>
+          <v-layout mb-4 v-if="getSplashScreenObject().data == 'edit'">
+            <v-btn color="warning" block @click="skip()">Skip</v-btn>
+          </v-layout>
           <v-layout row justify-start>
             <v-flex xs2>
               <v-tooltip bottom>
@@ -361,6 +363,7 @@ export default {
     Moveable,
     TemplateBuilder
   },
+  props: ["skip"],
   data: () => ({
     timer: null,
     chooseTemplate: false,

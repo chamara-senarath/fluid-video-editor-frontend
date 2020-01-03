@@ -96,7 +96,7 @@ export default {
           tags: video.data.tags
         });
         this.setSplashScreenObject({
-          data: null,
+          data: "edit",
           duration: video.data.splashDuration
         });
         this.setChapterMarks(video.data.chapterMarks);

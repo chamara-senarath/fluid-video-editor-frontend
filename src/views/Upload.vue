@@ -56,7 +56,14 @@
             </v-btn>
           </v-layout>
         </v-layout>
-        <SplashEditor ref="splashEditor"></SplashEditor>
+        <SplashEditor
+          :skip="
+            () => {
+              stepperCount++;
+            }
+          "
+          ref="splashEditor"
+        ></SplashEditor>
       </v-stepper-content>
       <v-stepper-content step="3">
         <v-layout>
@@ -98,7 +105,17 @@
             </v-btn>
           </v-layout>
           <v-layout justify-end>
-            <v-btn depressed fab small color="primary" @click="clickNext">
+            <v-btn
+              depressed
+              fab
+              small
+              color="primary"
+              @click="
+                () => {
+                  $router.go();
+                }
+              "
+            >
               <v-icon small>fa fa-upload</v-icon>
             </v-btn>
           </v-layout>

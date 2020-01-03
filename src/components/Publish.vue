@@ -207,6 +207,9 @@ export default {
       questions: this.questionList
     };
     await axios.patch(this.API_URL + "/api/video", Obj);
+    if (this.getSplashScreenObject().data == "edit") {
+      return;
+    }
 
     var thumbnailBlob = this.b64toBlob(this.thumbnail);
     //post splash

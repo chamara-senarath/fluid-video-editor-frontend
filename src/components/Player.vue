@@ -168,7 +168,7 @@ export default {
   ],
   data: () => ({
     controlVisibility: true,
-    panelOpacity: 0.4,
+    panelOpacity: 0.6,
     watermarkStyle: null,
     drawer: true,
     player: null,

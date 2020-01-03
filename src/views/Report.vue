@@ -56,7 +56,6 @@ export default {
           title: "Most Watched Video",
           video: "About DIPS",
           img: "https://picsum.photos/id/179/800/800",
-          views: 1241,
           color: "green",
           icon: "fa fa-smile-beam"
         },
@@ -64,7 +63,6 @@ export default {
           title: "Least Watched Video",
           video: "DIPS Arena - eHealth solution",
           img: "https://picsum.photos/id/179/800/800",
-          views: 51,
           color: "purple",
           icon: "fa fa-frown"
         },
@@ -72,7 +70,6 @@ export default {
           title: "Frequently Watched Video",
           video: "Cross Team Forums",
           img: "https://picsum.photos/id/179/800/800",
-          views: 933,
 
           color: "red",
           icon: "fa fa-wave-square"
