@@ -10,15 +10,14 @@
           <v-card-text>
             <v-layout row mt-2>
               <v-flex xs3 px-2>
-                <v-avatar tile size="100"
-                  ><v-img :src="item.img"></v-img
-                ></v-avatar>
+                <v-responsive :aspect-ratio="16 / 9">
+                  <v-img :src="item.img"></v-img>
+                </v-responsive>
               </v-flex>
               <v-flex xs9 px-12>
                 <v-layout column>
                   <div class="title">{{ item.video }}</div>
                   <span>Total Views: {{ item.views }} </span>
-                  <span>Total Likes: {{ item.likes }}</span>
                 </v-layout>
               </v-flex>
             </v-layout>
@@ -48,6 +47,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -57,7 +57,6 @@ export default {
           video: "About DIPS",
           img: "https://picsum.photos/id/179/800/800",
           views: 1241,
-          likes: 921,
           color: "green",
           icon: "fa fa-smile-beam"
         },
@@ -66,7 +65,6 @@ export default {
           video: "DIPS Arena - eHealth solution",
           img: "https://picsum.photos/id/179/800/800",
           views: 51,
-          likes: 1,
           color: "purple",
           icon: "fa fa-frown"
         },
@@ -75,7 +73,7 @@ export default {
           video: "Cross Team Forums",
           img: "https://picsum.photos/id/179/800/800",
           views: 933,
-          likes: 124,
+
           color: "red",
           icon: "fa fa-wave-square"
         }
@@ -87,27 +85,49 @@ export default {
           align: "left",
           value: "name"
         },
-        { text: "Views", value: "views" },
-        { text: "Likes", value: "likes" }
+        { text: "Views", value: "views" }
       ],
-      items: [
-        {
-          name: "DIPS Arena - eHealth solution",
-          views: 151,
-          likes: 112
-        },
-        {
-          name: "DIPS SL Team : Short Summary",
-          views: 526,
-          likes: 12
-        },
-        {
-          name: "Cross Team Forums",
-          views: 929,
-          likes: 20
-        }
-      ]
+      items: []
     };
+  },
+  async mounted() {
+    let mostWatched = await axios.get(
+      this.API_URL + "/api/insight/most_watched"
+    );
+    let leastWatched = await axios.get(
+      this.API_URL + "/api/insight/least_watched"
+    );
+    let summary = await axios.get(this.API_URL + "/api/insight/summary");
+
+    if (mostWatched.data) {
+      this.watchList[0].video = mostWatched.data.title;
+      this.watchList[0].views = mostWatched.data.views;
+      this.watchList[0].img =
+        this.API_URL + "/api/video/splash?id=" + mostWatched.data.id;
+    }
+    if (leastWatched.data) {
+      this.watchList[1].video = leastWatched.data.title;
+      this.watchList[1].views = leastWatched.data.views;
+      this.watchList[1].img =
+        this.API_URL + "/api/video/splash?id=" + leastWatched.data.id;
+    }
+    //TODO Change this to frequent watch
+    if (mostWatched.data) {
+      this.watchList[2].video = mostWatched.data.title;
+      this.watchList[2].views = mostWatched.data.views;
+      this.watchList[2].img =
+        this.API_URL + "/api/video/splash?id=" + mostWatched.data.id;
+    }
+
+    if (summary.data && summary.data.length != 0) {
+      summary.data.forEach(summary => {
+        let obj = {
+          name: summary.title,
+          views: summary.totalViews
+        };
+        this.items.push(obj);
+      });
+    }
   }
 };
 </script>
