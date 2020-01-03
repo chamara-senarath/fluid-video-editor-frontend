@@ -16,7 +16,9 @@
               </v-flex>
               <v-flex xs9 px-12>
                 <v-layout column>
-                  <div class="title">{{ item.video }}</div>
+                  <div class="title">
+                    {{ item.video | truncate(50, "...") }}
+                  </div>
                   <span>Total Views: {{ item.views }} </span>
                 </v-layout>
               </v-flex>
