@@ -69,7 +69,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      error: true,
+      error: false,
       watchList: [
         {
           title: "Most Watched Video",

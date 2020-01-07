@@ -113,7 +113,7 @@ export default {
   },
   data() {
     return {
-      error: true,
+      error: false,
       selectedID: null,
       thumbnailList: [],
       showConfirmation: false,
