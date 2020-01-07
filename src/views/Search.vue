@@ -21,10 +21,29 @@
                 <div
                   v-if="hover"
                   class=" transition-fast-in-fast-out black  v-card--reveal"
-                  style="height: 30%;"
+                  style="height: 40%;"
                 >
                   <v-container>
                     <v-layout row>
+                      <v-flex xs12>
+                        <v-layout column align-end>
+                          <v-btn
+                            fab
+                            elevation="0"
+                            outlined
+                            small
+                            @click="
+                              () => {
+                                showConfirmation = true;
+                                selectedID = thumbnail.id;
+                              }
+                            "
+                            ><v-icon color="red" small
+                              >fa fa-trash-alt</v-icon
+                            ></v-btn
+                          >
+                        </v-layout>
+                      </v-flex>
                       <v-flex px-1 xs6>
                         <v-btn
                           block
@@ -63,16 +82,6 @@
                     4.5 ({{ thumbnail.rates }})
                   </div>
                 </v-row>
-                <v-layout row justify-end>
-                  <v-btn
-                    fab
-                    elevation="0"
-                    outlined
-                    small
-                    @click="showConfirmation = true"
-                    ><v-icon color="red" small>fa fa-trash-alt</v-icon></v-btn
-                  >
-                </v-layout>
               </v-layout>
             </v-card-title>
           </v-card>
@@ -92,6 +101,7 @@ export default {
   },
   data() {
     return {
+      selectedID: null,
       thumbnailList: [],
       showConfirmation: false,
       confirmationMessage: {
@@ -139,7 +149,10 @@ export default {
       if (val == "yes") {
         try {
           await axios.delete(
-            this.API_URL + "/api/video/file?id=" + this.getVideoObject().id
+            this.API_URL + "/api/video/file?id=" + this.selectedID
+          );
+          this.thumbnailList = this.thumbnailList.filter(
+            item => item.id != this.selectedID
           );
         } catch (error) {
           console.log(error);
