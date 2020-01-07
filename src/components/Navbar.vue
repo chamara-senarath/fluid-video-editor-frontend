@@ -1,6 +1,6 @@
 <template>
   <nav v-if="$route.name != 'Embed'">
-    <v-app-bar color="blue-grey darken-4" app dark>
+    <v-app-bar app elevation="0">
       <v-app-bar-nav-icon
         v-if="isLogged"
         @click.stop="drawer = !drawer"
@@ -11,19 +11,21 @@
 
       <v-spacer></v-spacer>
       <v-text-field
+        outlined
+        dense
         v-if="$route.name == 'Search' || $route.name == 'User'"
         placeholder="Search..."
         single-line
         append-icon="fa fa-search"
-        color="white"
         hide-details
+        @keydown.enter="search"
       />
       <v-spacer></v-spacer>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-btn
             v-on="on"
-            color="rgba(0,0,0,0.3)"
+            color="rgba(0,0,0,0)"
             small
             fab
             depressed
@@ -41,7 +43,7 @@
         <template v-slot:activator="{ on }">
           <v-btn
             v-on="on"
-            color="rgba(0,0,0,0.3)"
+            color="rgba(0,0,0,0)"
             fab
             small
             v-if="isLogged"
@@ -60,7 +62,7 @@
         <template v-slot:activator="{ on }">
           <v-btn
             v-on="on"
-            color="rgba(0,0,0,0.3)"
+            color="rgba(0,0,0,0)"
             fab
             small
             v-if="isLogged"
@@ -141,6 +143,9 @@ export default {
     logout() {
       this.drawer = false;
       this.isLogged = false;
+    },
+    search(e) {
+      this.$emit("search", e.target.value);
     }
   }
 };

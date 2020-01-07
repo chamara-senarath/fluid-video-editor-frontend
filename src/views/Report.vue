@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-layout column align-center v-if="error">
       <v-flex>
         <v-img src="/no_data_found.png" width="30vw"></v-img>
@@ -9,6 +9,7 @@
       </v-flex>
     </v-layout>
     <template v-else>
+      <span class="title">Video insight</span>
       <v-layout row>
         <v-flex
           xs12
@@ -26,9 +27,7 @@
             <v-card-text>
               <v-layout row mt-2>
                 <v-flex xs3 px-2>
-                  <v-responsive :aspect-ratio="16 / 9">
-                    <v-img :src="item.img"></v-img>
-                  </v-responsive>
+                  <v-img :src="item.img"></v-img>
                 </v-flex>
                 <v-flex xs9 px-12>
                   <v-layout column>

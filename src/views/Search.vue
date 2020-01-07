@@ -1,5 +1,6 @@
 <template>
   <v-container fluid>
+    <Navbar @search="loadData"></Navbar>
     <v-layout column align-center v-if="error">
       <v-flex>
         <v-img src="/no_data_found.png" width="30vw"></v-img>
@@ -9,6 +10,7 @@
       </v-flex>
     </v-layout>
     <template v-else>
+      <span class="title">Video List</span>
       <AreYouSure
         :showConfirmation="showConfirmation"
         :options="confirmationMessage"
@@ -30,31 +32,13 @@
                   <div
                     v-if="hover"
                     class=" transition-fast-in-fast-out black  v-card--reveal"
-                    style="height: 40%;"
+                    style="height: 20%;"
                   >
                     <v-container>
-                      <v-layout row>
-                        <v-flex xs12>
-                          <v-layout column align-end>
-                            <v-btn
-                              fab
-                              elevation="0"
-                              outlined
-                              small
-                              @click="
-                                () => {
-                                  showConfirmation = true;
-                                  selectedID = thumbnail.id;
-                                }
-                              "
-                              ><v-icon color="red" small
-                                >fa fa-trash-alt</v-icon
-                              ></v-btn
-                            >
-                          </v-layout>
-                        </v-flex>
-                        <v-flex px-1 xs6>
+                      <v-layout row justify-space-between px-2>
+                        <v-flex px-1 xs4>
                           <v-btn
+                            small
                             block
                             :to="{
                               name: 'Insight',
@@ -64,10 +48,24 @@
                             >Insights</v-btn
                           >
                         </v-flex>
-                        <v-flex px-1 xs6>
-                          <v-btn @click="edit(thumbnail.id)" block
+                        <v-flex px-1 xs4>
+                          <v-btn small @click="edit(thumbnail.id)" block
                             ><v-icon left>fa fa-edit</v-icon>Edit</v-btn
                           >
+                        </v-flex>
+                        <v-flex px-1 xs4>
+                          <v-btn
+                            block
+                            small
+                            @click="
+                              () => {
+                                showConfirmation = true;
+                                selectedID = thumbnail.id;
+                              }
+                            "
+                          >
+                            <v-icon left>fa fa-trash-alt</v-icon>Delete
+                          </v-btn>
                         </v-flex>
                       </v-layout>
                     </v-container>
@@ -76,7 +74,7 @@
               </v-img>
               <v-card-title>
                 <v-layout column>
-                  {{ thumbnail.title }}
+                  {{ thumbnail.title | truncate(50, "...") }}
 
                   <v-row align="center" class="mx-0">
                     <v-rating
@@ -105,10 +103,13 @@
 <script>
 import axios from "axios";
 import AreYouSure from "@/components/AreYouSure";
+import Navbar from "@/components/Navbar";
+
 import { mapMutations } from "vuex";
 export default {
   components: {
-    AreYouSure
+    AreYouSure,
+    Navbar
   },
   data() {
     return {
@@ -175,12 +176,9 @@ export default {
         }
       }
       this.showConfirmation = false;
-    }
-  },
-  async mounted() {
-    try {
-      let videos = await axios.get(this.API_URL + "/api/videos");
-      videos.data.forEach(video => {
+    },
+    pushData(videos) {
+      videos.forEach(video => {
         let obj = {
           id: video._id,
           title: video.title,
@@ -194,6 +192,23 @@ export default {
       if (this.thumbnailList.length == 0) {
         this.error = true;
       }
+    },
+    async loadData(val) {
+      this.thumbnailList = [];
+      try {
+        let videos = await axios.get(
+          this.API_URL + "/api/video/search?key=" + val
+        );
+        this.pushData(videos.data);
+      } catch (error) {
+        this.error = error;
+      }
+    }
+  },
+  async mounted() {
+    try {
+      let videos = await axios.get(this.API_URL + "/api/videos");
+      this.pushData(videos.data);
     } catch (error) {
       this.error = error;
     }
