@@ -1,6 +1,6 @@
 <template>
   <nav v-if="$route.name != 'Embed'">
-    <v-app-bar color="blue darken-3" app dark>
+    <v-app-bar color="blue-grey darken-4" app dark>
       <v-app-bar-nav-icon
         v-if="isLogged"
         @click.stop="drawer = !drawer"

@@ -19,8 +19,13 @@
     </v-layout>
     <v-overlay :value="overlay">
       <v-layout column align-center>
-        <v-progress-circular indeterminate size="64"></v-progress-circular>
-        <span>Uploading...</span>
+        <v-card>
+          <v-img src="/uploading.gif"></v-img>
+
+          <v-card-text
+            ><v-layout column align-center>Uploading...</v-layout></v-card-text
+          >
+        </v-card>
       </v-layout>
     </v-overlay>
     <v-form ref="form">
