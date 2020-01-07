@@ -7,7 +7,7 @@ import Embed from "../views/Embed.vue";
 import Test from "../views/Test.vue";
 import Insight from "../views/Insight.vue";
 import Report from "../views/Report.vue";
-
+import NotFound from "../views/NotFound.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -51,7 +51,9 @@ const routes = [
     path: "/test",
     name: "Test",
     component: Test
-  }
+  },
+  { path: "/404", component: NotFound },
+  { path: "*", redirect: "/404" }
 ];
 
 const router = new VueRouter({
