@@ -338,6 +338,9 @@ export default {
     this.handleResize();
   },
   mounted() {
+    this.chapterList = this.chapterList.sort((a, b) =>
+      a.startTime > b.startTime ? 1 : -1
+    );
     this.normalScreenWidth = window.innerWidth;
     // this.$refs.player.player.elements.buttons.fullscreen.hidden = true;
     this.$refs.player.player.config.fullscreen = {
