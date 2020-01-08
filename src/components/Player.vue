@@ -262,6 +262,9 @@ export default {
       }
     },
     toggleFullscreen: function() {
+      if (this.$route.name == "upload") {
+        return;
+      }
       var elem = document.documentElement;
       if (
         document.fullscreenEnabled ||
