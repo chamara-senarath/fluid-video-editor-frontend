@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   props: ["chooseTemplate"],
   data() {
@@ -98,6 +99,7 @@ export default {
     };
   },
   methods: {
+    ...mapGetters(["getVideoObject"]),
     close() {
       this.selectedTemplate = this.currentTemplate;
       this.$emit("setTemplate", null);
@@ -107,7 +109,7 @@ export default {
       this.currentTemplate = this.selectedTemplate;
       if (this.selectedTemplate == 0) {
         let text1 = {
-          text: "Your title here",
+          text: this.getVideoObject().title,
           position: {
             x: "center",
             y: "top"
@@ -116,10 +118,10 @@ export default {
             id: 1,
             name: "Open Sans"
           },
-          size: "H1"
+          size: "H4"
         };
         let text2 = {
-          text: "Your footer here",
+          text: "Authors: " + this.getVideoObject().authors.toString(),
           position: {
             x: "center",
             y: "bottom"
@@ -135,7 +137,7 @@ export default {
       }
       if (this.selectedTemplate == 1) {
         let text1 = {
-          text: "Your title here",
+          text: this.getVideoObject().title,
           position: {
             x: "center",
             y: "top"
@@ -144,10 +146,10 @@ export default {
             id: 1,
             name: "Open Sans"
           },
-          size: "H1"
+          size: "H4"
         };
         let text2 = {
-          text: "Your content here",
+          text: this.getVideoObject().tags.toString(),
           position: {
             x: "center",
             y: "center"
@@ -159,7 +161,7 @@ export default {
           size: "H4"
         };
         let text3 = {
-          text: "Your footer here",
+          text: "Authors: " + this.getVideoObject().authors.toString(),
           position: {
             x: "center",
             y: "bottom"

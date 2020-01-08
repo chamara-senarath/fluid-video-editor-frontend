@@ -127,7 +127,7 @@
           @click="clickUpload"
           :class="getVideoObject().file != null ? 'success' : 'primary'"
           block
-          >{{ getVideoObject().file != null ? "Update" : "Upload"
+          >{{ getVideoObject().file != null ? "Edit" : "Upload"
           }}<v-icon small right>{{
             getVideoObject().file != null ? "fa fa-edit" : "fa fa-upload"
           }}</v-icon></v-btn
@@ -241,6 +241,7 @@ export default {
       if (this.getVideoObject().file != null) {
         let video = {
           ...this.getVideoObject(),
+          title: this.video.title,
           authors: this.authors,
           tags: this.tags
         };

@@ -19,7 +19,7 @@
           :key="index"
           pa-2
         >
-          <v-card dark :color="`${item.color} lighten-1`">
+          <v-card dark :color="`${item.color} lighten-1`" min-height="25vh">
             <v-card-title :class="`${item.color} darken-1`">
               {{ item.title }}
               <v-icon right>{{ item.icon }}</v-icon>

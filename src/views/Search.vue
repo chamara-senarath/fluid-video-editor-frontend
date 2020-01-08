@@ -26,13 +26,13 @@
           :key="thumbnail.id"
         >
           <v-hover v-slot:default="{ hover }">
-            <v-card>
+            <v-card min-height="45vh">
               <v-img :src="thumbnail.img">
                 <v-expand-transition>
                   <div
                     v-if="hover"
                     class=" transition-fast-in-fast-out black  v-card--reveal"
-                    style="height: 20%;"
+                    style="height: 8vh;"
                   >
                     <v-container>
                       <v-layout row justify-space-between px-2>

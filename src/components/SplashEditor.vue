@@ -790,6 +790,7 @@ export default {
 .moveable {
   position: relative;
   color: black;
+  word-wrap: break-word;
 }
 .fixed {
   position: absolute;
@@ -798,6 +799,7 @@ export default {
 .moveable span {
   position: absolute;
   white-space: nowrap;
+   
 }
 .logo {
   display: block;

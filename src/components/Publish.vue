@@ -195,6 +195,7 @@ export default {
     this.watermark = this.getWatermark();
     let Obj = {
       id: id,
+      title: this.title,
       authors: this.authors,
       tags: this.tags,
       splashDuration: this.getSplashScreenObject().duration,

@@ -96,7 +96,7 @@ export default {
 
   async mounted() {
     this.vid = this.$route.query.vid;
-    this.uid = this.$route.query.uid;
+    this.uid = "5e0ebe92823ecb188470de12"; //this.$route.query.uid;
     let video = await axios.get(this.API_URL + "/api/video?id=" + this.vid);
     this.title = video.data.title;
     this.chapterList = video.data.chapterMarks;
