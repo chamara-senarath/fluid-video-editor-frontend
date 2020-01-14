@@ -701,7 +701,7 @@ export default {
       this.canvasData = await this.$html2canvas(canvas, options);
     },
 
-    validate() {
+    async validate() {
       this.selectedElement = null;
       let watermarkPosition = null;
       let watermarkWidthRatio = null;
@@ -709,22 +709,22 @@ export default {
         watermarkPosition = this.genarateRatio().position;
         watermarkWidthRatio = this.genarateRatio().widthRatio;
       }
-      this.canvasToData().then(() => {
-        this.setSplashScreenObject({
-          data: this.canvasData,
-          duration: this.duration
-        });
-        if (this.logo.file) {
-          let logo = {
-            ...this.logo,
-            position: watermarkPosition,
-            widthRatio: watermarkWidthRatio
-          };
-          this.setWatermark(logo);
-        } else {
-          this.setWatermark(null);
-        }
+      await this.canvasToData();
+      this.setSplashScreenObject({
+        data: this.canvasData,
+        duration: this.duration
       });
+      if (this.logo.file) {
+        let logo = {
+          ...this.logo,
+          position: watermarkPosition,
+          widthRatio: watermarkWidthRatio
+        };
+        this.setWatermark(logo);
+      } else {
+        this.setWatermark(null);
+      }
+
       return true;
     }
   },
@@ -799,7 +799,6 @@ export default {
 .moveable span {
   position: absolute;
   white-space: nowrap;
-   
 }
 .logo {
   display: block;
