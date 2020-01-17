@@ -2,7 +2,7 @@
   <nav v-if="$route.name != 'Embed'">
     <v-app-bar app elevation="0">
       <v-app-bar-nav-icon
-        v-if="isLogged"
+        v-if="$route.name != 'Login' && $route.name != 'User'"
         @click.stop="drawer = !drawer"
       ></v-app-bar-nav-icon>
       <v-toolbar-title>
@@ -39,7 +39,7 @@
         <span>Dark Mode Toggle</span>
       </v-tooltip>
 
-      <v-tooltip bottom>
+      <v-tooltip bottom v-if="$route.name != 'Login' && $route.name != 'User'">
         <template v-slot:activator="{ on }">
           <v-btn
             v-on="on"
@@ -58,7 +58,7 @@
         <span>{{ $route.name == "upload" ? "Search" : "Upload" }}</span>
       </v-tooltip>
 
-      <v-tooltip bottom>
+      <v-tooltip bottom v-if="$route.name != 'Login' && $route.name != 'User'">
         <template v-slot:activator="{ on }">
           <v-btn
             v-on="on"
@@ -67,7 +67,6 @@
             small
             v-if="isLogged"
             depressed
-            to="user"
             @click="logout"
           >
             <v-icon small>fa fa-sign-out-alt</v-icon>
@@ -77,7 +76,11 @@
       </v-tooltip>
     </v-app-bar>
 
-    <v-navigation-drawer v-if="getUser" v-model="drawer" app>
+    <v-navigation-drawer
+      v-if="$route.name != 'Login' && $route.name != 'User'"
+      v-model="drawer"
+      app
+    >
       <v-list-item>
         <v-layout column align-center>
           <v-flex mt-4 mb-3>
@@ -116,7 +119,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -139,10 +142,14 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["setAdmin"]),
+
     ...mapGetters["getVideoObject"],
     logout() {
       this.drawer = false;
       this.isLogged = false;
+      this.$router.push("/login");
+      this.setAdmin({ isLogged: false });
     },
     search(e) {
       this.$emit("search", e.target.value);

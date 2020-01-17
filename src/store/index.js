@@ -5,6 +5,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    admin: {
+      isLogged: false
+    },
     video: {
       id: null,
       title: null,
@@ -43,6 +46,9 @@ export default new Vuex.Store({
     },
     getWatermark: state => {
       return state.watermark;
+    },
+    getIsLogged: state => {
+      return state.admin.isLogged;
     }
   },
   mutations: {
@@ -75,6 +81,9 @@ export default new Vuex.Store({
         state.watermark.position = payload.position;
         state.watermark.file = payload.file;
       }
+    },
+    setAdmin: (state, payload) => {
+      state.admin.isLogged = payload.isLogged;
     }
   },
   actions: {},

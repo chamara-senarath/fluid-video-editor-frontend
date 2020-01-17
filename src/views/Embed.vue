@@ -1,6 +1,8 @@
 <template>
   <v-responsive aspect-ratio="16/9">
-    <div v-if="is_loading">Loading</div>
+    <v-overlay :value="is_loading">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
     <Player
       v-if="this.src != null && !is_loading"
       :title="title"
@@ -58,13 +60,16 @@ export default {
         questions: this.questionList,
         checkpoints: []
       };
-      await axios.post(this.API_URL + "/api/insight/user", obj);
+      if (obj.questions.length != 0) {
+        await axios.post(this.API_URL + "/api/insight/user", obj);
+      }
     },
     initQuestionList(questionList) {
       let tempList = [];
       questionList.forEach(question => {
         let q = {
           ...question,
+          qid: question._id,
           is_answered: false,
           is_skipped: false,
           is_correct: false,
@@ -81,7 +86,18 @@ export default {
           this.API_URL + "/api/insight/user?uid=" + uid + "&vid=" + vid
         );
         let userInsight = result.data.questions;
-        this.questionList = userInsight;
+        let tempList = [];
+        for (let i = 0; i < this.questionList.length; i++) {
+          let questionsFromList = this.questionList[i];
+          for (let j = 0; j < userInsight.length; j++) {
+            let questionFromInsight = userInsight[j];
+            if (questionsFromList._id == questionFromInsight._id) {
+              let q = { ...questionFromInsight, ...userInsight };
+              tempList.push(q);
+            }
+          }
+        }
+        this.questionList = tempList;
       } catch (e) {
         console.log(e + "error");
       }
@@ -118,7 +134,8 @@ export default {
       uid: this.uid
     });
 
-    this.timer = setInterval(this.saveLog, 2000);
+    this.timer = setInterval(this.saveLog, 1000);
+
     this.is_loading = false;
   },
   beforeDestroy() {

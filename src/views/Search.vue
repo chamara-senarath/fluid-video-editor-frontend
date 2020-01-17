@@ -26,7 +26,7 @@
           :key="thumbnail.id"
         >
           <v-hover v-slot:default="{ hover }">
-            <v-card min-height="45vh">
+            <v-card>
               <v-img :src="thumbnail.img">
                 <v-expand-transition>
                   <div
@@ -72,9 +72,9 @@
                   </div>
                 </v-expand-transition>
               </v-img>
-              <v-card-title>
+              <v-card-title class="ellipsis">
                 <v-layout column>
-                  {{ thumbnail.title | truncate(50, "...") }}
+                  {{ thumbnail.title }}
 
                   <v-row align="center" class="mx-0">
                     <v-rating
@@ -222,5 +222,10 @@ export default {
   opacity: 0.8;
   position: absolute;
   width: 100%;
+}
+.ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 </style>
