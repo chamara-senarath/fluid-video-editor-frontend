@@ -30,8 +30,8 @@ Vue.mixin({
   data: function() {
     return {
       get API_URL() {
-        // return "http://10.2.1.153";
-        return "http://localhost:3000";
+        return "http://10.2.1.153";
+        // return "http://localhost:3000";
       }
     };
   }
