@@ -1,6 +1,11 @@
 <template>
   <v-container fluid>
     <Navbar @search="loadData"></Navbar>
+    <MiniPlayer
+      :showPlayer="showPlayer"
+      :src="videoSource"
+      @closePlayer="showPlayer = false"
+    ></MiniPlayer>
     <v-layout column align-center v-if="error">
       <v-flex>
         <v-img src="/no_data_found.png" width="30vw"></v-img>
@@ -73,23 +78,40 @@
                 </v-expand-transition>
               </v-img>
               <v-card-title class="ellipsis">
-                <v-layout column>
-                  {{ thumbnail.title }}
+                <v-layout row>
+                  <v-flex>
+                    <v-layout column>
+                      {{ thumbnail.title }}
 
-                  <v-row align="center" class="mx-0">
-                    <v-rating
-                      :value="thumbnail.rating"
-                      color="amber"
-                      dense
-                      half-increments
-                      readonly
-                      size="14"
-                    ></v-rating>
+                      <v-row align="center" class="mx-0">
+                        <v-rating
+                          :value="thumbnail.rating"
+                          color="amber"
+                          dense
+                          half-increments
+                          readonly
+                          size="14"
+                        ></v-rating>
 
-                    <div class="grey--text ml-4 caption">
-                      4.5 ({{ thumbnail.rates }})
-                    </div>
-                  </v-row>
+                        <div class="grey--text ml-4 caption">
+                          4.5 ({{ thumbnail.rates }})
+                        </div>
+                      </v-row>
+                    </v-layout>
+                  </v-flex>
+                  <v-flex>
+                    <v-layout column align-end>
+                      <v-btn
+                        @click="gotoVideo(thumbnail.id)"
+                        small
+                        elevation="0"
+                        dark
+                        fab
+                        color="pink"
+                        ><v-icon small dark>fa fa-play</v-icon></v-btn
+                      >
+                    </v-layout>
+                  </v-flex>
                 </v-layout>
               </v-card-title>
             </v-card>
@@ -104,16 +126,20 @@
 import axios from "axios";
 import AreYouSure from "@/components/AreYouSure";
 import Navbar from "@/components/Navbar";
+import MiniPlayer from "@/components/MiniPlayer";
 
 import { mapMutations } from "vuex";
 export default {
   components: {
     AreYouSure,
-    Navbar
+    Navbar,
+    MiniPlayer
   },
   data() {
     return {
       error: false,
+      showPlayer: false,
+      videoSource: null,
       selectedID: null,
       thumbnailList: [],
       showConfirmation: false,
@@ -134,6 +160,10 @@ export default {
       "setQuestionMarks",
       "setWatermark"
     ]),
+    gotoVideo(id) {
+      this.videoSource = this.API_URL + "/embed?vid=" + id;
+      this.showPlayer = true;
+    },
     edit(id) {
       let videoURL = this.API_URL + "/api/video/file?id=" + id;
       let watermarkURL = this.API_URL + "/api/video/watermark?id=" + id;

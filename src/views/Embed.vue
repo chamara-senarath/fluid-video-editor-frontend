@@ -53,6 +53,7 @@ export default {
       "getVideoObject",
       "getQuestionMarks"
     ]),
+
     async saveLog() {
       let obj = {
         uid: this.uid,
@@ -67,17 +68,32 @@ export default {
   },
 
   async mounted() {
+    //set page loader
     this.is_loading = true;
-    this.vid = this.$route.query.vid;
-    this.uid = "5dfb38e7f77174033c7b032b"; //this.$route.query.uid;
+
+    //set route params
+    this.vid = this.$route.params.vid;
+    this.uid = this.$route.params.uid;
+
+    //forward to 404 when no user found
+    let res = await axios.get(this.API_URL + "/api/user?id=" + this.uid);
+    if (res.status == 204 || res.status == 400) {
+      this.$router.push("/404");
+      return;
+    }
+
+    //set video title and chapter list
     let video = await axios.get(this.API_URL + "/api/video?id=" + this.vid);
     this.title = video.data.title;
     this.chapterList = video.data.chapterMarks;
+
+    //set questions list
     let qlist = await axios.get(
       this.API_URL + "/api/insight/user?uid=" + this.uid + "&vid=" + this.vid
     );
-
     this.questionList = qlist.data;
+
+    //set video watermark, splashduration, src and thumbnail
     this.watermark = video.data.watermark;
     this.splashDuration = video.data.splashDuration;
     this.src = this.API_URL + "/api/video/file?id=" + this.vid;
@@ -91,15 +107,16 @@ export default {
       this.watermark.file =
         this.API_URL + "/api/video/watermark?id=" + this.vid;
     }
-
     // post video insight to increment view count
     await axios.post(this.API_URL + "/api/insight/video", {
       vid: this.vid,
       uid: this.uid
     });
 
+    //set timer to log periodically
     this.timer = setInterval(this.saveLog, 1000);
 
+    //unset loader
     this.is_loading = false;
   },
   beforeDestroy() {

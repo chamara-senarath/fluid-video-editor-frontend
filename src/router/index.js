@@ -35,16 +35,16 @@ const routes = [
       requiresAuth: true
     }
   },
-  // {
-  //   path: "/embed/:vid/:uid",
-  //   name: "Embed",
-  //   component: Embed
-  // },
   {
-    path: "/embed",
+    path: "/embed/:vid/:uid",
     name: "Embed",
     component: Embed
   },
+  // {
+  //   path: "/embed",
+  //   name: "Embed",
+  //   component: Embed
+  // },
 
   {
     path: "/insight",
