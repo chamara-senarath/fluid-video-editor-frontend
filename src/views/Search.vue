@@ -185,7 +185,7 @@ export default {
           ...video.data.watermark,
           file: watermarkURL
         });
-        this.$router.push({ name: "upload" });
+        this.$router.push({ name: "upload", params: { is_edit: true } });
       });
     },
     async userAnswer(val) {

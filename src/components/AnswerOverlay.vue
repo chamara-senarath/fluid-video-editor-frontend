@@ -90,7 +90,6 @@ export default {
   methods: {
     changeOverlayState(val) {
       this.$emit("state", val);
-      this.timerValue = 0;
     },
     answer() {
       this.question.is_answered = true;
@@ -108,10 +107,7 @@ export default {
       if (this.question.duration == 0) {
         return;
       }
-      if (this.interval != null) {
-        clearInterval(this.interval);
-      }
-      this.timerValue = 0;
+
       let duration = this.question.duration;
       this.interval = setInterval(() => {
         this.timerValue += 100 / (duration * 10);
@@ -126,6 +122,15 @@ export default {
     },
     question(newVal, oldVal) {
       if (oldVal.id != newVal.id) {
+        this.timer();
+      }
+    },
+    overlay(val) {
+      if (val) {
+        if (this.interval != null) {
+          clearInterval(this.interval);
+        }
+        this.timerValue = 0;
         this.timer();
       }
     }

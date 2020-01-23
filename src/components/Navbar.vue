@@ -48,7 +48,10 @@
             small
             v-if="isLogged"
             depressed
-            :to="$route.name == 'upload' ? '/' : '/upload'"
+            :to="{
+              name: $route.name == 'upload' ? 'Search' : 'upload',
+              params: { is_edit: false }
+            }"
           >
             <v-icon small>{{
               $route.name == "upload" ? "fa fa-search" : "fa fa-upload"
@@ -136,7 +139,11 @@ export default {
         "https://images.wallpaperscraft.com/image/corn_field_summer_124670_3840x2400.jpg",
       items: [
         { title: "Search", icon: "fa fa-search", path: "/" },
-        { title: "Upload", icon: "fa fa-upload", path: "/upload" },
+        {
+          title: "Upload",
+          icon: "fa fa-upload",
+          path: { name: "upload", params: { is_edit: false } }
+        },
         { title: "Insight", icon: "fa fa-chart-line", path: "/report" }
       ]
     };

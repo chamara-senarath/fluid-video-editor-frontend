@@ -127,7 +127,10 @@ export default {
     },
     preview() {
       window.open(
-        this.API_URL + "/embed?vid=" + this.getVideoObject().id,
+        this.API_URL +
+          "/embed/" +
+          this.getVideoObject().id +
+          "/5dfb38e7f77174033c7b032b",
         "_blank"
       );
     },

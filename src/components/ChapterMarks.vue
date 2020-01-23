@@ -147,6 +147,11 @@ export default {
   mounted() {
     if (this.file != null) {
       this.player = this.$refs.player.player;
+      this.$refs.player.player.config.fullscreen = {
+        enabled: false,
+        fallback: false,
+        iosNative: false
+      };
     }
     if (this.getChapterMarks().length != 0) {
       this.chapterMarkList = this.getChapterMarks();

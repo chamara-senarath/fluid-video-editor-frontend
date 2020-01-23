@@ -322,6 +322,9 @@ export default {
     }
   },
   mounted() {
+    if (!this.$route.params.is_edit) {
+      return;
+    }
     if (this.getVideoObject != null) {
       this.video.title = this.getVideoObject().title;
       if (this.getVideoObject().authors.length != 0) {
