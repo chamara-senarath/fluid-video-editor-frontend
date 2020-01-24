@@ -78,9 +78,8 @@ export default {
 
     //forward to 404 when no user found
     if (!is_test) {
-      console.log("hit");
       let res = await axios.get(this.API_URL + "/api/user?id=" + this.uid);
-      if (res.status == 204 || res.status == 400) {
+      if (res.status == 204 || res.status == 400 || res.status == 404) {
         this.$router.push("/404");
         return;
       }

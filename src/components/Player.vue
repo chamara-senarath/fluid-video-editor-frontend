@@ -25,7 +25,7 @@
       </vue-plyr>
 
       <transition name="fade">
-        <div v-if="is_intro" style="position:absolute;right:0px">
+        <div v-if="is_intro" style="position:absolute;right:0px;z-index:100">
           <v-btn
             transition="slide-x-transition"
             :color="`rgba(0,0,0,${panelOpacity})`"
@@ -54,7 +54,7 @@
         <img
           :src="watermark.file"
           :width="watermarkStyle.width"
-          :style="`opacity:${watermark.opacity / 100}`"
+          :style="`opacity:${watermark.opacity / 100};pointer-events: none;`"
         />
       </div>
       <AnswerOverlay
