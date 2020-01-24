@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     gotoVideo(id) {
-      this.videoSource = this.API_URL + "/embed?vid=" + id;
+      this.videoSource = this.API_URL + "/embed/" + id + "/test";
       this.showPlayer = true;
     },
     async loadData(val) {
