@@ -46,7 +46,7 @@
 
           <v-responsive :aspect-ratio="16 / 9">
             <Player
-              v-if="this.thumbnail != null"
+              v-if="thumbnail != null"
               :title="title"
               :src="src"
               :thumbnail="thumbnail"
@@ -54,6 +54,7 @@
               :watermark="watermark"
               :chapterList="chapterList"
               :questionList="this.questionList"
+              :seek="0"
               :user="{
                 name: 'Chamara Senarath',
                 avatar:

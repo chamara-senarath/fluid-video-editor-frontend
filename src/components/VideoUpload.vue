@@ -222,7 +222,11 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setVideoObject", "setSplashScreenObject"]),
+    ...mapMutations([
+      "setVideoObject",
+      "setSplashScreenObject",
+      "setVideoDefault"
+    ]),
     ...mapGetters(["getVideoObject", "getChapterMarks"]),
     uploadVideo(file) {
       if (
@@ -246,10 +250,6 @@ export default {
           tags: this.tags
         };
         this.setVideoObject(video);
-        this.setSplashScreenObject({
-          data: null,
-          duration: null
-        });
         this.$emit("uploaded", true);
         return;
       }
@@ -328,6 +328,8 @@ export default {
   },
   mounted() {
     if (!this.$route.params.is_edit) {
+      this.setVideoDefault();
+
       return;
     }
     if (this.getVideoObject != null) {

@@ -5,19 +5,23 @@
       :chooseTemplate="chooseTemplate"
     ></TemplateBuilder>
     <v-layout v-if="splash" row justify-center>
-<v-flex md9>
+      <v-flex md9>
         <div class="splash-container">
-        <v-img class="img" :src="splash" style="outline-style: dotted;"></v-img>
-        <v-btn
-          @click="splash = null"
-          large
-          dark
-          color="rgba(0, 0, 0, 0.8)"
-          class="btn"
-          >Edit Intro Screen</v-btn
-        >
-      </div>
-</v-flex>
+          <v-img
+            class="img"
+            :src="splash"
+            style="outline-style: dotted;"
+          ></v-img>
+          <v-btn
+            @click="splash = null"
+            large
+            dark
+            color="rgba(0, 0, 0, 0.8)"
+            class="btn"
+            >Edit Intro Screen</v-btn
+          >
+        </div>
+      </v-flex>
     </v-layout>
     <v-layout v-else row>
       <v-flex md9 mr-10 ml-3>
@@ -773,8 +777,8 @@ export default {
       this.duration = this.getSplashScreenObject().duration;
     }
     if (this.getSplashScreenObject().data == "edit") {
-    this.splash =
-      this.API_URL + "/api/video/splash?id=" + this.getVideoObject().id;
+      this.splash =
+        this.API_URL + "/api/video/splash?id=" + this.getVideoObject().id;
     }
   }
 };

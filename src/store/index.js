@@ -84,6 +84,30 @@ export default new Vuex.Store({
     },
     setAdmin: (state, payload) => {
       state.admin.isLogged = payload.isLogged;
+    },
+    setVideoDefault: state => {
+      state.video = {
+        id: null,
+        title: null,
+        file: null,
+        authors: [],
+        tags: []
+      };
+      state.splashScreen = {
+        data: "null",
+        duration: null
+      };
+      state.watermark = {
+        file: null,
+        opacity: null,
+        widthRatio: null,
+        position: {
+          leftRatio: null,
+          topRatio: null
+        }
+      };
+      state.chapterMarks = [];
+      state.questionMarks = [];
     }
   },
   actions: {},
