@@ -131,7 +131,7 @@ export default {
         name: "Chamara Senarath",
         role: "Administrator",
         avatar:
-          "https://www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png"
+          "https://media-exp1.licdn.com/dms/image/C5603AQH8djRfeVGRIA/profile-displayphoto-shrink_200_200/0?e=1583971200&v=beta&t=h4bdo5LKhkdkZPR11n87vWbEHyVi7rEkIEY4TzEFS2A"
       }, // TODO remove this when implement user login
       submitLoading: false,
       drawer: false,
