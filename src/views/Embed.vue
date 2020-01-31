@@ -5,6 +5,7 @@
     </v-overlay>
     <Player
       v-if="this.src != null && !is_loading"
+      @calculateWatchPercentage="calculateWatchPercentage"
       :title="title"
       :src="src"
       :thumbnail="thumbnail"
@@ -12,6 +13,7 @@
       :watermark="watermark"
       :chapterList="chapterList"
       :questionList="this.questionList"
+      :seek="watchPercentage"
       :user="{
         name: 'Chamara Senarath',
         avatar:
@@ -43,7 +45,9 @@ export default {
       splashDuration: null,
       watermark: null,
       chapterList: [],
-      questionList: []
+      questionList: [],
+      watchPercentage: null,
+      postWatchPercentage: null
     };
   },
   methods: {
@@ -53,12 +57,15 @@ export default {
       "getVideoObject",
       "getQuestionMarks"
     ]),
-
+    calculateWatchPercentage(val) {
+      this.postWatchPercentage = (val * 100).toFixed(2);
+    },
     async saveLog() {
       let obj = {
         uid: this.uid,
         vid: this.vid,
         questions: this.questionList,
+        percentage: this.postWatchPercentage,
         checkpoints: []
       };
       if (obj.questions && obj.questions.length != 0) {
@@ -92,12 +99,14 @@ export default {
 
     //set questions list
     if (!is_test) {
-      let qlist = await axios.get(
+      let result = await axios.get(
         this.API_URL + "/api/insight/user?uid=" + this.uid + "&vid=" + this.vid
       );
-      this.questionList = qlist.data;
+      this.questionList = result.data.questions;
+      this.watchPercentage = result.data.percentage;
     } else {
       this.questionList = video.data.questions;
+      this.watchPercentage = 0;
     }
     //set video watermark, splashduration, src and thumbnail
     this.watermark = video.data.watermark;

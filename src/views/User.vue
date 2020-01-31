@@ -74,12 +74,12 @@ export default {
     pushData(videos) {
       videos.forEach(video => {
         let obj = {
-          id: video._id,
-          title: video.title,
-          img: this.API_URL + "/api/video/splash?id=" + video._id,
+          id: video.video._id,
+          title: video.video.title,
+          img: this.API_URL + "/api/video/splash?id=" + video.video._id,
           rating: 3.2,
           rates: 1412,
-          completed: 30
+          completed: video.percentage
         };
         this.thumbnailList.push(obj);
       });
@@ -90,9 +90,20 @@ export default {
     }
   },
   async mounted() {
+    let uid = this.$route.params.uid;
+
+    //forward to 404 when no user found
+    let res = await axios.get(this.API_URL + "/api/user?id=" + uid);
+    if (res.status == 204 || res.status == 400 || res.status == 404) {
+      this.$router.push("/404");
+      return;
+    }
+
     try {
-      let videos = await axios.get(this.API_URL + "/api/videos");
-      this.pushData(videos.data);
+      let videos = await axios.get(
+        this.API_URL + "/api/insight/user/all?uid=" + uid
+      );
+      this.pushData(videos.data.videos);
     } catch (error) {
       this.error = error;
     }

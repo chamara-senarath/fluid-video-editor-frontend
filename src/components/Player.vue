@@ -35,6 +35,7 @@
             @click="
               () => {
                 is_intro = false;
+
                 this.player.play();
               }
             "
@@ -164,6 +165,7 @@ export default {
     "watermark",
     "chapterList",
     "questionList",
+    "seek",
     "user"
   ],
   data: () => ({
@@ -179,7 +181,8 @@ export default {
     isFullscreen: false,
     fullScreenWidth: null,
     normalScreenWidth: null,
-    is_intro: true
+    is_intro: true,
+    is_set_duration: false
   }),
   methods: {
     secondToHHMMSS(time) {
@@ -211,6 +214,10 @@ export default {
     },
     videoTimeUpdated: function() {
       this.duration = this.player.currentTime;
+      this.calculateWatchPercentage(
+        this.player.currentTime,
+        this.player.duration
+      );
     },
     onPlayVideo() {
       if (this.duration < 1) {
@@ -316,11 +323,20 @@ export default {
     },
     handleResize() {
       this.fullScreenWidth = window.innerWidth;
+    },
+    calculateWatchPercentage(currentTime, duration) {
+      let watchPercentage = currentTime / duration;
+      this.$emit("calculateWatchPercentage", watchPercentage);
     }
   },
   watch: {
     duration(value) {
       this.onPlayVideo();
+      if (this.is_set_duration == false && this.player.duration > 0) {
+        this.is_set_duration = true;
+        // console.log((this.seek * this.player.duration) / 100);
+        this.player.currentTime = (this.seek * this.player.duration) / 100;
+      }
       for (let i = 0; i < this.chapterList.length; i++) {
         if (value >= this.chapterList[i].startTime) {
           this.playingChapter = i;
