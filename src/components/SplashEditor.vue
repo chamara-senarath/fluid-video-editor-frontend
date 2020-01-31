@@ -4,7 +4,22 @@
       @setTemplate="setTemplate"
       :chooseTemplate="chooseTemplate"
     ></TemplateBuilder>
-    <v-layout row>
+    <v-layout v-if="splash" row justify-center>
+<v-flex md9>
+        <div class="splash-container">
+        <v-img class="img" :src="splash" style="outline-style: dotted;"></v-img>
+        <v-btn
+          @click="splash = null"
+          large
+          dark
+          color="rgba(0, 0, 0, 0.8)"
+          class="btn"
+          >Edit Intro Screen</v-btn
+        >
+      </div>
+</v-flex>
+    </v-layout>
+    <v-layout v-else row>
       <v-flex md9 mr-10 ml-3>
         <div ref="canvas">
           <v-sheet
@@ -231,9 +246,6 @@
       </v-flex>
       <v-flex md2>
         <v-layout column justify-center wrap>
-          <v-layout mb-4 v-if="getSplashScreenObject().data == 'edit'">
-            <v-btn color="warning" block @click="skip()">Skip</v-btn>
-          </v-layout>
           <v-layout row justify-start>
             <v-flex xs2>
               <v-tooltip bottom>
@@ -365,6 +377,7 @@ export default {
   },
   props: ["skip"],
   data: () => ({
+    splash: null,
     timer: null,
     chooseTemplate: false,
     fontSize: "display-2",
@@ -483,7 +496,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setSplashScreenObject", "setWatermark"]),
-    ...mapGetters(["getSplashScreenObject"]),
+    ...mapGetters(["getSplashScreenObject", "getVideoObject"]),
     create_UUID() {
       var dt = new Date().getTime();
       var uuid = "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(/[xy]/g, function(
@@ -702,6 +715,10 @@ export default {
     },
 
     async validate() {
+      if (this.splash) {
+        return false;
+      }
+
       this.selectedElement = null;
       let watermarkPosition = null;
       let watermarkWidthRatio = null;
@@ -755,6 +772,10 @@ export default {
     if (this.getSplashScreenObject().duration != null) {
       this.duration = this.getSplashScreenObject().duration;
     }
+    // if (this.getSplashScreenObject().data == "edit") {
+    this.splash =
+      this.API_URL + "/api/video/splash?id=" + this.getVideoObject().id;
+    // }
   }
 };
 </script>
@@ -803,5 +824,17 @@ export default {
 .logo {
   display: block;
   height: auto;
+}
+
+.splash-container {
+  position: relative;
+}
+
+.splash-container .btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
 }
 </style>

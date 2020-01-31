@@ -31,7 +31,7 @@
     <v-form ref="form">
       <v-alert v-if="feedback" type="error">{{ feedback }}</v-alert>
       <v-file-input
-        v-if="getVideoObject().file == null"
+        v-if="!$route.params.is_edit"
         ref="videoSelect"
         clearable
         color="blue darken-3"
