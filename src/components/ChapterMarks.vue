@@ -129,6 +129,7 @@ export default {
         return;
       }
       this.setChapterMarks(this.chapterMarkList);
+      this.player.pause();
       return true;
     },
     secondToHHMMSS(time) {

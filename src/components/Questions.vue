@@ -167,6 +167,7 @@ export default {
     },
     validate() {
       this.setQuestionMarks(this.questionsMarks);
+      this.player.pause();
       return true;
     }
   },
