@@ -56,14 +56,7 @@
             </v-btn>
           </v-layout>
         </v-layout>
-        <SplashEditor
-          :skip="
-            () => {
-              stepperCount++;
-            }
-          "
-          ref="splashEditor"
-        ></SplashEditor>
+        <SplashEditor ref="splashEditor"></SplashEditor>
       </v-stepper-content>
       <v-stepper-content step="3">
         <v-layout>

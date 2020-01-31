@@ -772,10 +772,10 @@ export default {
     if (this.getSplashScreenObject().duration != null) {
       this.duration = this.getSplashScreenObject().duration;
     }
-    // if (this.getSplashScreenObject().data == "edit") {
+    if (this.getSplashScreenObject().data == "edit") {
     this.splash =
       this.API_URL + "/api/video/splash?id=" + this.getVideoObject().id;
-    // }
+    }
   }
 };
 </script>

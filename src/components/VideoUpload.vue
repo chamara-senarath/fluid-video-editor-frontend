@@ -125,15 +125,15 @@
       <v-flex>
         <v-btn
           @click="clickUpload"
-          :class="getVideoObject().file != null ? 'success' : 'primary'"
+          :class="this.$route.params.is_edit ? 'success' : 'primary'"
           block
-          >{{ getVideoObject().file != null ? "Edit" : "Upload"
+          >{{ this.$route.params.is_edit ? "Edit" : "Upload"
           }}<v-icon small right>{{
-            getVideoObject().file != null ? "fa fa-edit" : "fa fa-upload"
+            this.$route.params.is_edit ? "fa fa-edit" : "fa fa-upload"
           }}</v-icon></v-btn
         >
       </v-flex>
-      <v-flex mt-2 v-if="getVideoObject().file != null">
+      <v-flex mt-2 v-if="this.$route.params.is_edit">
         <v-btn @click="uploadNew" block class="primary"
           >Upload New<v-icon small right>fa fa-upload</v-icon></v-btn
         >
@@ -222,7 +222,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setVideoObject"]),
+    ...mapMutations(["setVideoObject", "setSplashScreenObject"]),
     ...mapGetters(["getVideoObject", "getChapterMarks"]),
     uploadVideo(file) {
       if (
@@ -246,9 +246,14 @@ export default {
           tags: this.tags
         };
         this.setVideoObject(video);
+        this.setSplashScreenObject({
+          data: null,
+          duration: null
+        });
         this.$emit("uploaded", true);
         return;
       }
+
       try {
         this.overlay = true;
         this.uploaded = false;
