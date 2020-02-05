@@ -334,7 +334,6 @@ export default {
       this.onPlayVideo();
       if (this.is_set_duration == false && this.player.duration > 0) {
         this.is_set_duration = true;
-        // console.log((this.seek * this.player.duration) / 100);
         this.player.currentTime = (this.seek * this.player.duration) / 100;
       }
       for (let i = 0; i < this.chapterList.length; i++) {

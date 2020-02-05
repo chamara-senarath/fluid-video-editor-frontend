@@ -26,7 +26,6 @@ export default {
   methods: {
     close() {
       this.$emit("closePlayer", true);
-      console.log();
     }
   },
   computed: {

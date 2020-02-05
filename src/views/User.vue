@@ -49,6 +49,7 @@ export default {
   },
   data() {
     return {
+      uid: null,
       thumbnailList: [],
       showPlayer: false,
       videoSource: null,
@@ -57,14 +58,18 @@ export default {
   },
   methods: {
     gotoVideo(id) {
-      this.videoSource = this.API_URL + "/embed/" + id + "/test";
+      this.videoSource = this.API_URL + "/embed/" + id + "/" + this.uid;
       this.showPlayer = true;
     },
     async loadData(val) {
       this.thumbnailList = [];
       try {
         let videos = await axios.get(
-          this.API_URL + "/api/video/search?key=" + val
+          this.API_URL +
+            "/api/insight/user/search?key=" +
+            val +
+            "&uid=" +
+            this.uid
         );
         this.pushData(videos.data);
       } catch (error) {
@@ -90,10 +95,10 @@ export default {
     }
   },
   async mounted() {
-    let uid = this.$route.params.uid;
+    this.uid = this.$route.params.uid;
 
     //forward to 404 when no user found
-    let res = await axios.get(this.API_URL + "/api/user?id=" + uid);
+    let res = await axios.get(this.API_URL + "/api/user?id=" + this.uid);
     if (res.status == 204 || res.status == 400 || res.status == 404) {
       this.$router.push("/404");
       return;
@@ -101,7 +106,7 @@ export default {
 
     try {
       let videos = await axios.get(
-        this.API_URL + "/api/insight/user/all?uid=" + uid
+        this.API_URL + "/api/insight/user/all?uid=" + this.uid
       );
       this.pushData(videos.data.videos);
     } catch (error) {
