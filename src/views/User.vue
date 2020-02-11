@@ -4,7 +4,7 @@
     <MiniPlayer
       :showPlayer="showPlayer"
       :src="videoSource"
-      @closePlayer="showPlayer = false"
+      @closePlayer="closePlayer"
     ></MiniPlayer>
     <v-layout column align-center v-if="error">
       <v-flex>
@@ -97,6 +97,21 @@ export default {
       if (this.thumbnailList.length == 0) {
         this.error = true;
       }
+    },
+    closePlayer() {
+      this.showPlayer = false;
+      this.fetchData();
+    },
+    async fetchData() {
+      this.thumbnailList = [];
+      try {
+        let videos = await axios.get(
+          this.API_URL + "/api/insight/user/all?uid=" + this.uid
+        );
+        this.pushData(videos.data.videos);
+      } catch (error) {
+        this.error = error;
+      }
     }
   },
   async mounted() {
@@ -108,15 +123,7 @@ export default {
       this.$router.push("/404");
       return;
     }
-
-    try {
-      let videos = await axios.get(
-        this.API_URL + "/api/insight/user/all?uid=" + this.uid
-      );
-      this.pushData(videos.data.videos);
-    } catch (error) {
-      this.error = error;
-    }
+    this.fetchData();
   }
 };
 </script>
