@@ -15,28 +15,6 @@
       </v-flex>
     </v-layout>
     <template v-else>
-      <v-layout column align-end>
-        <v-layout row>
-          <v-flex align-self-center>
-            <span class="subtitle">Search By</span>
-          </v-flex>
-          <v-flex
-            v-for="selectedOption in searchOptions"
-            :key="selectedOption.text"
-          >
-            <v-chip
-              @click="searchBy(selectedOption.text)"
-              :color="`${selectedOption.color} darken-3`"
-              class="mx-2"
-              :outlined="searchOption != selectedOption.text"
-              small
-              dark
-            >
-              {{ selectedOption.text }}
-            </v-chip>
-          </v-flex>
-        </v-layout>
-      </v-layout>
       <span class="title">Video List</span>
       <v-spacer></v-spacer>
       <span v-if="searchKey != ''" class="sub-title"
@@ -176,14 +154,7 @@ export default {
           "If you delete the video, this video will be deleted from your uploaded video list. Are you sure?",
         yes: "Yes, I am sure",
         no: "No, Keep me here"
-      },
-      searchOptions: [
-        { text: "Title", color: "light-blue" },
-        { text: "Author", color: "lime" },
-        { text: "Tag", color: "cyan" }
-      ],
-      searchOption: "Title",
-      searchKey: ""
+      }
     };
   },
   methods: {
@@ -257,33 +228,11 @@ export default {
         this.error = true;
       }
     },
-    async loadData(val) {
-      this.searchKey = val;
+    async loadData({ key, option }) {
       this.thumbnailList = [];
       try {
         let videos = await axios.get(
-          this.API_URL +
-            "/api/video/search?key=" +
-            val +
-            "&option=" +
-            this.searchOption
-        );
-        this.pushData(videos.data);
-      } catch (error) {
-        this.error = error;
-      }
-    },
-    async searchBy(text) {
-      this.searchOption = text;
-      this.thumbnailList = [];
-
-      try {
-        let videos = await axios.get(
-          this.API_URL +
-            "/api/video/search?key=" +
-            this.searchKey +
-            "&option=" +
-            this.searchOption
+          this.API_URL + "/api/video/search?key=" + key + "&option=" + option
         );
         this.pushData(videos.data);
       } catch (error) {

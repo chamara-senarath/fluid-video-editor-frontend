@@ -20,6 +20,7 @@
         hide-details
         @keydown.enter="search"
       />
+
       <v-spacer></v-spacer>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
@@ -118,6 +119,32 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
+    <v-layout
+      column
+      align-end
+      v-if="$route.name == 'Search' || $route.name == 'User'"
+    >
+      <v-layout row>
+        <v-flex align-self-center>
+          <span class="subtitle">Search By</span>
+        </v-flex>
+        <v-flex
+          v-for="selectedOption in searchOptions"
+          :key="selectedOption.text"
+        >
+          <v-chip
+            @click="searchBy(selectedOption.text)"
+            :color="`${selectedOption.color} darken-3`"
+            class="mx-2"
+            :outlined="searchOption != selectedOption.text"
+            small
+            dark
+          >
+            {{ selectedOption.text }}
+          </v-chip>
+        </v-flex>
+      </v-layout>
+    </v-layout>
   </nav>
 </template>
 
@@ -145,7 +172,14 @@ export default {
           path: { name: "upload", params: { is_edit: false } }
         },
         { title: "Insight", icon: "fa fa-chart-line", path: "/report" }
-      ]
+      ],
+      searchOptions: [
+        { text: "Title", color: "light-blue" },
+        { text: "Author", color: "lime" },
+        { text: "Tag", color: "cyan" }
+      ],
+      searchOption: "Title",
+      searchKey: ""
     };
   },
   methods: {
@@ -159,7 +193,12 @@ export default {
       this.setAdmin({ isLogged: false });
     },
     search(e) {
-      this.$emit("search", e.target.value);
+      this.searchKey = e.target.value;
+      this.$emit("search", { key: this.searchKey, option: this.searchOption });
+    },
+    searchBy(text) {
+      this.searchOption = text;
+      this.$emit("search", { key: this.searchKey, option: this.searchOption });
     }
   }
 };

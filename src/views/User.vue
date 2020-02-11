@@ -18,7 +18,10 @@
       <v-flex
         px-3
         py-3
+        xs12
+        sm6
         md4
+        lg3
         v-for="thumbnail in thumbnailList"
         :key="thumbnail.id"
       >
@@ -61,15 +64,17 @@ export default {
       this.videoSource = this.API_URL + "/embed/" + id + "/" + this.uid;
       this.showPlayer = true;
     },
-    async loadData(val) {
+    async loadData({ key, option }) {
       this.thumbnailList = [];
       try {
         let videos = await axios.get(
           this.API_URL +
             "/api/insight/user/search?key=" +
-            val +
+            key +
             "&uid=" +
-            this.uid
+            this.uid +
+            "&option=" +
+            option
         );
         this.pushData(videos.data);
       } catch (error) {
