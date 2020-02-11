@@ -145,6 +145,9 @@
         </v-flex>
       </v-layout>
     </v-layout>
+    <span v-if="searchKey != ''" class="sub-title"
+      >Search Results for {{ searchOption }} : {{ searchKey }}</span
+    >
   </nav>
 </template>
 

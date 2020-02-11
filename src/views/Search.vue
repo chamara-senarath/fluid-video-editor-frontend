@@ -17,9 +17,7 @@
     <template v-else>
       <span class="title">Video List</span>
       <v-spacer></v-spacer>
-      <span v-if="searchKey != ''" class="sub-title"
-        >Search Results for {{ searchOption }} : {{ searchKey }}</span
-      >
+
       <v-divider></v-divider>
 
       <AreYouSure
