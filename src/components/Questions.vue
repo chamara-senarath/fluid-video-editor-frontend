@@ -32,7 +32,7 @@
                   readonly
                   color="blue darken-3"
                   label="Time"
-                  :value="secondToHHMMSS(questionsMark.startTime)"
+                  :value="questionsMark.startTime | secondToHHMMSS"
                 ></v-text-field>
               </v-flex>
               <v-flex md5>
@@ -115,12 +115,6 @@ export default {
         }
       );
       return uuid;
-    },
-    secondToHHMMSS(time) {
-      var date = new Date(null);
-      date.setSeconds(time);
-      var result = date.toISOString().substr(11, 8);
-      return result;
     },
     addQuestionMark() {
       this.editableQuestion = null;

@@ -46,6 +46,25 @@
         </div>
       </transition>
 
+      <transition name="fade">
+        <div
+          v-if="!is_intro && !showComments && comments.length != 0"
+          style="position:absolute;right:0px;z-index:100"
+        >
+          <v-btn
+            transition="slide-x-transition"
+            :color="`rgba(0,0,0,${panelOpacity})`"
+            depressed
+            dark
+            tile
+            @click="showComments = true"
+          >
+            <v-icon left small>fa fa-comment-dots</v-icon>
+            Show Comments
+          </v-btn>
+        </div>
+      </transition>
+
       <div
         v-if="this.watermarkStyle != null"
         :style="
@@ -64,7 +83,13 @@
         :overlay="answerOverlay"
         :question="currentQuestion"
       ></AnswerOverlay>
-
+      <div style="position:absolute;right:0px;bottom:0px;z-index:1000">
+        <CommentSection
+          :show="showComments"
+          :comments="comments"
+          @hideComments="showComments = false"
+        />
+      </div>
       <v-btn
         v-if="this.chapterList.length != 0 && !drawer && !is_intro"
         @click.stop="drawer = !drawer"
@@ -121,7 +146,7 @@
         >
           <v-list-item-icon>
             <span style="font-weight: 300;">{{
-              secondToHHMMSS(item.startTime)
+              item.startTime | secondToHHMMSS
             }}</span>
           </v-list-item-icon>
 
@@ -151,11 +176,13 @@
 <script>
 import AnswerOverlay from "@/components/AnswerOverlay";
 import QuestionGroup from "@/components/QuestionGroup";
+import CommentSection from "@/components/CommentSection";
 
 export default {
   components: {
     AnswerOverlay,
-    QuestionGroup
+    QuestionGroup,
+    CommentSection
   },
   props: [
     "title",
@@ -165,6 +192,7 @@ export default {
     "watermark",
     "chapterList",
     "questionList",
+    "commentList",
     "seek",
     "user"
   ],
@@ -182,15 +210,13 @@ export default {
     fullScreenWidth: null,
     normalScreenWidth: null,
     is_intro: true,
-    is_set_duration: false
+    is_set_duration: false,
+    comments: [],
+    commentListClone: [],
+    commentTimeStamp: 0,
+    showComments: false
   }),
   methods: {
-    secondToHHMMSS(time) {
-      var date = new Date(null);
-      date.setSeconds(time);
-      var result = date.toISOString().substr(11, 8);
-      return result;
-    },
     genarateWatermarkStyle({ leftRatio, topRatio }, widthRatio) {
       let playerWidth = this.$refs.playerView.getBoundingClientRect().width;
       let playerHeight = this.$refs.playerView.getBoundingClientRect().height;
@@ -349,6 +375,16 @@ export default {
           this.displayQuestion(i);
         }
       }
+
+      //push a comment to comments
+      if (this.commentListClone.length != 0 && value > this.commentTimeStamp) {
+        this.comments.push(this.commentListClone[0]);
+        this.comments.reverse();
+        this.commentListClone.shift();
+        if (this.commentListClone.length != 0) {
+          this.commentTimeStamp = this.commentListClone[0].time;
+        }
+      }
     }
   },
   created() {
@@ -367,6 +403,12 @@ export default {
       iosNative: false
     };
     this.player = this.$refs.player.player;
+
+    //set commentTimeStamp
+    if (this.commentList.length != 0) {
+      this.commentTimeStamp = this.commentList[0].time;
+      this.commentListClone = [...this.commentList];
+    }
   },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);

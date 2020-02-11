@@ -13,6 +13,7 @@
       :watermark="watermark"
       :chapterList="chapterList"
       :questionList="this.questionList"
+      :commentList="comments"
       :seek="watchPercentage"
       :user="{
         name: 'Chamara Senarath',
@@ -47,7 +48,21 @@ export default {
       chapterList: [],
       questionList: [],
       watchPercentage: null,
-      postWatchPercentage: null
+      postWatchPercentage: null,
+      comments: [
+        {
+          _id: "001",
+          comment: "Which of these is supported by method overriding in Java?",
+          username: "alex costa",
+          time: "62.43"
+        },
+        {
+          _id: "002",
+          comment: "fdfsfds",
+          username: "alex costa",
+          time: "122.53"
+        }
+      ]
     };
   },
   methods: {

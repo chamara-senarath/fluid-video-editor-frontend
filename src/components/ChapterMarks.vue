@@ -23,7 +23,7 @@
                   readonly
                   color="blue darken-3"
                   label="Time"
-                  :value="secondToHHMMSS(chapterMark.startTime)"
+                  :value="chapterMark.startTime | secondToHHMMSS"
                 ></v-text-field>
               </v-flex>
               <v-flex md5>
@@ -131,12 +131,6 @@ export default {
       this.setChapterMarks(this.chapterMarkList);
       this.player.pause();
       return true;
-    },
-    secondToHHMMSS(time) {
-      var date = new Date(null);
-      date.setSeconds(time);
-      var result = date.toISOString().substr(11, 8);
-      return result;
     }
   },
   computed: {

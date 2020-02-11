@@ -151,7 +151,7 @@ export default {
         content:
           "If you delete the video, this video will be deleted from your uploaded video list. Are you sure?",
         yes: "Yes, I am sure",
-        no: "No, Keep me here"
+        no: "No, Do not delete"
       }
     };
   },

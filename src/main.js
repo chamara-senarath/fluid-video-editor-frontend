@@ -23,8 +23,16 @@ var upperFirst = function(v) {
   return v.charAt(0).toUpperCase() + v.slice(1);
 };
 
+var secondToHHMMSS = function(time) {
+  var date = new Date(null);
+  date.setSeconds(time);
+  var result = date.toISOString().substr(11, 8);
+  return result;
+};
+
 Vue.filter("truncate", truncate);
 Vue.filter("upperFirst", upperFirst);
+Vue.filter("secondToHHMMSS", secondToHHMMSS);
 
 Vue.mixin({
   data: function() {
