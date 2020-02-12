@@ -7,17 +7,22 @@
       min-width="22vw"
     >
       <v-layout column>
-        <v-btn
-          @click="hideComment"
-          class="blue--text text--lighten-3"
-          dark
-          :color="`rgba(0, 0, 0, ${opacity})`"
-          block
-          >Hide Comments <v-icon right small>fa fa-comment-slash</v-icon></v-btn
-        >
+        <v-layout mb-2>
+          <v-btn
+            @click="hideComment"
+            class="blue--text text--lighten-3"
+            dark
+            :color="`rgba(0, 0, 0, ${opacity})`"
+            block
+            >Hide Comments
+            <v-icon right small>fa fa-comment-slash</v-icon></v-btn
+          >
+        </v-layout>
+
         <v-layout pt-2 column align-center v-if="!$refs.commentCard">
           <span class="white--text">No Comments</span>
         </v-layout>
+
         <v-list
           id="style-7"
           color="rgba(0,0,0,0)"

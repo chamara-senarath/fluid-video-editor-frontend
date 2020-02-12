@@ -17,7 +17,7 @@
       :commentList="comments"
       :seek="watchPercentage"
       :user="{
-        name: 'Chamara Senarath',
+        name: user.name,
         avatar:
           'https://icon-library.net/images/avatar-icon-png/avatar-icon-png-8.jpg'
       }"
@@ -120,6 +120,8 @@ export default {
         this.$router.push("/404");
         return;
       }
+      //assign user if exist
+      this.user = res.data;
     }
 
     //set video title and chapter list
