@@ -48,7 +48,7 @@
 
       <transition name="fade">
         <div
-          v-if="!is_intro && !showComments && comments.length != 0"
+          v-if="!is_intro && !showComments"
           style="position:absolute;right:0px;z-index:100"
         >
           <v-btn
@@ -60,7 +60,6 @@
             @click="showComments = true"
           >
             <v-icon left small>fa fa-comment-dots</v-icon>
-            Show Comments
           </v-btn>
         </div>
       </transition>
@@ -83,11 +82,13 @@
         :overlay="answerOverlay"
         :question="currentQuestion"
       ></AnswerOverlay>
-      <div style="position:absolute;right:0px;bottom:0px;z-index:1000">
+      <div style="position:absolute;right:0px;bottom:2vh;z-index:1000">
         <CommentSection
           :show="showComments"
-          :comments="comments"
+          :comments="commentList"
+          :time="duration"
           @hideComments="showComments = false"
+          @sendComment="sendComment"
         />
       </div>
       <v-btn
@@ -211,9 +212,7 @@ export default {
     normalScreenWidth: null,
     is_intro: true,
     is_set_duration: false,
-    comments: [],
-    commentListClone: [],
-    commentTimeStamp: 0,
+
     showComments: false
   }),
   methods: {
@@ -353,6 +352,13 @@ export default {
     calculateWatchPercentage(currentTime, duration) {
       let watchPercentage = currentTime / duration;
       this.$emit("calculateWatchPercentage", watchPercentage);
+    },
+    sendComment(userComment) {
+      let comment = {
+        comment: userComment,
+        time: this.duration
+      };
+      this.$emit("sendComment", comment);
     }
   },
   watch: {
@@ -375,16 +381,6 @@ export default {
           this.displayQuestion(i);
         }
       }
-
-      //push a comment to comments
-      if (this.commentListClone.length != 0 && value > this.commentTimeStamp) {
-        this.comments.push(this.commentListClone[0]);
-        this.comments.reverse();
-        this.commentListClone.shift();
-        if (this.commentListClone.length != 0) {
-          this.commentTimeStamp = this.commentListClone[0].time;
-        }
-      }
     }
   },
   created() {
@@ -403,12 +399,6 @@ export default {
       iosNative: false
     };
     this.player = this.$refs.player.player;
-
-    //set commentTimeStamp
-    if (this.commentList.length != 0) {
-      this.commentTimeStamp = this.commentList[0].time;
-      this.commentListClone = [...this.commentList];
-    }
   },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);

@@ -2,8 +2,9 @@
   <v-layout column ma-2>
     <v-alert
       :value="show"
-      color="rgba(0,0,0,0)"
+      color="rgba(0,0,0,0.5)"
       transition="slide-x-reverse-transition"
+      min-width="22vw"
     >
       <v-layout column>
         <v-btn
@@ -14,7 +15,9 @@
           block
           >Hide Comments <v-icon right small>fa fa-comment-slash</v-icon></v-btn
         >
-
+        <v-layout pt-2 column align-center v-if="!$refs.commentCard">
+          <span class="white--text">No Comments</span>
+        </v-layout>
         <v-list
           id="style-7"
           color="rgba(0,0,0,0)"
@@ -23,6 +26,8 @@
         >
           <v-flex my-1 v-for="comment in comments" :key="comment._id">
             <v-card
+              ref="commentCard"
+              v-if="time > comment.time"
               width="20vw"
               dark
               flat
@@ -37,9 +42,11 @@
                     }}</span>
                     <v-divider></v-divider>
                   </v-flex>
-                  <span class="white--text">by {{ comment.username }}</span>
+                  <span class="white--text caption"
+                    >by {{ comment.username }}</span
+                  >
                   <v-spacer></v-spacer>
-                  <span class="white--text"
+                  <span class="white--text caption"
                     >@ {{ comment.time | secondToHHMMSS }}</span
                   >
                 </v-layout>
@@ -47,6 +54,28 @@
             </v-card>
           </v-flex>
         </v-list>
+
+        <v-layout mt-2 style="position:relative">
+          <v-textarea
+            @keydown.enter.ctrl="sendComment"
+            v-model="userComment"
+            rows="1"
+            row-height="15"
+            maxlength="50"
+            dark
+            label="Write a Comment"
+            outlined
+            no-resize
+          ></v-textarea>
+
+          <v-btn
+            @click="sendComment"
+            style="position:absolute;bottom:15px;right:10px"
+            fab
+            x-small
+            ><v-icon x-small color="blue">fa fa-send</v-icon></v-btn
+          >
+        </v-layout>
       </v-layout>
     </v-alert>
   </v-layout>
@@ -54,15 +83,23 @@
 
 <script>
 export default {
-  props: ["comments", "show"],
+  props: ["comments", "show", "time"],
   data() {
     return {
-      opacity: 0.7
+      opacity: 0.7,
+      userComment: ""
     };
   },
   methods: {
     hideComment() {
       this.$emit("hideComments");
+    },
+    async sendComment() {
+      if (this.userComment == "") {
+        return;
+      }
+      this.$emit("sendComment", this.userComment);
+      this.userComment = "";
     }
   }
 };

@@ -6,6 +6,7 @@
     <Player
       v-if="this.src != null && !is_loading"
       @calculateWatchPercentage="calculateWatchPercentage"
+      @sendComment="sendComment"
       :title="title"
       :src="src"
       :thumbnail="thumbnail"
@@ -49,20 +50,10 @@ export default {
       questionList: [],
       watchPercentage: null,
       postWatchPercentage: null,
-      comments: [
-        {
-          _id: "001",
-          comment: "Which of these is supported by method overriding in Java?",
-          username: "alex costa",
-          time: "62.43"
-        },
-        {
-          _id: "002",
-          comment: "fdfsfds",
-          username: "alex costa",
-          time: "122.53"
-        }
-      ]
+      user: {
+        name: "Chamara Senarath"
+      },
+      comments: []
     };
   },
   methods: {
@@ -85,6 +76,30 @@ export default {
       };
       if (obj.questions && obj.questions.length != 0) {
         await axios.post(this.API_URL + "/api/insight/user", obj);
+      }
+    },
+    async fetchComment(vid) {
+      this.comments = [];
+      try {
+        let result = await axios.get(this.API_URL + "/api/comment?vid=" + vid);
+        if (result.data) {
+          this.comments = result.data;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async sendComment(comment) {
+      comment = { ...comment, username: this.user.name };
+      let obj = {
+        vid: this.vid,
+        comment: comment
+      };
+      try {
+        await axios.post(this.API_URL + "/api/comment", obj);
+        await this.fetchComment(this.vid);
+      } catch (error) {
+        console.log(error);
       }
     }
   },
@@ -123,6 +138,9 @@ export default {
       this.questionList = video.data.questions;
       this.watchPercentage = 0;
     }
+
+    //set comments
+    this.fetchComment(this.vid);
     //set video watermark, splashduration, src and thumbnail
     this.watermark = video.data.watermark;
     this.splashDuration = video.data.splashDuration;
