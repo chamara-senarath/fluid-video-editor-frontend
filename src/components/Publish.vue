@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-layout row>
-      <v-flex xs8>
+    <v-layout row justify-space-between>
+      <v-flex xs12 md6>
         <v-layout>
           <v-row justify="center">
             <v-dialog v-model="embedDialog" persistent max-width="400">
@@ -43,29 +43,16 @@
               </v-card>
             </v-dialog>
           </v-row>
-
-          <v-responsive :aspect-ratio="16 / 9">
-            <Player
-              v-if="thumbnail != null"
-              :title="title"
-              :src="src"
-              :thumbnail="thumbnail"
-              :splashDuration="splashDuration"
-              :watermark="watermark"
-              :chapterList="chapterList"
-              :questionList="this.questionList"
-              :seek="0"
-              :user="{
-                name: 'Chamara Senarath',
-                avatar:
-                  'https://icon-library.net/images/avatar-icon-png/avatar-icon-png-8.jpg'
-              }"
-            ></Player>
-          </v-responsive>
+          <v-layout column align-center>
+            <span class="title"
+              >Your video has been published successfully</span
+            >
+            <v-img width="38vw" src="/ready.png"></v-img>
+          </v-layout>
         </v-layout>
       </v-flex>
 
-      <v-flex xs4>
+      <v-flex xs12 md4>
         <v-layout column pl-3>
           <v-layout>
             <v-btn block dark color="green darken-3" @click="preview"
@@ -87,11 +74,8 @@
 import { mapGetters } from "vuex";
 import axios from "axios";
 
-import Player from "@/components/Player";
 export default {
-  components: {
-    Player
-  },
+  components: {},
   data() {
     return {
       embedDialog: false,
@@ -100,13 +84,17 @@ export default {
       title: "",
       authors: [],
       tags: [],
-      src: null,
       thumbnail: null,
       splashDuration: null,
       watermark: null,
       chapterList: [],
       questionList: []
     };
+  },
+  computed: {
+    src() {
+      return "http://localhost:8080/embed/5e295668c54e130d8ccf8df8/test";
+    }
   },
   methods: {
     ...mapGetters([
