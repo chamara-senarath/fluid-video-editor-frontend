@@ -46,23 +46,42 @@
         </div>
       </transition>
 
-      <transition name="fade">
+      <transition name="slide-x-reverse-transition">
         <div
-          v-if="!is_intro && !showComments"
-          style="position:absolute;right:0px;z-index:100"
+          v-if="expandRightPanel && !showComments"
+          style="position:absolute;right:65px;z-index:100"
         >
           <v-btn
-            transition="slide-x-transition"
             :color="`rgba(0,0,0,${panelOpacity})`"
             depressed
             dark
             tile
-            @click="showComments = true"
+            @click="showCommentHandler"
           >
             <v-icon left small>fa fa-comment-dots</v-icon>
           </v-btn>
+          <v-divider vertical></v-divider>
+          <v-btn :color="`rgba(0,0,0,${panelOpacity})`" depressed dark tile>
+            <v-icon left small>fa fa-camera-retro</v-icon>
+          </v-btn>
+          <v-divider vertical></v-divider>
         </div>
       </transition>
+      <div v-if="!is_intro" style="position:absolute;right:0px;z-index:100">
+        <v-btn
+          @click="expandRightPanelHandler"
+          :color="`rgba(0,0,0,${panelOpacity})`"
+          depressed
+          dark
+          tile
+        >
+          <v-icon left small
+            >fa fa-chevron-circle-{{
+              expandRightPanel ? "right" : "left"
+            }}</v-icon
+          >
+        </v-btn>
+      </div>
 
       <div
         v-if="this.watermarkStyle != null"
@@ -87,7 +106,7 @@
           :show="showComments"
           :comments="commentList"
           :time="duration"
-          @hideComments="showComments = false"
+          @hideComments="hideCommentHandler"
           @sendComment="sendComment"
         />
       </div>
@@ -213,7 +232,8 @@ export default {
     is_intro: true,
     is_set_duration: false,
 
-    showComments: false
+    showComments: false,
+    expandRightPanel: false
   }),
   methods: {
     genarateWatermarkStyle({ leftRatio, topRatio }, widthRatio) {
@@ -359,6 +379,17 @@ export default {
         time: this.duration
       };
       this.$emit("sendComment", comment);
+    },
+    showCommentHandler() {
+      this.showComments = true;
+      this.expandRightPanel = false;
+    },
+    hideCommentHandler() {
+      this.showComments = false;
+    },
+    expandRightPanelHandler() {
+      this.expandRightPanel = !this.expandRightPanel;
+      this.showComments = false;
     }
   },
   watch: {
