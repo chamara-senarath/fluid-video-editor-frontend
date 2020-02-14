@@ -44,10 +44,15 @@
             </v-dialog>
           </v-row>
           <v-layout column align-center>
-            <span class="title"
-              >Your video has been published successfully</span
-            >
-            <v-img width="38vw" src="/ready.png"></v-img>
+            <span class="title">{{
+              is_published
+                ? "Your video has been published successfully"
+                : "Your video is being published"
+            }}</span>
+            <v-img
+              width="36vw"
+              :src="is_published ? '/ready.png' : '/publishing.gif'"
+            ></v-img>
           </v-layout>
         </v-layout>
       </v-flex>
@@ -78,6 +83,7 @@ export default {
   components: {},
   data() {
     return {
+      src: null,
       embedDialog: false,
       embedCode: "<href='fdsfsdfsd'>",
       showCopied: false,
@@ -88,13 +94,9 @@ export default {
       splashDuration: null,
       watermark: null,
       chapterList: [],
-      questionList: []
+      questionList: [],
+      is_published: true
     };
-  },
-  computed: {
-    src() {
-      return "http://localhost:8080/embed/5e295668c54e130d8ccf8df8/test";
-    }
   },
   methods: {
     ...mapGetters([
@@ -172,6 +174,7 @@ export default {
   },
 
   async mounted() {
+    this.is_published = false;
     let id = this.getVideoObject().id;
     this.title = this.getVideoObject().title;
     this.authors = this.getVideoObject().authors;
@@ -196,35 +199,43 @@ export default {
       chapterMarks: this.chapterList,
       questions: this.questionList
     };
-    await axios.patch(this.API_URL + "/api/video", Obj);
-    if (this.getSplashScreenObject().data == "edit") {
-      return;
-    }
 
-    var thumbnailBlob = this.b64toBlob(this.thumbnail);
-    //post splash
-    const formDataSplash = new FormData();
-    formDataSplash.append("splash", thumbnailBlob);
-    await axios.post(this.API_URL + "/api/video/splash", formDataSplash, {
-      params: {
-        id: id
+    this.is_published = true;
+    try {
+      await axios.patch(this.API_URL + "/api/video", Obj);
+      if (this.getSplashScreenObject().data == "edit") {
+        return;
       }
-    });
 
-    //post watermark
-    if (this.watermark != null) {
-      var watermarkBlob = await fetch(this.watermark.file).then(r => r.blob());
-      const formDataWatermark = new FormData();
-      formDataWatermark.append("watermark", watermarkBlob);
-      await axios.post(
-        this.API_URL + "/api/video/watermark",
-        formDataWatermark,
-        {
-          params: {
-            id: id
-          }
+      var thumbnailBlob = this.b64toBlob(this.thumbnail);
+      //post splash
+      const formDataSplash = new FormData();
+      formDataSplash.append("splash", thumbnailBlob);
+      await axios.post(this.API_URL + "/api/video/splash", formDataSplash, {
+        params: {
+          id: id
         }
-      );
+      });
+
+      //post watermark
+      if (this.watermark != null) {
+        var watermarkBlob = await fetch(this.watermark.file).then(r =>
+          r.blob()
+        );
+        const formDataWatermark = new FormData();
+        formDataWatermark.append("watermark", watermarkBlob);
+        await axios.post(
+          this.API_URL + "/api/video/watermark",
+          formDataWatermark,
+          {
+            params: {
+              id: id
+            }
+          }
+        );
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 };

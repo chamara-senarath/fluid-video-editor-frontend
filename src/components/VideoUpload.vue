@@ -14,7 +14,7 @@
         >
       </v-snackbar>
       <v-flex>
-        <v-img src="uploadFile.png" width="200"></v-img>
+        <v-img src="uploadFile.gif" width="26vw"></v-img>
       </v-flex>
     </v-layout>
     <v-overlay :value="overlay">

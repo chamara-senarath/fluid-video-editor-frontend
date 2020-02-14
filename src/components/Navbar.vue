@@ -177,11 +177,12 @@ export default {
         { title: "Insight", icon: "fa fa-chart-line", path: "/report" }
       ],
       searchOptions: [
+        { text: "All", color: "light-green" },
         { text: "Title", color: "light-blue" },
         { text: "Author", color: "lime" },
         { text: "Tag", color: "cyan" }
       ],
-      searchOption: "Title",
+      searchOption: "All",
       searchKey: ""
     };
   },
