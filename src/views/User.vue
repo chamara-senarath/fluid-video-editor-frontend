@@ -30,7 +30,7 @@
           <v-card-title class="ellipsis">
             {{ thumbnail.title }}
           </v-card-title>
-
+          <v-rating small v-model="rating"></v-rating>
           <v-progress-linear
             :value="thumbnail.completed"
             color="red"
@@ -136,6 +136,7 @@ export default {
   width: 100%;
 }
 .ellipsis {
+  margin-right: 1vw;
   text-overflow: ellipsis;
 
   /* Required for text-overflow to do anything */

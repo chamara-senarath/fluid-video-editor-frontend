@@ -61,8 +61,24 @@
             <v-icon left small>fa fa-comment-dots</v-icon>
           </v-btn>
           <v-divider vertical></v-divider>
-          <v-btn :color="`rgba(0,0,0,${panelOpacity})`" depressed dark tile>
+          <v-btn
+            :color="`rgba(0,0,0,${panelOpacity})`"
+            depressed
+            dark
+            tile
+            @click="takeScreenShot"
+          >
             <v-icon left small>fa fa-camera-retro</v-icon>
+          </v-btn>
+          <v-divider vertical></v-divider>
+          <v-btn
+            :color="`rgba(0,0,0,${panelOpacity})`"
+            depressed
+            dark
+            tile
+            @click="showRating"
+          >
+            <v-icon left small>fa fa-smile</v-icon>
           </v-btn>
           <v-divider vertical></v-divider>
         </div>
@@ -101,6 +117,7 @@
         :overlay="answerOverlay"
         :question="currentQuestion"
       ></AnswerOverlay>
+      <Rating @submit="submitRating" :overlay="ratingOverlay"> </Rating>
       <div style="position:absolute;right:0px;bottom:2vh;z-index:1000">
         <CommentSection
           :show="showComments"
@@ -197,12 +214,13 @@
 import AnswerOverlay from "@/components/AnswerOverlay";
 import QuestionGroup from "@/components/QuestionGroup";
 import CommentSection from "@/components/CommentSection";
-
+import Rating from "@/components/Rating";
 export default {
   components: {
     AnswerOverlay,
     QuestionGroup,
-    CommentSection
+    CommentSection,
+    Rating
   },
   props: [
     "title",
@@ -225,6 +243,7 @@ export default {
     duration: null,
     playingChapter: 0,
     answerOverlay: false,
+    ratingOverlay: false,
     currentQuestion: null,
     isFullscreen: false,
     fullScreenWidth: null,
@@ -390,6 +409,18 @@ export default {
     expandRightPanelHandler() {
       this.expandRightPanel = !this.expandRightPanel;
       this.showComments = false;
+      this.ratingOverlay = false;
+    },
+    takeScreenShot() {},
+    submitRating({ option, value }) {
+      if (option == "submit") {
+        console.log(value);
+      }
+      this.ratingOverlay = false;
+    },
+    showRating() {
+      this.ratingOverlay = true;
+      this.expandRightPanel = false;
     }
   },
   watch: {

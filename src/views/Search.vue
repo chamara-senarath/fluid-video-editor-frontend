@@ -257,6 +257,7 @@ export default {
   width: 100%;
 }
 .ellipsis {
+  margin-right: 1vw;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
