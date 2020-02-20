@@ -30,7 +30,14 @@
           <v-card-title class="ellipsis">
             {{ thumbnail.title }}
           </v-card-title>
-          <v-rating small v-model="rating"></v-rating>
+          <v-rating
+            :value="thumbnail.rating"
+            color="amber"
+            dense
+            half-increments
+            readonly
+            size="14"
+          ></v-rating>
           <v-progress-linear
             :value="thumbnail.completed"
             color="red"
@@ -87,9 +94,12 @@ export default {
           id: video.video._id,
           title: video.video.title,
           img: this.API_URL + "/api/video/splash?id=" + video.video._id,
-          rating: 3.2,
-          rates: 1412,
-          completed: video.percentage
+          rating:
+            video.video.rating.users == 0
+              ? 0
+              : video.video.rating.rating / video.video.rating.users,
+          rates: video.video.rating.users,
+          completed: video.video.percentage
         };
         this.thumbnailList.push(obj);
       });
@@ -116,7 +126,6 @@ export default {
   },
   async mounted() {
     this.uid = this.$route.params.uid;
-
     //forward to 404 when no user found
     let res = await axios.get(this.API_URL + "/api/user?id=" + this.uid);
     if (res.status == 204 || res.status == 400 || res.status == 404) {

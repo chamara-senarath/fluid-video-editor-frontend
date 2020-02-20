@@ -62,7 +62,7 @@
         <span>{{ $route.name == "upload" ? "Search" : "Upload" }}</span>
       </v-tooltip>
 
-      <v-tooltip bottom v-if="$route.name != 'Login' && $route.name != 'User'">
+      <v-tooltip bottom v-if="$route.name != 'Login'">
         <template v-slot:activator="{ on }">
           <v-btn
             v-on="on"
@@ -89,12 +89,12 @@
         <v-layout column align-center>
           <v-flex mt-4 mb-3>
             <v-avatar size="100">
-              <img :src="getUser.avatar" />
+              <img :src="profile.avatar" />
             </v-avatar>
           </v-flex>
           <v-flex>
-            <p class="headline text-center">{{ getUser.name }}</p>
-            <p class="subtitle-1 text-center">{{ getUser.role }}</p>
+            <p class="headline text-center">{{ profile.name }}</p>
+            <p class="subtitle-1 text-center">{{ profile.role }}</p>
           </v-flex>
         </v-layout>
       </v-list-item>
@@ -152,12 +152,13 @@
 </template>
 
 <script>
+import axios from "axios";
 import { mapMutations, mapGetters } from "vuex";
 export default {
   data() {
     return {
       isLogged: true, // TODO remove this when implement user login
-      getUser: {
+      profile: {
         name: "Chamara Senarath",
         role: "Administrator",
         avatar:
@@ -187,14 +188,24 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setAdmin"]),
-
-    ...mapGetters["getVideoObject"],
-    logout() {
+    ...mapMutations(["removeToken"]),
+    ...mapGetters(["getToken", "getUser"]),
+    async logout() {
       this.drawer = false;
       this.isLogged = false;
+      let { role } = this.getUser();
+      if (role == "user") {
+        await axios.post(
+          this.API_URL + "/api/user/logout",
+          {},
+          {
+            headers: { "x-auth": this.getToken() }
+          }
+        );
+      }
+      this.removeToken();
+
       this.$router.push("/login");
-      this.setAdmin({ isLogged: false });
     },
     search(e) {
       this.searchKey = e.target.value;

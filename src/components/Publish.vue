@@ -190,6 +190,10 @@ export default {
       title: this.title,
       authors: this.authors,
       tags: this.tags,
+      rating: {
+        rating: 0,
+        users: 0
+      },
       splashDuration: this.getSplashScreenObject().duration,
       watermark: {
         opacity: this.watermark.opacity,

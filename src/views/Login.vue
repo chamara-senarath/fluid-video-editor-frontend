@@ -4,7 +4,7 @@
       <v-col cols="12" sm="4" md="4">
         <v-card @keydown.enter="login" class="elevation-2" max-width="50vh">
           <v-toolbar color="#517EA9" dark flat>
-            <v-toolbar-title>Admin Login</v-toolbar-title>
+            <v-toolbar-title>Login</v-toolbar-title>
             <v-spacer />
             <v-icon>fa fa-user</v-icon>
           </v-toolbar>
@@ -13,6 +13,12 @@
               {{ error }}
             </v-alert>
             <v-form>
+              <v-select
+                prepend-icon="fa fa-user-tag"
+                :items="roles"
+                label="Role"
+                v-model="role"
+              ></v-select>
               <v-text-field
                 label="User Name"
                 autofocus
@@ -42,29 +48,53 @@
 </template>
 
 <script>
+import axios from "axios";
 import { mapMutations } from "vuex";
 export default {
   data() {
     return {
       username: null,
       password: null,
-      error: null
+      role: "Admin",
+      error: null,
+      roles: ["Admin", "User"]
     };
   },
   methods: {
-    ...mapMutations(["setAdmin"]),
-    login() {
-      if (this.validateUser(this.username, this.password)) {
-        this.$router.push("/");
+    ...mapMutations(["setToken", "setUser"]),
+    async login() {
+      let username = this.username;
+      let password = this.password;
+      if (this.role == "Admin") {
+        if (username == "admin" && password == "admin") {
+          this.setToken("faketoken");
+          this.setUser({
+            is_logged: true,
+            role: "admin"
+          });
+          this.$router.push("/");
+        } else {
+          this.error = "Invalid Username/Password";
+        }
       }
-    },
-    validateUser(username, password) {
-      if (username == "admin" && password == "admin") {
-        this.setAdmin({ isLogged: true });
-        return true;
-      } else {
-        this.error = "Invalid Username/Password";
-        return false;
+
+      if (this.role == "User") {
+        try {
+          let result = await axios.post(this.API_URL + "/api/user/login", {
+            username,
+            password
+          });
+          let token = result.data.token;
+          let user_id = result.data.user_id;
+          this.setToken(token);
+          this.setUser({
+            is_logged: true,
+            role: "user"
+          });
+          this.$router.push("/user/" + user_id);
+        } catch (error) {
+          this.error = "Invalid Username/Password";
+        }
       }
     }
   }

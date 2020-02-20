@@ -99,7 +99,9 @@
                           size="14"
                         ></v-rating>
                         <div class="grey--text ml-4 caption">
-                          4.5 ({{ thumbnail.rates }})
+                          {{ thumbnail.rating.toFixed(1) }} ({{
+                            thumbnail.rates
+                          }})
                         </div>
                         <v-layout column align-end>
                           <v-btn
@@ -216,8 +218,12 @@ export default {
           id: video._id,
           title: video.title,
           img: this.API_URL + "/api/video/splash?id=" + video._id,
-          rating: 3.2,
-          rates: 1412
+          rating:
+            video.rating.users == 0
+              ? 0
+              : video.rating.rating / video.rating.users,
+
+          rates: video.rating.users
         };
         this.thumbnailList.push(obj);
       });

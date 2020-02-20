@@ -414,7 +414,7 @@ export default {
     takeScreenShot() {},
     submitRating({ option, value }) {
       if (option == "submit") {
-        console.log(value);
+        this.$emit("submitRating", value);
       }
       this.ratingOverlay = false;
     },

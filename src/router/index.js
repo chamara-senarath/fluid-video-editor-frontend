@@ -19,13 +19,17 @@ const routes = [
     name: "Search",
     component: Search,
     meta: {
-      requiresAuth: true
+      requiresUserAuth: true
     }
   },
   {
     path: "/user/:uid",
     name: "User",
-    component: User
+    component: User,
+    meta: {
+      requiresAuth: true,
+      role: "user"
+    }
   },
   {
     path: "/upload",
@@ -83,8 +87,18 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  let { is_logged, role } = store.getters.getUser;
+
+  if (to.matched.some(record => record.meta.requiresUserAuth)) {
+    if (is_logged && role == "user") {
+      next();
+      return;
+    }
+    next("/login");
+  }
+
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters.getIsLogged != false) {
+    if (is_logged) {
       next();
       return;
     }

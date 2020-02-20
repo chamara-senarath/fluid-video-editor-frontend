@@ -1,13 +1,16 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+let store = new Vuex.Store({
   state: {
-    admin: {
-      isLogged: false
+    user: {
+      is_logged: false,
+      role: null
     },
+    token: null,
     video: {
       id: null,
       title: null,
@@ -47,8 +50,11 @@ export default new Vuex.Store({
     getWatermark: state => {
       return state.watermark;
     },
-    getIsLogged: state => {
-      return state.admin.isLogged;
+    getToken: state => {
+      return state.token;
+    },
+    getUser: state => {
+      return state.user;
     }
   },
   mutations: {
@@ -82,8 +88,19 @@ export default new Vuex.Store({
         state.watermark.file = payload.file;
       }
     },
-    setAdmin: (state, payload) => {
-      state.admin.isLogged = payload.isLogged;
+    setToken: (state, payload) => {
+      state.token = payload;
+    },
+    setUser: (state, payload) => {
+      state.user = payload;
+    },
+    removeToken: state => {
+      state.token = null;
+      state.user = {
+        is_logged: false,
+        role: null
+      };
+      store.commit("setVideoDefault");
     },
     setVideoDefault: state => {
       state.video = {
@@ -111,5 +128,8 @@ export default new Vuex.Store({
     }
   },
   actions: {},
-  modules: {}
+  modules: {},
+  plugins: [createPersistedState()]
 });
+
+export default store;

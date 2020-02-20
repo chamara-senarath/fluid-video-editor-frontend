@@ -7,6 +7,7 @@
       v-if="this.src != null && !is_loading"
       @calculateWatchPercentage="calculateWatchPercentage"
       @sendComment="sendComment"
+      @submitRating="submitRating"
       :title="title"
       :src="src"
       :thumbnail="thumbnail"
@@ -98,6 +99,17 @@ export default {
       try {
         await axios.post(this.API_URL + "/api/comment", obj);
         await this.fetchComment(this.vid);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async submitRating(rating) {
+      let obj = {
+        vid: this.vid,
+        rating: rating
+      };
+      try {
+        await axios.post(this.API_URL + "/api/rating", obj);
       } catch (error) {
         console.log(error);
       }
