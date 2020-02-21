@@ -98,11 +98,18 @@
                           readonly
                           size="14"
                         ></v-rating>
-                        <div class="grey--text ml-4 caption">
-                          {{ thumbnail.rating.toFixed(1) }} ({{
-                            thumbnail.rates
-                          }})
-                        </div>
+                        <router-link
+                          :to="{
+                            name: 'Comments',
+                            params: { vid: thumbnail.id }
+                          }"
+                        >
+                          <span class="grey--text ml-4 caption">
+                            {{ thumbnail.rating.toFixed(1) }} ({{
+                              thumbnail.rates
+                            }})
+                          </span>
+                        </router-link>
                         <v-layout column align-end>
                           <v-btn
                             @click="gotoVideo(thumbnail.id)"

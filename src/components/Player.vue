@@ -412,9 +412,9 @@ export default {
       this.ratingOverlay = false;
     },
     takeScreenShot() {},
-    submitRating({ option, value }) {
+    submitRating({ option, rating, comment }) {
       if (option == "submit") {
-        this.$emit("submitRating", value);
+        this.$emit("submitRating", { rating, comment });
       }
       this.ratingOverlay = false;
     },

@@ -9,6 +9,7 @@ import Insight from "../views/Insight.vue";
 import Report from "../views/Report.vue";
 import Login from "../views/Login.vue";
 import NotFound from "../views/NotFound.vue";
+import Comments from "../views/Comments.vue";
 
 import store from "../store/index";
 Vue.use(VueRouter);
@@ -19,7 +20,7 @@ const routes = [
     name: "Search",
     component: Search,
     meta: {
-      requiresUserAuth: true
+      requiresAuth: true
     }
   },
   {
@@ -27,14 +28,21 @@ const routes = [
     name: "User",
     component: User,
     meta: {
-      requiresAuth: true,
-      role: "user"
+      requiresUserAuth: true
     }
   },
   {
     path: "/upload",
     name: "upload",
     component: Upload,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/comments",
+    name: "Comments",
+    component: Comments,
     meta: {
       requiresAuth: true
     }
@@ -76,8 +84,8 @@ const routes = [
     name: "Test",
     component: Test
   },
-  { path: "/404", component: NotFound },
-  { path: "*", redirect: "/404" }
+  { path: "/404", component: NotFound }
+  // { path: "*", redirect: "/404" }
 ];
 
 const router = new VueRouter({

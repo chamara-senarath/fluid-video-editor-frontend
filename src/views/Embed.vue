@@ -103,10 +103,14 @@ export default {
         console.log(error);
       }
     },
-    async submitRating(rating) {
+    async submitRating({ rating, comment }) {
       let obj = {
         vid: this.vid,
-        rating: rating
+        comment: {
+          username: this.user.name,
+          comment: comment,
+          rating: rating
+        }
       };
       try {
         await axios.post(this.API_URL + "/api/rating", obj);

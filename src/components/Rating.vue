@@ -5,10 +5,17 @@
         Rate This Video
       </v-card-title>
       <v-card-text>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium
-        optio velit, cumque quibusdam iste rerum!
+        <v-textarea
+          class="subtitle-1"
+          outlined
+          label="Write a comment"
+          auto-grow="false"
+          no-resize
+          maxlength="200"
+          v-model="comment"
+        ></v-textarea>
 
-        <div class="text-center mt-12">
+        <div class="text-center mt-2">
           <v-rating
             v-model="rating"
             color="yellow darken-3"
@@ -33,12 +40,14 @@
 export default {
   props: ["overlay"],
   data: () => ({
-    rating: 0
+    rating: 0,
+    comment: null
   }),
   methods: {
     submit(option) {
-      let value = this.rating;
-      this.$emit("submit", { option, value });
+      let rating = this.rating;
+      let comment = this.comment;
+      this.$emit("submit", { option, rating, comment });
     }
   }
 };
