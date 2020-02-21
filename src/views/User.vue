@@ -25,19 +25,42 @@
         v-for="thumbnail in thumbnailList"
         :key="thumbnail.id"
       >
-        <v-card @click="gotoVideo(thumbnail.id)">
+        <v-card>
           <v-img :src="thumbnail.img"> </v-img>
           <v-card-title class="ellipsis">
             {{ thumbnail.title }}
           </v-card-title>
-          <v-rating
-            :value="thumbnail.rating"
-            color="amber"
-            dense
-            half-increments
-            readonly
-            size="14"
-          ></v-rating>
+          <v-row align="center" class="mb-2 mx-3">
+            <v-rating
+              :value="thumbnail.rating"
+              color="amber"
+              dense
+              half-increments
+              readonly
+              size="14"
+            ></v-rating>
+            <router-link
+              :to="{
+                name: 'Comments',
+                params: { vid: thumbnail.id }
+              }"
+            >
+              <span class="grey--text ml-4 caption">
+                {{ thumbnail.rating.toFixed(1) }} ({{ thumbnail.rates }})
+              </span>
+            </router-link>
+            <v-layout column align-end>
+              <v-btn
+                @click="gotoVideo(thumbnail.id)"
+                x-small
+                elevation="0"
+                dark
+                fab
+                color="pink"
+                ><v-icon small dark>fa fa-play</v-icon></v-btn
+              >
+            </v-layout>
+          </v-row>
           <v-progress-linear
             :value="thumbnail.completed"
             color="red"

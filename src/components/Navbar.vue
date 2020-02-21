@@ -2,7 +2,11 @@
   <nav v-if="$route.name != 'Embed'">
     <v-app-bar app elevation="0">
       <v-app-bar-nav-icon
-        v-if="$route.name != 'Login' && $route.name != 'User'"
+        v-if="
+          $route.name != 'Login' &&
+            $route.name != 'User' &&
+            $route.name != 'Comments'
+        "
         @click.stop="drawer = !drawer"
       ></v-app-bar-nav-icon>
       <v-toolbar-title>
