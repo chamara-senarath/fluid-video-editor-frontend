@@ -77,15 +77,18 @@ const routes = [
   {
     path: "/login",
     name: "Login",
-    component: Login
+    component: Login,
+    meta: {
+      hasAuth: true
+    }
   },
   {
     path: "/test",
     name: "Test",
     component: Test
   },
-  { path: "/404", component: NotFound }
-  // { path: "*", redirect: "/404" }
+  { path: "/404", component: NotFound },
+  { path: "*", redirect: "/404" }
 ];
 
 const router = new VueRouter({
@@ -96,6 +99,14 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   let { is_logged, role } = store.getters.getUser;
+
+  if (to.matched.some(record => record.meta.hasAuth)) {
+    if (is_logged) {
+      next("/");
+      return;
+    }
+    next();
+  }
 
   if (to.matched.some(record => record.meta.requiresUserAuth)) {
     if (is_logged && role == "user") {

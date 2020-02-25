@@ -38,8 +38,9 @@ Vue.mixin({
   data: function() {
     return {
       get API_URL() {
-        // return "http://10.2.1.153";
-        return "http://localhost:3000";
+        // return "http://10.2.1.153";                          //for local server
+        // return "http://sl-fl-srv01.dipscloud.com:8082"       //for dips server
+        return "http://localhost:3000"; //for local host
       }
     };
   }
