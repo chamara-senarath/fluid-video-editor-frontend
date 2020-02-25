@@ -61,19 +61,30 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setToken", "setUser"]),
+    ...mapMutations(["setToken", "setUser", "setProfile"]),
     async login() {
       let username = this.username;
       let password = this.password;
       if (this.role == "Admin") {
-        if (username == "admin" && password == "admin") {
-          this.setToken("faketoken");
+        try {
+          let result = await axios.post(this.API_URL + "/api/admin/login", {
+            username,
+            password
+          });
+          let token = result.data.token;
+          let profileObj = {
+            name: result.data.name,
+            avatar: result.data.avatar,
+            group: result.data.group
+          };
+          this.setToken(token);
           this.setUser({
             is_logged: true,
             role: "admin"
           });
+          this.setProfile(profileObj);
           this.$router.push("/");
-        } else {
+        } catch (error) {
           this.error = "Invalid Username/Password";
         }
       }
@@ -86,11 +97,17 @@ export default {
           });
           let token = result.data.token;
           let user_id = result.data.user_id;
+          let profileObj = {
+            name: result.data.name,
+            avatar: result.data.avatar,
+            group: result.data.group
+          };
           this.setToken(token);
           this.setUser({
             is_logged: true,
             role: "user"
           });
+          this.setProfile(profileObj);
           this.$router.push("/user/" + user_id);
         } catch (error) {
           this.error = "Invalid Username/Password";

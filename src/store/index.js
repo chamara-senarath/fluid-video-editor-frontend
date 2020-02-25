@@ -10,6 +10,11 @@ let store = new Vuex.Store({
       is_logged: false,
       role: null
     },
+    profile: {
+      name: null,
+      avatar: null,
+      group: null
+    },
     token: null,
     video: {
       id: null,
@@ -55,6 +60,9 @@ let store = new Vuex.Store({
     },
     getUser: state => {
       return state.user;
+    },
+    getProfile: state => {
+      return state.profile;
     }
   },
   mutations: {
@@ -93,6 +101,9 @@ let store = new Vuex.Store({
     },
     setUser: (state, payload) => {
       state.user = payload;
+    },
+    setProfile: (state, payload) => {
+      state.profile = payload;
     },
     removeToken: state => {
       state.token = null;

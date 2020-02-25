@@ -93,7 +93,9 @@
         <v-layout column align-center>
           <v-flex mt-4 mb-3>
             <v-avatar size="100">
-              <img :src="profile.avatar" />
+              <img
+                :src="profile.avatar == null ? '/avatar.png' : profile.avatar"
+              />
             </v-avatar>
           </v-flex>
           <v-flex>
@@ -161,7 +163,7 @@ import { mapMutations, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      isLogged: true, // TODO remove this when implement user login
+      isLogged: true,
       profile: {
         name: "Chamara Senarath",
         role: "Administrator",
@@ -193,7 +195,7 @@ export default {
   },
   methods: {
     ...mapMutations(["removeToken"]),
-    ...mapGetters(["getToken", "getUser"]),
+    ...mapGetters(["getToken", "getUser", "getProfile"]),
     async logout() {
       this.drawer = false;
       this.isLogged = false;
@@ -219,6 +221,14 @@ export default {
       this.searchOption = text;
       this.$emit("search", { key: this.searchKey, option: this.searchOption });
     }
+  },
+  mounted() {
+    let profileObject = {
+      name: this.getProfile().name,
+      avatar: this.getProfile().avatar,
+      role: this.getUser().role == "admin" ? "Administrator" : "User"
+    };
+    this.profile = profileObject;
   }
 };
 </script>
