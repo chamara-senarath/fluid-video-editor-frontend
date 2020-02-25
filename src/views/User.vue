@@ -118,10 +118,17 @@ export default {
           title: video.video.title,
           img: this.API_URL + "/api/video/splash?id=" + video.video._id,
           rating:
+            video.video.rating &&
+            video.video.rating.users &&
             video.video.rating.users == 0
               ? 0
               : video.video.rating.rating / video.video.rating.users,
-          rates: video.video.rating.users,
+          rates:
+            video.video.rating &&
+            video.video.rating.users &&
+            video.video.rating.users == 0
+              ? 0
+              : video.video.rating.users,
           completed: video.video.percentage
         };
         this.thumbnailList.push(obj);
