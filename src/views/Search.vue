@@ -140,7 +140,7 @@ import AreYouSure from "@/components/AreYouSure";
 import Navbar from "@/components/Navbar";
 import MiniPlayer from "@/components/MiniPlayer";
 
-import { mapMutations } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 export default {
   components: {
     AreYouSure,
@@ -172,6 +172,7 @@ export default {
       "setQuestionMarks",
       "setWatermark"
     ]),
+    ...mapGetters(["getProfile"]),
     gotoVideo(id) {
       this.videoSource = this.API_URL + "/embed/" + id + "/test";
       this.showPlayer = true;
@@ -243,7 +244,13 @@ export default {
       this.thumbnailList = [];
       try {
         let videos = await axios.get(
-          this.API_URL + "/api/video/search?key=" + key + "&option=" + option
+          this.API_URL +
+            "/api/video/search?key=" +
+            key +
+            "&option=" +
+            option +
+            "&group=" +
+            this.getProfile().group
         );
         this.pushData(videos.data);
       } catch (error) {
@@ -253,7 +260,9 @@ export default {
   },
   async mounted() {
     try {
-      let videos = await axios.get(this.API_URL + "/api/videos");
+      let videos = await axios.get(
+        this.API_URL + "/api/videos?group=" + this.getProfile().group
+      );
       this.pushData(videos.data);
     } catch (error) {
       this.error = error;

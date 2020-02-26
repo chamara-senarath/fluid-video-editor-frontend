@@ -227,7 +227,7 @@ export default {
       "setSplashScreenObject",
       "setVideoDefault"
     ]),
-    ...mapGetters(["getVideoObject", "getChapterMarks"]),
+    ...mapGetters(["getVideoObject", "getChapterMarks", "getProfile"]),
     uploadVideo(file) {
       if (
         file &&
@@ -260,7 +260,8 @@ export default {
         let res = await axios.post(this.API_URL + "/api/video", {
           title: this.video.title,
           authors: this.authors,
-          tags: this.tags
+          tags: this.tags,
+          group: this.getProfile().group
         });
 
         const formData = new FormData();

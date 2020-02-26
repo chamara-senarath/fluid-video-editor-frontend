@@ -9,7 +9,7 @@
           class="subtitle-1"
           outlined
           label="Write a comment"
-          auto-grow="false"
+          :auto-grow="false"
           no-resize
           maxlength="200"
           v-model="comment"

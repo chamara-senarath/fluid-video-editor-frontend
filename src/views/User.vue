@@ -75,6 +75,7 @@
 import Navbar from "@/components/Navbar";
 import MiniPlayer from "@/components/MiniPlayer";
 import axios from "axios";
+import { mapGetters } from "vuex";
 export default {
   components: {
     Navbar,
@@ -86,10 +87,12 @@ export default {
       thumbnailList: [],
       showPlayer: false,
       videoSource: null,
+      percentagesList: [],
       error: null
     };
   },
   methods: {
+    ...mapGetters(["getProfile"]),
     gotoVideo(id) {
       this.videoSource = this.API_URL + "/embed/" + id + "/" + this.uid;
       this.showPlayer = true;
@@ -99,12 +102,12 @@ export default {
       try {
         let videos = await axios.get(
           this.API_URL +
-            "/api/insight/user/search?key=" +
+            "/api/video/search?key=" +
             key +
-            "&uid=" +
-            this.uid +
             "&option=" +
-            option
+            option +
+            "&group=" +
+            this.getProfile().group
         );
         this.pushData(videos.data);
       } catch (error) {
@@ -114,22 +117,15 @@ export default {
     pushData(videos) {
       videos.forEach(video => {
         let obj = {
-          id: video.video._id,
-          title: video.video.title,
-          img: this.API_URL + "/api/video/splash?id=" + video.video._id,
+          id: video._id,
+          title: video.title,
+          img: this.API_URL + "/api/video/splash?id=" + video._id,
           rating:
-            video.video.rating &&
-            video.video.rating.users &&
-            video.video.rating.users == 0
+            video.rating.users == 0
               ? 0
-              : video.video.rating.rating / video.video.rating.users,
-          rates:
-            video.video.rating &&
-            video.video.rating.users &&
-            video.video.rating.users == 0
-              ? 0
-              : video.video.rating.users,
-          completed: video.video.percentage
+              : video.rating.rating / video.rating.users,
+          rates: video.rating.users,
+          completed: this.findPercentage(video._id)
         };
         this.thumbnailList.push(obj);
       });
@@ -146,23 +142,48 @@ export default {
       this.thumbnailList = [];
       try {
         let videos = await axios.get(
-          this.API_URL + "/api/insight/user/all?uid=" + this.uid
+          this.API_URL + "/api/videos?group=" + this.getProfile().group
         );
-        this.pushData(videos.data.videos);
+        this.pushData(videos.data);
       } catch (error) {
         this.error = error;
       }
+    },
+    findPercentage(id) {
+      let item = this.percentagesList.find(ele => ele.video == id);
+      if (item) {
+        return item.percentage;
+      } else {
+        return 0;
+      }
     }
   },
+
   async mounted() {
     this.uid = this.$route.params.uid;
-    //forward to 404 when no user found
-    let res = await axios.get(this.API_URL + "/api/user?id=" + this.uid);
-    if (res.status == 204 || res.status == 400 || res.status == 404) {
-      this.$router.push("/404");
-      return;
+    try {
+      //forward to 404 when no user found
+      let videoListResult = await axios.get(
+        this.API_URL + "/api/user?id=" + this.uid
+      );
+      if (
+        videoListResult.status == 204 ||
+        videoListResult.status == 400 ||
+        videoListResult.status == 404
+      ) {
+        this.$router.push("/404");
+        return;
+      }
+      let percentageListResult = await axios.get(
+        this.API_URL + "/api/insight/user/all?uid=" + this.uid
+      );
+      if (percentageListResult.data) {
+        this.percentagesList = percentageListResult.data;
+      }
+      this.fetchData();
+    } catch (error) {
+      console.log(error);
     }
-    this.fetchData();
   }
 };
 </script>

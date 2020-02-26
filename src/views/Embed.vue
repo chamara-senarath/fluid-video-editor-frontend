@@ -75,9 +75,8 @@ export default {
         percentage: this.postWatchPercentage,
         checkpoints: []
       };
-      if (obj.questions && obj.questions.length != 0) {
-        await axios.post(this.API_URL + "/api/insight/user", obj);
-      }
+
+      await axios.post(this.API_URL + "/api/insight/user", obj);
     },
     async fetchComment(vid) {
       this.comments = [];
@@ -144,12 +143,12 @@ export default {
     let video = await axios.get(this.API_URL + "/api/video?id=" + this.vid);
     this.title = video.data.title;
     this.chapterList = video.data.chapterMarks;
-
     //set questions list
     if (!is_test) {
       let result = await axios.get(
         this.API_URL + "/api/insight/user?uid=" + this.uid + "&vid=" + this.vid
       );
+
       this.questionList = result.data.questions;
       this.watchPercentage = result.data.percentage;
     } else {
