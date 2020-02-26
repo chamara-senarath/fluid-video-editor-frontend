@@ -26,10 +26,10 @@
                   dense
                   half-increments
                   readonly
-                  size="14"
+                  size="15"
                 ></v-rating>
                 <v-flex ml-2>
-                  <span class="caption">{{ rating.amount }}</span>
+                  <span class="subtitle-1">{{ rating.amount }}</span>
                 </v-flex>
               </v-layout>
             </v-flex>

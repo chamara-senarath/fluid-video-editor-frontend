@@ -44,7 +44,14 @@
         <span>Dark Mode Toggle</span>
       </v-tooltip>
 
-      <v-tooltip bottom v-if="$route.name != 'Login' && $route.name != 'User'">
+      <v-tooltip
+        bottom
+        v-if="
+          $route.name != 'Login' &&
+            $route.name != 'User' &&
+            $route.name != 'Comments'
+        "
+      >
         <template v-slot:activator="{ on }">
           <v-btn
             v-on="on"

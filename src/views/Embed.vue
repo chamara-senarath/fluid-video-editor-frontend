@@ -112,6 +112,9 @@ export default {
         }
       };
       try {
+        if (rating == 0) {
+          return;
+        }
         await axios.post(this.API_URL + "/api/rating", obj);
       } catch (error) {
         console.log(error);
