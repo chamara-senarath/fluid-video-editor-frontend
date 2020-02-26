@@ -461,6 +461,7 @@ export default {
       iosNative: false
     };
     this.player = this.$refs.player.player;
+    this.onPlayVideo();
   },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);
