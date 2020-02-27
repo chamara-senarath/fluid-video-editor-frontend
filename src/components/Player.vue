@@ -117,7 +117,12 @@
         :overlay="answerOverlay"
         :question="currentQuestion"
       ></AnswerOverlay>
-      <Rating @submit="submitRating" :overlay="ratingOverlay"> </Rating>
+      <Rating
+        @submit="submitRating"
+        :overlay="ratingOverlay"
+        :ratingObj="rating"
+      >
+      </Rating>
       <div style="position:absolute;right:0px;bottom:2vh;z-index:1000">
         <CommentSection
           :show="showComments"
@@ -231,6 +236,7 @@ export default {
     "chapterList",
     "questionList",
     "commentList",
+    "rating",
     "seek",
     "user"
   ],

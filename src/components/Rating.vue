@@ -38,7 +38,7 @@
 
 <script>
 export default {
-  props: ["overlay"],
+  props: ["overlay", "ratingObj"],
   data: () => ({
     rating: 0,
     comment: null
@@ -48,6 +48,12 @@ export default {
       let rating = this.rating;
       let comment = this.comment;
       this.$emit("submit", { option, rating, comment });
+    }
+  },
+  mounted() {
+    if (this.ratingObj) {
+      this.rating = this.ratingObj.rating;
+      this.comment = this.ratingObj.comment;
     }
   }
 };

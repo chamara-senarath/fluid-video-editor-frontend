@@ -16,6 +16,7 @@
       :chapterList="chapterList"
       :questionList="this.questionList"
       :commentList="comments"
+      :rating="rating"
       :seek="watchPercentage"
       :user="{
         name: user.name,
@@ -54,7 +55,8 @@ export default {
         name: null,
         avatar: null
       },
-      comments: []
+      comments: [],
+      rating: null
     };
   },
   methods: {
@@ -106,7 +108,7 @@ export default {
       let obj = {
         vid: this.vid,
         comment: {
-          username: this.user.name,
+          user: this.user._id,
           comment: comment,
           rating: rating
         }
@@ -161,6 +163,16 @@ export default {
 
     //set comments
     this.fetchComment(this.vid);
+
+    //set Existing ratings
+    let existingRatingResult = await axios.get(
+      this.API_URL +
+        "/api/rating/comment/me?vid=" +
+        this.vid +
+        "&uid=" +
+        this.uid
+    );
+    this.rating = existingRatingResult.data;
     //set video watermark, splashduration, src and thumbnail
     this.watermark = video.data.watermark;
     this.splashDuration = video.data.splashDuration;

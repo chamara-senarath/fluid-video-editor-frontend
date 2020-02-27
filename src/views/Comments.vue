@@ -48,7 +48,7 @@
           <v-card outlined>
             <v-card-text>
               <v-layout column>
-                <span>{{ comment.username }}</span>
+                <span>{{ comment.user.name }}</span>
                 <v-rating
                   :value="comment.rating"
                   color="amber"
