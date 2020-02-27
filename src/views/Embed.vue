@@ -19,8 +19,7 @@
       :seek="watchPercentage"
       :user="{
         name: user.name,
-        avatar:
-          'https://icon-library.net/images/avatar-icon-png/avatar-icon-png-8.jpg'
+        avatar: user.avatar == null ? '/avatar.png' : user.avatar
       }"
     ></Player>
   </v-responsive>
@@ -52,7 +51,8 @@ export default {
       watchPercentage: null,
       postWatchPercentage: null,
       user: {
-        name: "Chamara Senarath"
+        name: null,
+        avatar: null
       },
       comments: []
     };

@@ -2,11 +2,7 @@
   <nav v-if="$route.name != 'Embed'">
     <v-app-bar app elevation="0">
       <v-app-bar-nav-icon
-        v-if="
-          $route.name != 'Login' &&
-            $route.name != 'User' &&
-            $route.name != 'Comments'
-        "
+        v-if="profile.role == 'Administrator'"
         @click.stop="drawer = !drawer"
       ></v-app-bar-nav-icon>
       <v-toolbar-title>
@@ -44,14 +40,7 @@
         <span>Dark Mode Toggle</span>
       </v-tooltip>
 
-      <v-tooltip
-        bottom
-        v-if="
-          $route.name != 'Login' &&
-            $route.name != 'User' &&
-            $route.name != 'Comments'
-        "
-      >
+      <v-tooltip bottom v-if="profile.role == 'Administrator'">
         <template v-slot:activator="{ on }">
           <v-btn
             v-on="on"
@@ -92,7 +81,7 @@
     </v-app-bar>
 
     <v-navigation-drawer
-      v-if="$route.name != 'Login' && $route.name != 'User'"
+      v-if="profile.role == 'Administrator'"
       v-model="drawer"
       app
     >
@@ -171,12 +160,7 @@ export default {
   data() {
     return {
       isLogged: true,
-      profile: {
-        name: "Chamara Senarath",
-        role: "Administrator",
-        avatar:
-          "https://media-exp1.licdn.com/dms/image/C5603AQH8djRfeVGRIA/profile-displayphoto-shrink_200_200/0?e=1583971200&v=beta&t=h4bdo5LKhkdkZPR11n87vWbEHyVi7rEkIEY4TzEFS2A"
-      }, // TODO remove this when implement user login
+      profile: null,
       submitLoading: false,
       drawer: false,
       bg:
@@ -204,8 +188,6 @@ export default {
     ...mapMutations(["removeToken"]),
     ...mapGetters(["getToken", "getUser", "getProfile"]),
     async logout() {
-      this.drawer = false;
-      this.isLogged = false;
       let { role } = this.getUser();
       if (role == "user") {
         await axios.post(
@@ -217,6 +199,7 @@ export default {
         );
       }
       this.removeToken();
+      this.isLogged = false;
 
       this.$router.push("/login");
     },
