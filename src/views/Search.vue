@@ -3,6 +3,7 @@
     <Navbar @search="loadData"></Navbar>
     <MiniPlayer
       :showPlayer="showPlayer"
+      :title="videoTitle"
       :src="videoSource"
       @closePlayer="showPlayer = false"
     ></MiniPlayer>
@@ -70,6 +71,7 @@
                             small
                             @click="
                               () => {
+                                this.videoTitle = thumbnail.title;
                                 showConfirmation = true;
                                 selectedID = thumbnail.id;
                               }
@@ -152,6 +154,7 @@ export default {
       error: false,
       showPlayer: false,
       videoSource: null,
+      videoTitle: null,
       selectedID: null,
       thumbnailList: [],
       showConfirmation: false,

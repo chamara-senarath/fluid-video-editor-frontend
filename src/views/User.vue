@@ -4,6 +4,7 @@
     <MiniPlayer
       :showPlayer="showPlayer"
       :src="videoSource"
+      :title="videoTitle"
       @closePlayer="closePlayer"
     ></MiniPlayer>
     <v-layout column align-center v-if="error">
@@ -51,7 +52,7 @@
             </router-link>
             <v-layout column align-end>
               <v-btn
-                @click="gotoVideo(thumbnail.id)"
+                @click="gotoVideo(thumbnail)"
                 x-small
                 elevation="0"
                 dark
@@ -87,13 +88,16 @@ export default {
       thumbnailList: [],
       showPlayer: false,
       videoSource: null,
+      videoTitle: null,
       percentagesList: [],
       error: null
     };
   },
   methods: {
     ...mapGetters(["getProfile"]),
-    gotoVideo(id) {
+    gotoVideo(thumbnail) {
+      let id = thumbnail.id;
+      this.videoTitle = thumbnail.title;
       this.videoSource = this.API_URL + "/embed/" + id + "/" + this.uid;
       this.showPlayer = true;
     },

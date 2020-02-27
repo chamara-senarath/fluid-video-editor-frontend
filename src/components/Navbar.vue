@@ -160,7 +160,11 @@ export default {
   data() {
     return {
       isLogged: true,
-      profile: null,
+      profile: {
+        role: null,
+        avatar: null,
+        name: null
+      },
       submitLoading: false,
       drawer: false,
       bg:
