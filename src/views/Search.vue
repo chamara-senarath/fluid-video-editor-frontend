@@ -71,7 +71,6 @@
                             small
                             @click="
                               () => {
-                                this.videoTitle = thumbnail.title;
                                 showConfirmation = true;
                                 selectedID = thumbnail.id;
                               }
@@ -114,7 +113,7 @@
                         </router-link>
                         <v-layout column align-end>
                           <v-btn
-                            @click="gotoVideo(thumbnail.id)"
+                            @click="gotoVideo(thumbnail)"
                             x-small
                             elevation="0"
                             dark
@@ -176,7 +175,9 @@ export default {
       "setWatermark"
     ]),
     ...mapGetters(["getProfile"]),
-    gotoVideo(id) {
+    gotoVideo(thumbnail) {
+      let id = thumbnail.id;
+      this.videoTitle = thumbnail.title;
       this.videoSource = this.API_URL + "/embed/" + id + "/test";
       this.showPlayer = true;
     },

@@ -48,7 +48,14 @@
           <v-card outlined>
             <v-card-text>
               <v-layout column>
-                <span>{{ comment.user.name }}</span>
+                <v-layout row px-3>
+                  <v-flex xs11>
+                    <span>{{ comment.user.name }}</span>
+                  </v-flex>
+                  <v-flex>
+                    <span>{{ comment.date.split("T")[0] }}</span>
+                  </v-flex>
+                </v-layout>
                 <v-rating
                   :value="comment.rating"
                   color="amber"
