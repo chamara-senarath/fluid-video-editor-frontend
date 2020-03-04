@@ -165,14 +165,20 @@ export default {
     this.fetchComment(this.vid);
 
     //set Existing ratings
-    let existingRatingResult = await axios.get(
-      this.API_URL +
-        "/api/rating/comment/me?vid=" +
-        this.vid +
-        "&uid=" +
-        this.uid
-    );
-    this.rating = existingRatingResult.data;
+    try {
+      let existingRatingResult = await axios.get(
+        this.API_URL +
+          "/api/rating/comment/me?vid=" +
+          this.vid +
+          "&uid=" +
+          this.uid
+      );
+      if (existingRatingResult) {
+        this.rating = existingRatingResult.data;
+      }
+    } catch (error) {
+      console.log(error);
+    }
     //set video watermark, splashduration, src and thumbnail
     this.watermark = video.data.watermark;
     this.splashDuration = video.data.splashDuration;
