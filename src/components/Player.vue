@@ -417,7 +417,54 @@ export default {
       this.showComments = false;
       this.ratingOverlay = false;
     },
-    takeScreenShot() {},
+    async takeScreenShot() {
+      this.player.pause();
+
+      const canvas = this.player.media;
+      const options = {
+        type: "dataURL"
+        // logging: true,
+        // letterRendering: 2,
+        // allowTaint: true,
+        // useCORS: true,
+        // foreignObjectRendering: true
+      };
+      let canvasData = await this.$html2canvas(canvas, options);
+      var byteString = atob(canvasData.split(",")[1]);
+      var mimeString = canvasData
+        .split(",")[0]
+        .split(":")[1]
+        .split(";")[0];
+      var ab = new ArrayBuffer(byteString.length);
+      var dw = new DataView(ab);
+      for (var i = 0; i < byteString.length; i++) {
+        dw.setUint8(i, byteString.charCodeAt(i));
+      }
+      let file = new Blob([ab], { type: mimeString });
+      const e = document.createEvent("MouseEvents"),
+        a = document.createElement("a");
+      a.download = `screenshot-${this.title}.png`;
+      a.href = window.URL.createObjectURL(file);
+      a.dataset.downloadurl = ["image/png", a.download, a.href].join(":");
+      e.initEvent(
+        "click",
+        true,
+        false,
+        window,
+        0,
+        0,
+        0,
+        0,
+        0,
+        false,
+        false,
+        false,
+        false,
+        0,
+        null
+      );
+      a.dispatchEvent(e);
+    },
     submitRating({ option, rating, comment }) {
       if (option == "submit") {
         this.$emit("submitRating", { rating, comment });
