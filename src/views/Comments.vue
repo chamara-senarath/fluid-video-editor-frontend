@@ -15,7 +15,9 @@
           <v-layout column align-center>
             <v-flex>
               <span>{{
-                ratings.length == 0 ? "No Ratings for this video" : "Ratings"
+                $t(
+                  ratings.length == 0 ? "No Ratings for this video" : "Ratings"
+                )
               }}</span>
             </v-flex>
             <v-flex px-5 v-for="rating in ratings" :key="rating._id">
@@ -36,11 +38,11 @@
           </v-layout>
         </v-flex>
       </v-layout>
-      <span class="title">Comments</span>
+      <span class="title">{{ $t("Comments") }}</span>
       <v-divider></v-divider>
       <v-layout v-if="comments.length == 0" mt-10 column align-center>
         <v-flex>
-          <span>No Comments for this video</span>
+          <span>{{ $t("No Comments for this video") }}</span>
         </v-flex>
       </v-layout>
       <v-layout column mt-5>

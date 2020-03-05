@@ -34,9 +34,10 @@
             :key="index"
             @click="changeLanguage(item)"
           >
-            <v-list-item-title
+            <v-list-item-title class="caption"
               ><flag :iso="item.country" />
-              {{ item.language }}</v-list-item-title
+
+              {{ item.language.toUpperCase() }}</v-list-item-title
             >
           </v-list-item>
         </v-list>

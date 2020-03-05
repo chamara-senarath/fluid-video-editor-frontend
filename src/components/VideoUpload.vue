@@ -1,10 +1,5 @@
 <template>
   <v-container>
-    <AreYouSure
-      :showConfirmation="showConfirmation"
-      :options="confirmationMessage"
-      @userAnswer="userAnswer"
-    ></AreYouSure>
     <v-layout column align-center>
       <v-snackbar color="blue darken-3" top v-model="snackbar">
         <v-icon color="white">fa fa-check</v-icon>
@@ -135,25 +130,15 @@
           }}</v-icon></v-btn
         >
       </v-flex>
-      <v-flex mt-2 v-if="this.$route.params.is_edit">
-        <v-btn @click="uploadNew" block class="primary"
-          >{{ $t("Upload New")
-          }}<v-icon small right>fa fa-upload</v-icon></v-btn
-        >
-      </v-flex>
     </v-form>
   </v-container>
 </template>
 
 <script>
-import AreYouSure from "@/components/AreYouSure";
 import { mapGetters, mapMutations } from "vuex";
 import axios from "axios";
 
 export default {
-  components: {
-    AreYouSure
-  },
   data() {
     const srcs = {
       1: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
@@ -163,14 +148,6 @@ export default {
       5: "https://cdn.vuetifyjs.com/images/lists/5.jpg"
     };
     return {
-      showConfirmation: false,
-      confirmationMessage: {
-        title: "leave this page",
-        content:
-          "If you go back, your saved sates will be deleted. Are you sure you want to leave this page?",
-        yes: "Yes, I am sure",
-        no: "No, Keep me here"
-      },
       autoUpdate: true,
       authors: [],
       tags: [],
@@ -310,27 +287,6 @@ export default {
     remove(arr, item) {
       const index = arr.indexOf(item.name);
       if (index >= 0) arr.splice(index, 1);
-    },
-    uploadNew() {
-      this.showConfirmation = true;
-    },
-    async userAnswer(val) {
-      this.showConfirmation = false;
-      if (val == "yes") {
-        if (
-          this.getChapterMarks() == null ||
-          this.getChapterMarks().length == 0
-        ) {
-          try {
-            await axios.delete(
-              this.API_URL + "/api/video/file?id=" + this.getVideoObject().id
-            );
-          } catch (error) {
-            this.feedback = error;
-          }
-        }
-        this.$router.go();
-      }
     }
   },
   mounted() {

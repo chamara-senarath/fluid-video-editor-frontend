@@ -1,7 +1,7 @@
 <template>
   <v-layout column>
     <v-layout>
-      <strong class="title white--text">Questions</strong>
+      <strong class="title white--text">{{ $t("Questions") }}</strong>
     </v-layout>
     <v-layout row>
       <v-chip

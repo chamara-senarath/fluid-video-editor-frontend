@@ -11,7 +11,7 @@
         >
           <v-layout row wrap>
             <v-flex>
-              Choose a Template
+              {{ $t("Choose a Template") }}
             </v-flex>
             <v-flex>
               <v-layout column align-end>
@@ -23,7 +23,7 @@
                       small
                       color="green darken-1"
                       @click="buildTemplate"
-                      >Choose</v-btn
+                      >{{ $t("Choose") }}</v-btn
                     >
                   </v-flex>
                   <v-flex mx-3>

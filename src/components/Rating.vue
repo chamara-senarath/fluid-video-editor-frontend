@@ -2,13 +2,13 @@
   <v-overlay :absolute="true" :value="overlay">
     <v-card class="elevation-16 mx-auto" width="300">
       <v-card-title class="headline" primary-title>
-        Rate This Video
+        {{ $t("Rate This Video") }}
       </v-card-title>
       <v-card-text>
         <v-textarea
           class="subtitle-1"
           outlined
-          label="Write a comment"
+          :label="$t('Write a comment')"
           :auto-grow="false"
           no-resize
           maxlength="200"
@@ -27,9 +27,9 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions class="justify-space-between">
-        <v-btn text @click="submit('close')">No Thanks</v-btn>
+        <v-btn text @click="submit('close')">{{ $t("No Thanks") }}</v-btn>
         <v-btn color="primary" text @click="submit('submit')">
-          Rate Now
+          {{ $t("Rate Now") }}
         </v-btn>
       </v-card-actions>
     </v-card>

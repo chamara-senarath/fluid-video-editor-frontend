@@ -50,26 +50,26 @@
                       <v-layout row justify-space-between px-2>
                         <v-flex px-1 xs4>
                           <v-btn
-                            small
+                            x-small
                             block
                             :to="{
                               name: 'Insight',
                               params: { vid: thumbnail.id }
                             }"
-                            ><v-icon left>fa fa-chart-line</v-icon
+                            ><v-icon small left>fa fa-chart-line</v-icon
                             >{{ $t("Insights") }}</v-btn
                           >
                         </v-flex>
                         <v-flex px-1 xs4>
-                          <v-btn small @click="edit(thumbnail.id)" block
-                            ><v-icon left>fa fa-edit</v-icon
+                          <v-btn x-small @click="edit(thumbnail.id)" block
+                            ><v-icon small left>fa fa-edit</v-icon
                             >{{ $t("Edit") }}</v-btn
                           >
                         </v-flex>
                         <v-flex px-1 xs4>
                           <v-btn
                             block
-                            small
+                            x-small
                             @click="
                               () => {
                                 showConfirmation = true;
@@ -77,7 +77,7 @@
                               }
                             "
                           >
-                            <v-icon left>fa fa-trash-alt</v-icon
+                            <v-icon small left>fa fa-trash-alt</v-icon
                             >{{ $t("Delete") }}
                           </v-btn>
                         </v-flex>
@@ -160,7 +160,7 @@ export default {
       thumbnailList: [],
       showConfirmation: false,
       confirmationMessage: {
-        title: "Delete this video",
+        title: "Are you sure you want to Delete this video",
         content:
           "If you delete the video, this video will be deleted from your uploaded video list. Are you sure?",
         yes: "Yes, I am sure",

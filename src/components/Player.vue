@@ -42,7 +42,7 @@
               "
             >
               <v-icon left small>fa fa-info-circle</v-icon>
-              Skip Intro
+              {{ $t("Skip Intro") }}
             </v-btn>
           </div>
         </transition>
@@ -170,7 +170,7 @@
         <v-divider></v-divider>
 
         <v-layout my-3 mx-4 row justify-space-between align-center>
-          <span class="title white--text">Chapter List</span>
+          <span class="title white--text">{{ $t("Chapter List") }}</span>
           <v-btn text icon color="white" @click="drawer = !drawer">
             <v-icon>fa fa-chevron-circle-left</v-icon>
           </v-btn>

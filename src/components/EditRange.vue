@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-dialog :value="editRangeDialog" persistent max-width="290">
       <v-card>
-        <v-card-title class="headline">Edit Range</v-card-title>
+        <v-card-title class="headline">{{ $t("Edit Range") }}</v-card-title>
         <v-card-text>
           <v-layout column px-3>
             <v-layout
@@ -46,7 +46,9 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="save">Done</v-btn>
+          <v-btn color="green darken-1" text @click="save">{{
+            $t("Done")
+          }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

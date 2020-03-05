@@ -5,11 +5,11 @@
         <v-img src="/no_data_found.png" width="30vw"></v-img>
       </v-flex>
       <v-flex>
-        <p class="title">Sorry, No data found</p>
+        <p class="title">{{ $t("Sorry, No data found") }}</p>
       </v-flex>
     </v-layout>
     <template v-else>
-      <span class="title">Video insight</span>
+      <span class="title">{{ $t("Video insight") }}</span>
       <v-layout row>
         <v-flex
           xs12
@@ -21,7 +21,7 @@
         >
           <v-card dark :color="`${item.color} lighten-1`" min-height="25vh">
             <v-card-title :class="`${item.color} darken-1`">
-              {{ item.title }}
+              {{ $t(item.title) }}
               <v-icon right>{{ item.icon }}</v-icon>
             </v-card-title>
             <v-card-text>
@@ -34,7 +34,7 @@
                     <div class="title">
                       {{ item.video | truncate(50, "...") }}
                     </div>
-                    <span>Total Views: {{ item.views }} </span>
+                    <span>{{ $t("Total Views") }}: {{ item.views }} </span>
                   </v-layout>
                 </v-flex>
               </v-layout>
@@ -44,12 +44,12 @@
       </v-layout>
       <v-card>
         <v-card-title>
-          Summary
+          {{ $t("Summary") }}
           <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
             append-icon="fa fa-search"
-            label="Search"
+            :label="$t('Search')"
             single-line
             hide-details
           ></v-text-field>

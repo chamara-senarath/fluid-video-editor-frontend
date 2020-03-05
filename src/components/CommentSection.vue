@@ -14,13 +14,13 @@
             dark
             :color="`rgba(0, 0, 0, ${opacity})`"
             block
-            >Hide Comments
+            >{{ $t("Hide Comments") }}
             <v-icon right small>fa fa-comment-slash</v-icon></v-btn
           >
         </v-layout>
 
         <v-layout pt-2 column align-center v-if="!$refs.commentCard">
-          <span class="white--text">No Comments</span>
+          <span class="white--text">{{ $t("No Comments") }}</span>
         </v-layout>
 
         <v-list
@@ -68,7 +68,7 @@
             row-height="15"
             maxlength="50"
             dark
-            label="Write a Comment"
+            :label="$t('Write a comment')"
             outlined
             no-resize
           ></v-textarea>

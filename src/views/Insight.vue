@@ -8,7 +8,7 @@
       <v-flex v-for="(card, index) in cardList" :key="index" xs12 md3 pa-2>
         <v-card dark :color="`${card.color} lighten-1`">
           <v-card-title :class="`${card.color} darken-1`">
-            {{ card.title }}
+            {{ $t(card.title) }}
           </v-card-title>
           <v-card-text>
             <v-layout mt-4 row align-center mx-2 justify-space-between>
@@ -34,7 +34,9 @@
         <v-card color="white">
           <v-card-title class="black--text">
             <v-layout row justify-space-between>
-              <v-flex xs8> Views By {{ pieChart.title }} </v-flex>
+              <v-flex xs8>
+                {{ $t("Views By") }} {{ $t(pieChart.title) }}
+              </v-flex>
               <v-spacer></v-spacer>
               <v-flex xs3>
                 <v-btn
@@ -43,7 +45,7 @@
                   small
                   v-if="pieChart.title == 'Age' && showPieCharts"
                   color="blue"
-                  >Edit Range</v-btn
+                  >{{ $t("Edit Range") }}</v-btn
                 >
               </v-flex>
             </v-layout>
