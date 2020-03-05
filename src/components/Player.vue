@@ -231,6 +231,7 @@
         </v-list>
         <v-layout mt-10 ml-4>
           <QuestionGroup
+            v-if="questionList.length != 0"
             :questions="questionList"
             :opacity="panelOpacity"
           ></QuestionGroup>
