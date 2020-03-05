@@ -49,6 +49,7 @@
 
       <v-autocomplete
         prepend-icon="fa fa-feather-alt"
+        :hide-selected="true"
         v-model="authors"
         :items="people"
         chips
@@ -93,6 +94,7 @@
 
       <v-combobox
         prepend-icon="fa fa-tag"
+        :hide-selected="true"
         v-model="tags"
         :items="tagList"
         :label="$t('Tag')"
