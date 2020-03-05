@@ -1,218 +1,220 @@
 <template>
-  <div
-    class="overflow-hidden"
-    style="position: relative;"
-    @mousewheel="changeOpacity"
-    @keydown.enter="toggleFullscreen"
-    @dblclick="toggleFullscreen"
-    ref="playerView"
-  >
-    <v-layout>
-      <vue-plyr
-        @timeupdate="videoTimeUpdated"
-        :emit="['timeupdate']"
-        ref="player"
-        :style="
-          `width:${
-            isFullscreen ? fullScreenWidth + 'px' : normalScreenWidth + 'px'
-          };`
-        "
-      >
-        <video :poster="thumbnail">
-          <source v-if="is_intro" :src="thumbnail" type="video/png" />
-          <source v-if="!is_intro" :src="src" type="video/mp4" />
-        </video>
-      </vue-plyr>
-
-      <transition name="fade">
-        <div v-if="is_intro" style="position:absolute;right:0px;z-index:100">
-          <v-btn
-            transition="slide-x-transition"
-            :color="`rgba(0,0,0,${panelOpacity})`"
-            depressed
-            dark
-            tile
-            @click="
-              () => {
-                is_intro = false;
-
-                this.player.play();
-              }
-            "
-          >
-            <v-icon left small>fa fa-info-circle</v-icon>
-            Skip Intro
-          </v-btn>
-        </div>
-      </transition>
-
-      <transition name="slide-x-reverse-transition">
-        <div
-          v-if="expandRightPanel && !showComments"
-          style="position:absolute;right:65px;z-index:100"
+  <div ref="canvas">
+    <div
+      class="overflow-hidden"
+      style="position: relative;"
+      @mousewheel="changeOpacity"
+      @keydown.enter="toggleFullscreen"
+      @dblclick="toggleFullscreen"
+      ref="playerView"
+    >
+      <v-layout>
+        <vue-plyr
+          @timeupdate="videoTimeUpdated"
+          :emit="['timeupdate']"
+          ref="player"
+          :style="
+            `width:${
+              isFullscreen ? fullScreenWidth + 'px' : normalScreenWidth + 'px'
+            };`
+          "
         >
+          <video :poster="thumbnail">
+            <source v-if="is_intro" :src="thumbnail" type="video/png" />
+            <source v-if="!is_intro" :src="src" type="video/mp4" />
+          </video>
+        </vue-plyr>
+
+        <transition name="fade">
+          <div v-if="is_intro" style="position:absolute;right:0px;z-index:100">
+            <v-btn
+              transition="slide-x-transition"
+              :color="`rgba(0,0,0,${panelOpacity})`"
+              depressed
+              dark
+              tile
+              @click="
+                () => {
+                  is_intro = false;
+
+                  this.player.play();
+                }
+              "
+            >
+              <v-icon left small>fa fa-info-circle</v-icon>
+              Skip Intro
+            </v-btn>
+          </div>
+        </transition>
+
+        <transition name="slide-x-reverse-transition">
+          <div
+            v-if="expandRightPanel && !showComments"
+            style="position:absolute;right:65px;z-index:100"
+          >
+            <v-btn
+              :color="`rgba(0,0,0,${panelOpacity})`"
+              depressed
+              dark
+              tile
+              @click="showCommentHandler"
+            >
+              <v-icon left small>fa fa-comment-dots</v-icon>
+            </v-btn>
+            <v-divider vertical></v-divider>
+            <v-btn
+              :color="`rgba(0,0,0,${panelOpacity})`"
+              depressed
+              dark
+              tile
+              @click="takeScreenShot"
+            >
+              <v-icon left small>fa fa-camera-retro</v-icon>
+            </v-btn>
+            <v-divider vertical></v-divider>
+            <v-btn
+              :color="`rgba(0,0,0,${panelOpacity})`"
+              depressed
+              dark
+              tile
+              @click="showRating"
+            >
+              <v-icon left small>fa fa-smile</v-icon>
+            </v-btn>
+            <v-divider vertical></v-divider>
+          </div>
+        </transition>
+        <div v-if="!is_intro" style="position:absolute;right:0px;z-index:100">
           <v-btn
+            @click="expandRightPanelHandler"
             :color="`rgba(0,0,0,${panelOpacity})`"
             depressed
             dark
             tile
-            @click="showCommentHandler"
           >
-            <v-icon left small>fa fa-comment-dots</v-icon>
+            <v-icon left small
+              >fa fa-chevron-circle-{{
+                expandRightPanel ? "right" : "left"
+              }}</v-icon
+            >
           </v-btn>
-          <v-divider vertical></v-divider>
-          <v-btn
-            :color="`rgba(0,0,0,${panelOpacity})`"
-            depressed
-            dark
-            tile
-            @click="takeScreenShot"
-          >
-            <v-icon left small>fa fa-camera-retro</v-icon>
-          </v-btn>
-          <v-divider vertical></v-divider>
-          <v-btn
-            :color="`rgba(0,0,0,${panelOpacity})`"
-            depressed
-            dark
-            tile
-            @click="showRating"
-          >
-            <v-icon left small>fa fa-smile</v-icon>
-          </v-btn>
-          <v-divider vertical></v-divider>
         </div>
-      </transition>
-      <div v-if="!is_intro" style="position:absolute;right:0px;z-index:100">
+
+        <div
+          v-if="this.watermarkStyle != null"
+          :style="
+            `position:absolute;top:${watermarkStyle.top}px;left:${watermarkStyle.left}px;`
+          "
+        >
+          <img
+            :src="watermark.file"
+            :width="watermarkStyle.width"
+            :style="`opacity:${watermark.opacity / 100};pointer-events: none;`"
+          />
+        </div>
+        <AnswerOverlay
+          v-if="currentQuestion != null"
+          @state="changeAnswerOverlayState"
+          :overlay="answerOverlay"
+          :question="currentQuestion"
+        ></AnswerOverlay>
+        <Rating
+          @submit="submitRating"
+          :overlay="ratingOverlay"
+          :ratingObj="rating"
+        >
+        </Rating>
+        <div style="position:absolute;right:0px;bottom:2vh;z-index:1000">
+          <CommentSection
+            :show="showComments"
+            :comments="commentList"
+            :time="duration"
+            @hideComments="hideCommentHandler"
+            @sendComment="sendComment"
+          />
+        </div>
         <v-btn
-          @click="expandRightPanelHandler"
+          v-if="this.chapterList.length != 0 && !drawer && !is_intro"
+          @click.stop="drawer = !drawer"
           :color="`rgba(0,0,0,${panelOpacity})`"
           depressed
           dark
           tile
+          absolute
         >
-          <v-icon left small
-            >fa fa-chevron-circle-{{
-              expandRightPanel ? "right" : "left"
-            }}</v-icon
-          >
-        </v-btn>
-      </div>
-
-      <div
-        v-if="this.watermarkStyle != null"
-        :style="
-          `position:absolute;top:${watermarkStyle.top}px;left:${watermarkStyle.left}px;`
-        "
-      >
-        <img
-          :src="watermark.file"
-          :width="watermarkStyle.width"
-          :style="`opacity:${watermark.opacity / 100};pointer-events: none;`"
-        />
-      </div>
-      <AnswerOverlay
-        v-if="currentQuestion != null"
-        @state="changeAnswerOverlayState"
-        :overlay="answerOverlay"
-        :question="currentQuestion"
-      ></AnswerOverlay>
-      <Rating
-        @submit="submitRating"
-        :overlay="ratingOverlay"
-        :ratingObj="rating"
-      >
-      </Rating>
-      <div style="position:absolute;right:0px;bottom:2vh;z-index:1000">
-        <CommentSection
-          :show="showComments"
-          :comments="commentList"
-          :time="duration"
-          @hideComments="hideCommentHandler"
-          @sendComment="sendComment"
-        />
-      </div>
-      <v-btn
-        v-if="this.chapterList.length != 0 && !drawer && !is_intro"
-        @click.stop="drawer = !drawer"
-        :color="`rgba(0,0,0,${panelOpacity})`"
-        depressed
-        dark
-        tile
-        absolute
-      >
-        <v-icon left dark color="white">fa fa-list-ul</v-icon>
-        <span v-if="this.chapterList.length != 0" color="primary" dark>
-          {{ title }} <strong class="blue--text">|</strong>
-          {{ chapterList[playingChapter].text }}
-        </span>
-      </v-btn>
-    </v-layout>
-
-    <v-navigation-drawer
-      v-if="this.chapterList.length != 0 && !is_intro"
-      v-model="drawer"
-      absolute
-      dark
-      :color="`rgba(0,0,0,${panelOpacity})`"
-    >
-      <v-list-item>
-        <v-list-item-avatar>
-          <v-img :src="user.avatar"></v-img>
-        </v-list-item-avatar>
-
-        <v-list-item-content v-if="user != null">
-          <v-list-item-title>{{ user.name }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-divider></v-divider>
-
-      <v-layout my-3 mx-4 row justify-space-between align-center>
-        <span class="title white--text">Chapter List</span>
-        <v-btn text icon color="white" @click="drawer = !drawer">
-          <v-icon>fa fa-chevron-circle-left</v-icon>
+          <v-icon left dark color="white">fa fa-list-ul</v-icon>
+          <span v-if="this.chapterList.length != 0" color="primary" dark>
+            {{ title }} <strong class="blue--text">|</strong>
+            {{ chapterList[playingChapter].text }}
+          </span>
         </v-btn>
       </v-layout>
 
-      <v-list dense>
-        <v-list-item
-          v-for="(item, i) in chapterList"
-          :key="i"
-          @click="playChapter(i)"
-          :style="
-            i == playingChapter
-              ? `background-color:rgba(13, 71, 161,${panelOpacity}`
-              : ''
-          "
-        >
-          <v-list-item-icon>
-            <span style="font-weight: 300;">{{
-              item.startTime | secondToHHMMSS
-            }}</span>
-          </v-list-item-icon>
+      <v-navigation-drawer
+        v-if="this.chapterList.length != 0 && !is_intro"
+        v-model="drawer"
+        absolute
+        dark
+        :color="`rgba(0,0,0,${panelOpacity})`"
+      >
+        <v-list-item>
+          <v-list-item-avatar>
+            <v-img :src="user.avatar"></v-img>
+          </v-list-item-avatar>
 
-          <v-list-item-content>
-            <v-list-item-title>
-              <v-tooltip right>
-                <template v-slot:activator="{ on }">
-                  <span style="font-weight: 300;" v-on="on">{{
-                    item.text
-                  }}</span>
-                </template>
-                <span style="font-weight: 300;">{{ item.text }}</span>
-              </v-tooltip></v-list-item-title
-            >
+          <v-list-item-content v-if="user != null">
+            <v-list-item-title>{{ user.name }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-      </v-list>
-      <v-layout mt-10 ml-4>
-        <QuestionGroup
-          :questions="questionList"
-          :opacity="panelOpacity"
-        ></QuestionGroup>
-      </v-layout>
-    </v-navigation-drawer>
+
+        <v-divider></v-divider>
+
+        <v-layout my-3 mx-4 row justify-space-between align-center>
+          <span class="title white--text">Chapter List</span>
+          <v-btn text icon color="white" @click="drawer = !drawer">
+            <v-icon>fa fa-chevron-circle-left</v-icon>
+          </v-btn>
+        </v-layout>
+
+        <v-list dense>
+          <v-list-item
+            v-for="(item, i) in chapterList"
+            :key="i"
+            @click="playChapter(i)"
+            :style="
+              i == playingChapter
+                ? `background-color:rgba(13, 71, 161,${panelOpacity}`
+                : ''
+            "
+          >
+            <v-list-item-icon>
+              <span style="font-weight: 300;">{{
+                item.startTime | secondToHHMMSS
+              }}</span>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>
+                <v-tooltip right>
+                  <template v-slot:activator="{ on }">
+                    <span style="font-weight: 300;" v-on="on">{{
+                      item.text
+                    }}</span>
+                  </template>
+                  <span style="font-weight: 300;">{{ item.text }}</span>
+                </v-tooltip></v-list-item-title
+              >
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <v-layout mt-10 ml-4>
+          <QuestionGroup
+            :questions="questionList"
+            :opacity="panelOpacity"
+          ></QuestionGroup>
+        </v-layout>
+      </v-navigation-drawer>
+    </div>
   </div>
 </template>
 <script>
@@ -420,14 +422,12 @@ export default {
     async takeScreenShot() {
       this.player.pause();
 
-      const canvas = this.player.media;
+      let canvas = this.$refs.canvas;
       const options = {
-        type: "dataURL"
-        // logging: true,
-        // letterRendering: 2,
-        // allowTaint: true,
-        // useCORS: true,
-        // foreignObjectRendering: true
+        type: "dataURL",
+        allowTaint: true,
+        useCORS: true,
+        foreignObjectRendering: true
       };
       let canvasData = await this.$html2canvas(canvas, options);
       var byteString = atob(canvasData.split(",")[1]);
