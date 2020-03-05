@@ -22,6 +22,25 @@
       />
 
       <v-spacer></v-spacer>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on }">
+          <v-btn color="rgba(0,0,0,0)" small fab depressed v-on="on">
+            <flag :iso="selectedCountry" />
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="(item, index) in languages"
+            :key="index"
+            @click="changeLanguage(item)"
+          >
+            <v-list-item-title
+              ><flag :iso="item.country" />
+              {{ item.language }}</v-list-item-title
+            >
+          </v-list-item>
+        </v-list>
+      </v-menu>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-btn
@@ -37,7 +56,7 @@
             }}</v-icon>
           </v-btn>
         </template>
-        <span>Dark Mode Toggle</span>
+        <span>{{ $t("Dark Mode Toggle") }}</span>
       </v-tooltip>
 
       <v-tooltip bottom v-if="profile.role == 'Administrator'">
@@ -59,7 +78,7 @@
             }}</v-icon>
           </v-btn>
         </template>
-        <span>{{ $route.name == "upload" ? "Search" : "Upload" }}</span>
+        <span>{{ $t($route.name == "upload" ? "Search" : "Upload") }}</span>
       </v-tooltip>
 
       <v-tooltip bottom v-if="$route.name != 'Login'">
@@ -76,7 +95,7 @@
             <v-icon small>fa fa-sign-out-alt</v-icon>
           </v-btn>
         </template>
-        <span>Logout</span>
+        <span>{{ $t("Logout") }}</span>
       </v-tooltip>
     </v-app-bar>
 
@@ -96,7 +115,7 @@
           </v-flex>
           <v-flex>
             <p class="headline text-center">{{ profile.name }}</p>
-            <p class="subtitle-1 text-center">{{ profile.role }}</p>
+            <p class="subtitle-1 text-center">{{ $t(profile.role) }}</p>
           </v-flex>
         </v-layout>
       </v-list-item>
@@ -116,7 +135,7 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title>{{ $t(item.title) }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -128,7 +147,7 @@
     >
       <v-layout row>
         <v-flex align-self-center>
-          <span class="subtitle">Search By</span>
+          <span class="subtitle">{{ $t("Search By") }}</span>
         </v-flex>
         <v-flex
           v-for="selectedOption in searchOptions"
@@ -142,7 +161,7 @@
             small
             dark
           >
-            {{ selectedOption.text }}
+            {{ $t(selectedOption.text) }}
           </v-chip>
         </v-flex>
       </v-layout>
@@ -159,6 +178,7 @@ import { mapMutations, mapGetters } from "vuex";
 export default {
   data() {
     return {
+      selectedCountry: "us",
       isLogged: true,
       profile: {
         role: null,
@@ -185,7 +205,11 @@ export default {
         { text: "Tag", color: "cyan" }
       ],
       searchOption: "All",
-      searchKey: ""
+      searchKey: "",
+      languages: [
+        { country: "us", language: "en" },
+        { country: "no", language: "no" }
+      ]
     };
   },
   methods: {
@@ -214,6 +238,10 @@ export default {
     searchBy(text) {
       this.searchOption = text;
       this.$emit("search", { key: this.searchKey, option: this.searchOption });
+    },
+    changeLanguage(item) {
+      this.$i18n.locale = item.language;
+      this.selectedCountry = item.country;
     }
   },
   mounted() {

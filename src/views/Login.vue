@@ -4,7 +4,7 @@
       <v-col cols="12" sm="4" md="4">
         <v-card @keydown.enter="login" class="elevation-2" max-width="50vh">
           <v-toolbar color="#517EA9" dark flat>
-            <v-toolbar-title>Login</v-toolbar-title>
+            <v-toolbar-title>{{ $t("Login") }}</v-toolbar-title>
             <v-spacer />
             <v-icon>fa fa-user</v-icon>
           </v-toolbar>
@@ -16,11 +16,11 @@
               <v-select
                 prepend-icon="fa fa-user-tag"
                 :items="roles"
-                label="Role"
+                :label="$t('Role')"
                 v-model="role"
               ></v-select>
               <v-text-field
-                label="User Name"
+                :label="$t('Username')"
                 autofocus
                 @focus="error = null"
                 prepend-icon="fa fa-user"
@@ -29,7 +29,7 @@
               />
 
               <v-text-field
-                label="Password"
+                :label="$t('Password')"
                 @focus="error = null"
                 prepend-icon="fa fa-lock"
                 type="password"
@@ -39,7 +39,9 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn block color="#F1C42E" @click="login">Login</v-btn>
+            <v-btn block color="#F1C42E" @click="login">{{
+              $t("Login")
+            }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>

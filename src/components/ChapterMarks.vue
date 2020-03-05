@@ -22,14 +22,14 @@
                 <v-text-field
                   readonly
                   color="blue darken-3"
-                  label="Time"
+                  :label="$t('Time')"
                   :value="chapterMark.startTime | secondToHHMMSS"
                 ></v-text-field>
               </v-flex>
               <v-flex md5>
                 <v-text-field
                   color="blue darken-3"
-                  label="Chapter Text"
+                  :label="$t('Chapter Text')"
                   v-model="chapterMark.text"
                   autofocus
                   :rules="rules.chapterText"
@@ -50,7 +50,8 @@
             <v-layout column align-center>
               <v-flex>
                 <v-btn dark color="blue darken-3" @click="addChapterMark"
-                  >Add Chapter Mark <v-icon right>fa fa-plus</v-icon></v-btn
+                  >{{ $t("Add Chapter Mark") }}
+                  <v-icon right>fa fa-plus</v-icon></v-btn
                 >
               </v-flex>
             </v-layout>

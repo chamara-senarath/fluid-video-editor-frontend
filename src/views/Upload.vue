@@ -1,33 +1,33 @@
 <template>
   <v-stepper v-model="stepperCount">
     <v-stepper-header>
-      <v-stepper-step :complete="stepperCount > 1" step="1"
-        >Upload Video</v-stepper-step
-      >
+      <v-stepper-step :complete="stepperCount > 1" step="1">{{
+        $t("Upload Video")
+      }}</v-stepper-step>
 
       <v-divider></v-divider>
 
-      <v-stepper-step :complete="stepperCount > 2" step="2"
-        >Add Intro</v-stepper-step
-      >
+      <v-stepper-step :complete="stepperCount > 2" step="2">{{
+        $t("Add Intro")
+      }}</v-stepper-step>
 
       <v-divider></v-divider>
 
-      <v-stepper-step :complete="stepperCount > 3" step="3"
-        >Add Chapter Marks</v-stepper-step
-      >
+      <v-stepper-step :complete="stepperCount > 3" step="3">{{
+        $t("Add Chapter Marks")
+      }}</v-stepper-step>
 
       <v-divider></v-divider>
 
-      <v-stepper-step :complete="stepperCount > 4" step="4"
-        >Add Questions</v-stepper-step
-      >
+      <v-stepper-step :complete="stepperCount > 4" step="4">{{
+        $t("Add Questions")
+      }}</v-stepper-step>
 
       <v-divider></v-divider>
 
-      <v-stepper-step :complete="stepperCount > 5" step="5"
-        >Publish</v-stepper-step
-      >
+      <v-stepper-step :complete="stepperCount > 5" step="5">{{
+        $t("Publish")
+      }}</v-stepper-step>
     </v-stepper-header>
 
     <v-stepper-items>

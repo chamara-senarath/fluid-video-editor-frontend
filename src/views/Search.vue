@@ -12,11 +12,11 @@
         <v-img src="/no_data_found.png" width="30vw"></v-img>
       </v-flex>
       <v-flex>
-        <p class="title">Sorry, No data found</p>
+        <p class="title">{{ $t("Sorry, No data found") }}</p>
       </v-flex>
     </v-layout>
     <template v-else>
-      <span class="title">Video List</span>
+      <span class="title">{{ $t("Video List") }}</span>
       <v-spacer></v-spacer>
 
       <v-divider></v-divider>
@@ -57,12 +57,13 @@
                               params: { vid: thumbnail.id }
                             }"
                             ><v-icon left>fa fa-chart-line</v-icon
-                            >Insights</v-btn
+                            >{{ $t("Insights") }}</v-btn
                           >
                         </v-flex>
                         <v-flex px-1 xs4>
                           <v-btn small @click="edit(thumbnail.id)" block
-                            ><v-icon left>fa fa-edit</v-icon>Edit</v-btn
+                            ><v-icon left>fa fa-edit</v-icon
+                            >{{ $t("Edit") }}</v-btn
                           >
                         </v-flex>
                         <v-flex px-1 xs4>
@@ -76,7 +77,8 @@
                               }
                             "
                           >
-                            <v-icon left>fa fa-trash-alt</v-icon>Delete
+                            <v-icon left>fa fa-trash-alt</v-icon
+                            >{{ $t("Delete") }}
                           </v-btn>
                         </v-flex>
                       </v-layout>

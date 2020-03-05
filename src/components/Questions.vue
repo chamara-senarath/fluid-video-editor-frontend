@@ -31,14 +31,14 @@
                 <v-text-field
                   readonly
                   color="blue darken-3"
-                  label="Time"
+                  :label="$t('Time')"
                   :value="questionsMark.startTime | secondToHHMMSS"
                 ></v-text-field>
               </v-flex>
               <v-flex md5>
                 <v-text-field
                   color="blue darken-3"
-                  label="Question"
+                  :label="$t('Question')"
                   v-model="questionsMark.question"
                   autofocus
                   readonly
@@ -70,7 +70,8 @@
             <v-layout column align-center>
               <v-flex>
                 <v-btn dark color="blue darken-3" @click="addQuestionMark"
-                  >Add Question Mark <v-icon right>fa fa-plus</v-icon></v-btn
+                  >{{ $t("Add Question Mark") }}
+                  <v-icon right>fa fa-plus</v-icon></v-btn
                 >
               </v-flex>
             </v-layout>

@@ -3,14 +3,14 @@
     <v-dialog :value="dialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
-          <span class="headline">MCQ Genarator</span>
+          <span class="headline">{{ $t("MCQ Generator") }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-layout column>
               <v-form ref="mcqForm">
                 <v-text-field
-                  label="Question"
+                  :label="$t('Question')"
                   v-model="question"
                   prepend-inner-icon="fa fa-question"
                   :rules="rules.text"
@@ -19,7 +19,7 @@
                   <v-text-field
                     autofocus
                     v-model="option.text"
-                    :label="`Option ${i + 1}`"
+                    :label="`${$t('Option')} ${i + 1}`"
                     prepend-inner-icon="fa fa-check-double"
                     :rules="rules.text"
                   ></v-text-field>
@@ -34,7 +34,9 @@
                   >
                 </v-layout>
                 <v-btn class="primary" @click="addOption">{{
-                  options.length == 0 ? "add an option" : "add another option"
+                  $t(
+                    options.length == 0 ? "add an option" : "add another option"
+                  )
                 }}</v-btn>
 
                 <v-layout column mt-5>
@@ -42,9 +44,9 @@
                     v-if="options.length != 0 && options[0].text != ''"
                     v-model="answer"
                     :items="options.filter(option => option.text)"
-                    label="Correct Answer"
+                    :label="$t('Correct Answer')"
                     required
-                    :rules="[v => !!v || 'Correct answer is required']"
+                    :rules="[v => !!v || $t('Correct answer is required')]"
                     dense
                   ></v-select>
                   <v-text-field
@@ -52,18 +54,18 @@
                     v-model="points"
                     type="Number"
                     min="0"
-                    label="Enter Points"
+                    :label="$t('Enter Points')"
                     dense
                   ></v-text-field>
-                  <v-switch v-model="isTimed" label="Timed Question">
+                  <v-switch v-model="isTimed" :label="$t('Timed Question')">
                   </v-switch>
                   <v-select
                     v-if="isTimed"
                     v-model="duration"
                     :items="timeDurations"
-                    label="Select Time Duration"
+                    :label="$t('Select Time Duration')"
                     dense
-                    suffix="Seconds"
+                    :suffix="$t('seconds')"
                   ></v-select>
                 </v-layout>
               </v-form>
@@ -72,15 +74,15 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="changeDialogState(false)"
-            >Close</v-btn
-          >
+          <v-btn color="blue darken-1" text @click="changeDialogState(false)">{{
+            $t("Close")
+          }}</v-btn>
           <v-btn
             :disabled="answer == null || options.length == 0"
             color="blue darken-1"
             text
             @click="save"
-            >{{ editableQuestion == null ? "Save" : "Update" }}</v-btn
+            >{{ $t(editableQuestion == null ? "Save" : "Update") }}</v-btn
           >
         </v-card-actions>
       </v-card>
@@ -101,7 +103,9 @@ export default {
       points: null,
       rules: {
         text: [
-          value => (value && value.length > 0) || "This field can not be empty"
+          value =>
+            (value && value.length > 0) ||
+            this.$t("This field can not be empty")
         ]
       }
     };

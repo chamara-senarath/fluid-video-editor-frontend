@@ -18,7 +18,7 @@
             dark
             color="rgba(0, 0, 0, 0.8)"
             class="btn"
-            >Edit Intro Screen</v-btn
+            >{{ $t("Edit Intro Screen") }}</v-btn
           >
         </div>
       </v-flex>
@@ -265,7 +265,7 @@
                     ><v-icon small>fa fa-heading</v-icon></v-btn
                   >
                 </template>
-                <span>Add new title</span>
+                <span>{{ $t("Add new title") }}</span>
               </v-tooltip>
             </v-flex>
 
@@ -290,7 +290,7 @@
                     ><v-icon small>fa fa-image</v-icon></v-btn
                   >
                 </template>
-                <span>Add new image</span>
+                <span>{{ $t("Add new image") }}</span>
               </v-tooltip>
             </v-flex>
             <v-flex xs2>
@@ -307,7 +307,7 @@
                     ><v-icon small>fa fa-film</v-icon></v-btn
                   >
                 </template>
-                <span>Choose a Template</span>
+                <span>{{ $t("Choose a Template") }}</span>
               </v-tooltip>
             </v-flex>
           </v-layout>
@@ -318,9 +318,9 @@
               color="blue darken-3"
               :rules="rules.logo"
               accept="image/png, image/jpeg"
-              placeholder="Select a Watermark"
+              :placeholder="$t('Select a Watermark')"
               prepend-icon="mdi-camera"
-              label="Watermark (Optional)"
+              :label="$t('Watermark (Optional)')"
               @change="selectLogo"
               v-model="logofile"
             ></v-file-input>
@@ -334,8 +334,8 @@
           </v-layout>
           <v-layout>
             <v-text-field
-              label="Duration"
-              suffix="seconds"
+              :label="$t('Duration')"
+              :suffix="$t('seconds')"
               v-model="duration"
               type="number"
               min="1"
@@ -349,14 +349,14 @@
               <span
                 style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"
               >
-                Selected Element :
+                {{ $t("Selected Element") }} :
                 {{ selectedElementText | truncate(20, "...") }}
               </span>
             </v-chip>
           </v-layout>
           <v-layout mt-3>
             <v-layout column>
-              <span class="caption">Color Picker</span>
+              <span class="caption">{{ $t("Color Picker") }}</span>
               <v-color-picker
                 hide-mode-switch
                 hide-inputs
@@ -453,7 +453,7 @@ export default {
           if (value && value.name) {
             return (
               ["jpg", "jpeg", "png"].includes(value.name.split(".")[1]) ||
-              "Invalid File Type"
+              this.$t("Invalid File Type")
             );
           }
           return false;
@@ -461,7 +461,7 @@ export default {
         value =>
           !value ||
           value.size < 2000000 ||
-          "Logo size should be less than 2 MB!"
+          this.$t("Logo size should be less than 2 MB!")
       ]
     },
     moveable: {

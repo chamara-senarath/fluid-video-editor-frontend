@@ -6,9 +6,9 @@
           <v-row justify="center">
             <v-dialog v-model="embedDialog" persistent max-width="400">
               <v-card>
-                <v-card-title class="headline"
-                  >Your Embed Code is here!</v-card-title
-                >
+                <v-card-title class="headline">{{
+                  $t("Your Embed Code is here!")
+                }}</v-card-title>
                 <v-card-text>
                   <v-layout row>
                     <v-layout justify-center>
@@ -18,7 +18,7 @@
                         type="success"
                         mode="appear-class"
                       >
-                        Copied Embed code to Clipboard
+                        {{ $t("Copied Embed code to Clipboard") }}
                       </v-alert>
                     </v-layout>
                     <v-layout justify-end>
@@ -37,7 +37,7 @@
                     color="green darken-1"
                     text
                     @click="embedDialog = false"
-                    >Done</v-btn
+                    >{{ $t("Done") }}</v-btn
                   >
                 </v-card-actions>
               </v-card>
@@ -45,9 +45,11 @@
           </v-row>
           <v-layout column align-center>
             <span class="title">{{
-              is_published
-                ? "Your video has been published successfully"
-                : "Your video is being published"
+              $t(
+                is_published
+                  ? "Your video has been published successfully"
+                  : "Your video is being published"
+              )
             }}</span>
             <v-img
               width="36vw"
@@ -61,12 +63,14 @@
         <v-layout column pl-3>
           <v-layout>
             <v-btn block dark color="green darken-3" @click="preview"
-              >Preview <v-icon right>fa fa-play-circle</v-icon></v-btn
+              >{{ $t("Preview") }}
+              <v-icon right>fa fa-play-circle</v-icon></v-btn
             >
           </v-layout>
           <v-layout mt-2>
             <v-btn block dark color="blue darken-3" @click="downloadEmbedCode"
-              >Download Embed Code <v-icon right>fa fa-download</v-icon></v-btn
+              >{{ $t("Download Embed Code") }}
+              <v-icon right>fa fa-download</v-icon></v-btn
             >
           </v-layout>
         </v-layout>

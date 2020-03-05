@@ -23,7 +23,9 @@
           <v-img src="/uploading.gif"></v-img>
 
           <v-card-text
-            ><v-layout column align-center>Uploading...</v-layout></v-card-text
+            ><v-layout column align-center
+              >{{ $t("Uploading") }}...</v-layout
+            ></v-card-text
           >
         </v-card>
       </v-layout>
@@ -37,15 +39,15 @@
         color="blue darken-3"
         :rules="rules.videoData"
         accept="video/mp4, video/avi"
-        placeholder="Select a Video"
+        :placeholder="$t('Select a Video')"
         prepend-icon="fa fa-video"
-        label="Upload Video"
+        :label="$t('Upload Video')"
         @change="uploadVideo"
       ></v-file-input>
       <v-text-field
         color="blue darken-3"
         prepend-icon="fa fa-edit"
-        label="Video Title"
+        :label="$t('Video Title')"
         v-model="video.title"
         :rules="rules.videoTitle"
       ></v-text-field>
@@ -56,7 +58,7 @@
         :items="people"
         chips
         color="blue-grey lighten-2"
-        label="Author"
+        :label="$t('Author')"
         item-text="name"
         item-value="name"
         :rules="rules.author"
@@ -98,7 +100,7 @@
         prepend-icon="fa fa-tag"
         v-model="tags"
         :items="tagList"
-        label="Tags"
+        :label="$t('Tag')"
         multiple
         chips
         :rules="rules.tags"
@@ -127,7 +129,7 @@
           @click="clickUpload"
           :class="this.$route.params.is_edit ? 'success' : 'primary'"
           block
-          >{{ this.$route.params.is_edit ? "Edit" : "Upload"
+          >{{ $t(this.$route.params.is_edit ? "Edit" : "Upload")
           }}<v-icon small right>{{
             this.$route.params.is_edit ? "fa fa-edit" : "fa fa-upload"
           }}</v-icon></v-btn
@@ -135,7 +137,8 @@
       </v-flex>
       <v-flex mt-2 v-if="this.$route.params.is_edit">
         <v-btn @click="uploadNew" block class="primary"
-          >Upload New<v-icon small right>fa fa-upload</v-icon></v-btn
+          >{{ $t("Upload New")
+          }}<v-icon small right>fa fa-upload</v-icon></v-btn
         >
       </v-flex>
     </v-form>
@@ -197,18 +200,21 @@ export default {
       uploaded: false,
       rules: {
         videoTitle: [
-          value => (value && value.length > 0) || "Video Title can not be empty"
+          value =>
+            (value && value.length > 0) ||
+            this.$t("Video Title can not be empty")
         ],
         author: [
-          () => this.authors.length > 0 || "Author Name can not be empty"
+          () =>
+            this.authors.length > 0 || this.$t("Author Name can not be empty")
         ],
-        tags: [() => this.tags.length > 0 || "Tags can not be empty"],
+        tags: [() => this.tags.length > 0 || this.$t("Tags can not be empty")],
         videoData: [
           value => {
             if (value && value.name) {
               return (
                 ["mp4", "avi"].includes(value.name.split(".")[1]) ||
-                "Invalid File Type"
+                this.$t("Invalid File Type")
               );
             }
             return false;
@@ -216,7 +222,7 @@ export default {
           value =>
             !value ||
             value.size < 2000000 * 512 || //2MB * 512
-            "Video size should be less than 1 GB!"
+            this.$t("Video size should be less than 1 GB!")
         ]
       }
     };
