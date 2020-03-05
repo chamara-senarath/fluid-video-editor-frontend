@@ -13,9 +13,16 @@
 
 <script>
 import Navbar from "@/components/Navbar";
+import { mapGetters } from "vuex";
 export default {
   components: {
     Navbar
+  },
+  methods: {
+    ...mapGetters(["getLanguage"])
+  },
+  mounted() {
+    this.$i18n.locale = this.getLanguage();
   }
 };
 </script>

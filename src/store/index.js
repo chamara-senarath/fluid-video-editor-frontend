@@ -10,6 +10,7 @@ let store = new Vuex.Store({
       is_logged: false,
       role: null
     },
+    language: "en",
     profile: {
       name: null,
       avatar: null,
@@ -63,6 +64,9 @@ let store = new Vuex.Store({
     },
     getProfile: state => {
       return state.profile;
+    },
+    getLanguage: state => {
+      return state.language;
     }
   },
   mutations: {
@@ -136,6 +140,9 @@ let store = new Vuex.Store({
       };
       state.chapterMarks = [];
       state.questionMarks = [];
+    },
+    setLanguage: (state, payload) => {
+      state.language = payload;
     }
   },
   actions: {},

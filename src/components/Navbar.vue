@@ -14,7 +14,7 @@
         outlined
         dense
         v-if="$route.name == 'Search' || $route.name == 'User'"
-        placeholder="Search..."
+        :placeholder="`${$t('Search')}...`"
         single-line
         append-icon="fa fa-search"
         hide-details
@@ -25,10 +25,10 @@
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
           <v-btn color="rgba(0,0,0,0)" small fab depressed v-on="on">
-            <flag :iso="selectedCountry" />
+            <flag :iso="countryFlag" />
           </v-btn>
         </template>
-        <v-list>
+        <v-list flat>
           <v-list-item
             v-for="(item, index) in languages"
             :key="index"
@@ -167,7 +167,7 @@
       </v-layout>
     </v-layout>
     <span v-if="searchKey != ''" class="sub-title"
-      >Search Results for {{ searchOption }} : {{ searchKey }}</span
+      >{{ $t("Search Results for") }} {{ searchOption }} : {{ searchKey }}</span
     >
   </nav>
 </template>
@@ -178,7 +178,6 @@ import { mapMutations, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      selectedCountry: "us",
       isLogged: true,
       profile: {
         role: null,
@@ -213,7 +212,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["removeToken"]),
+    ...mapMutations(["removeToken", "setLanguage"]),
     ...mapGetters(["getToken", "getUser", "getProfile"]),
     async logout() {
       let { role } = this.getUser();
@@ -240,8 +239,16 @@ export default {
       this.$emit("search", { key: this.searchKey, option: this.searchOption });
     },
     changeLanguage(item) {
+      this.setLanguage(item.language);
       this.$i18n.locale = item.language;
-      this.selectedCountry = item.country;
+    }
+  },
+  computed: {
+    countryFlag() {
+      let item = this.languages.filter(
+        item => item.language == this.$i18n.locale
+      );
+      return item[0].country;
     }
   },
   mounted() {
