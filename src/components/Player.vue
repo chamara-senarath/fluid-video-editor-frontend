@@ -52,35 +52,57 @@
             v-if="expandRightPanel && !showComments"
             style="position:absolute;right:65px;z-index:100"
           >
-            <v-btn
-              :color="`rgba(0,0,0,${panelOpacity})`"
-              depressed
-              dark
-              tile
-              @click="showCommentHandler"
-            >
-              <v-icon left small>fa fa-comment-dots</v-icon>
-            </v-btn>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  v-on="on"
+                  :color="`rgba(0,0,0,${panelOpacity})`"
+                  depressed
+                  dark
+                  tile
+                  @click="showCommentHandler"
+                >
+                  <v-icon left small>fa fa-comment-dots</v-icon>
+                </v-btn>
+              </template>
+              <span>{{ $t("Add Comment") }}</span>
+            </v-tooltip>
+
             <v-divider vertical></v-divider>
-            <v-btn
-              :color="`rgba(0,0,0,${panelOpacity})`"
-              depressed
-              dark
-              tile
-              @click="takeScreenShot"
-            >
-              <v-icon left small>fa fa-camera-retro</v-icon>
-            </v-btn>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  v-on="on"
+                  :color="`rgba(0,0,0,${panelOpacity})`"
+                  depressed
+                  dark
+                  tile
+                  @click="takeScreenShot"
+                >
+                  <v-icon left small>fa fa-camera-retro</v-icon>
+                </v-btn>
+              </template>
+              <span>{{ $t("Take Screenshot") }}</span>
+            </v-tooltip>
+
             <v-divider vertical></v-divider>
-            <v-btn
-              :color="`rgba(0,0,0,${panelOpacity})`"
-              depressed
-              dark
-              tile
-              @click="showRating"
-            >
-              <v-icon left small>fa fa-smile</v-icon>
-            </v-btn>
+
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  v-on="on"
+                  :color="`rgba(0,0,0,${panelOpacity})`"
+                  depressed
+                  dark
+                  tile
+                  @click="showRating"
+                >
+                  <v-icon left small>fa fa-smile</v-icon>
+                </v-btn>
+              </template>
+              <span>{{ $t("Send Feedback") }}</span>
+            </v-tooltip>
+
             <v-divider vertical></v-divider>
           </div>
         </transition>
