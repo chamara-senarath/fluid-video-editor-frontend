@@ -21,17 +21,20 @@
               }}</span>
             </v-flex>
             <v-flex px-5 v-for="rating in ratings" :key="rating._id">
-              <v-layout row>
+              <v-layout row mt-2 align-center>
                 <v-rating
                   :value="rating.rate"
                   color="amber"
                   dense
                   half-increments
                   readonly
-                  size="15"
+                  size="25"
                 ></v-rating>
                 <v-flex ml-2>
-                  <span class="subtitle-1">{{ rating.amount }}</span>
+                  <v-chip color="green darken-3" label dark small>
+                    {{ rating.amount }}
+                  </v-chip>
+                  <!-- <span class="subtitle-1">{{ rating.amount }}</span> -->
                 </v-flex>
               </v-layout>
             </v-flex>
