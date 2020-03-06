@@ -40,6 +40,28 @@
       </v-layout>
       <span class="title">{{ $t("Comments") }}</span>
       <v-divider></v-divider>
+      <v-layout column align-center mt-4>
+        <v-layout row>
+          <v-flex align-self-center mx-2>
+            <v-chip label small dark>{{ $t("Sort By") }}</v-chip>
+          </v-flex>
+          <v-flex
+            v-for="selectedOption in searchOptions"
+            :key="selectedOption.text"
+          >
+            <v-chip
+              @click="sortBy(selectedOption.text)"
+              :color="`${selectedOption.color} darken-3`"
+              class="mx-2"
+              :outlined="searchOption != selectedOption.text"
+              small
+              dark
+            >
+              {{ $t(selectedOption.text) }}
+            </v-chip>
+          </v-flex>
+        </v-layout>
+      </v-layout>
       <v-layout v-if="comments.length == 0" mt-10 column align-center>
         <v-flex>
           <span>{{ $t("No Comments for this video") }}</span>
@@ -80,22 +102,42 @@ import axios from "axios";
 export default {
   data() {
     return {
+      vid: null,
       title: null,
       thumbnail: null,
       ratings: [],
-      comments: []
+      comments: [],
+      searchOption: "Newest",
+      searchOptions: [
+        { text: "Newest", color: "light-green" },
+        { text: "Highest Rating", color: "light-blue" },
+        { text: "Lowest Rating", color: "lime" }
+      ]
     };
   },
-  async mounted() {
-    let vid = this.$route.params.vid;
-    try {
-      this.thumbnail = this.API_URL + "/api/video/splash?id=" + vid;
+  methods: {
+    sortBy(option) {
+      this.searchOption = option;
+      this.fetchComment(this.vid, this.searchOption);
+    },
+    async fetchComment(vid, searchOption) {
       let ratingResult = await axios.get(
-        this.API_URL + "/api/rating/comment?vid=" + vid
+        this.API_URL +
+          "/api/rating/comment?vid=" +
+          vid +
+          "&option=" +
+          searchOption
       );
       this.title = ratingResult.data.title;
       this.ratings = ratingResult.data.rating;
       this.comments = ratingResult.data.comments;
+    }
+  },
+  async mounted() {
+    this.vid = this.$route.params.vid;
+    try {
+      this.thumbnail = this.API_URL + "/api/video/splash?id=" + this.vid;
+      this.fetchComment(this.vid, this.searchOption);
     } catch (error) {
       console.log(error.toString());
     }

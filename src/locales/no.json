@@ -110,5 +110,9 @@
   "Write a comment": "Skriv en kommentar",
   "Add Comment": "Legg til en kommentar",
   "Take Screenshot": "Ta skjermbilde",
-  "Send Feedback": "Send tilbakemelding"
+  "Send Feedback": "Send tilbakemelding",
+  "Sort By": "Sorter etter",
+  "Newest": "Nyeste",
+  "Highest Rating": "Høyeste vurdering",
+  "Lowest Rating": "Laveste rangering"
 }

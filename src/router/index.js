@@ -40,7 +40,7 @@ const routes = [
     }
   },
   {
-    path: "/comments",
+    path: "/comments/:vid",
     name: "Comments",
     component: Comments,
     meta: {

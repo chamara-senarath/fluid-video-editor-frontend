@@ -110,5 +110,9 @@
   "Write a comment": "Write a comment",
   "Add Comment": "Add Comment",
   "Take Screenshot": "Take Screenshot",
-  "Send Feedback": "Send Feedback"
+  "Send Feedback": "Send Feedback",
+  "Sort By": "Sort By",
+  "Newest": "Newest",
+  "Highest Rating": "Highest Rating",
+  "Lowest Rating": "Lowest Rating"
 }
