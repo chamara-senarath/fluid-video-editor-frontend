@@ -5,7 +5,7 @@
       :showPlayer="showPlayer"
       :title="videoTitle"
       :src="videoSource"
-      @closePlayer="showPlayer = false"
+      @closePlayer="closePlayer"
     ></MiniPlayer>
     <v-layout column align-center v-if="error">
       <v-flex>
@@ -245,6 +245,10 @@ export default {
       if (this.thumbnailList.length == 0) {
         this.error = true;
       }
+    },
+    closePlayer() {
+      this.showPlayer = false;
+      this.fetchData();
     },
     async loadData({ key, option }) {
       this.thumbnailList = [];
