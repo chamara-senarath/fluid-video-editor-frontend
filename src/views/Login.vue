@@ -19,6 +19,12 @@
                 :label="$t('Role')"
                 v-model="role"
               ></v-select>
+              <v-select
+                prepend-icon="fa fa-user-tag"
+                :items="groups"
+                :label="$t('Group')"
+                v-model="group"
+              ></v-select>
               <v-text-field
                 :label="$t('Username')"
                 autofocus
@@ -58,13 +64,24 @@ export default {
       username: null,
       password: null,
       role: "Admin",
+      group: "DIPS",
       error: null,
-      roles: ["Admin", "User"]
+      roles: ["Admin", "User"],
+      groups: ["DIPS", "LayUp"]
     };
   },
   methods: {
-    ...mapMutations(["setToken", "setUser", "setProfile"]),
+    ...mapMutations(["setToken", "setUser", "setProfile", "setURL"]),
     async login() {
+      if (this.group == "DIPS") {
+        this.API_URL = process.env.VUE_APP_DIPS_SERVER;
+        this.setURL(process.env.VUE_APP_DIPS_SERVER);
+      }
+      if (this.group == "LayUp") {
+        this.API_URL = process.env.VUE_APP_LAYUP_SERVER;
+        this.setURL(process.env.VUE_APP_LAYUP_SERVER);
+      }
+
       let username = this.username;
       let password = this.password;
       if (this.role == "Admin") {
@@ -84,10 +101,19 @@ export default {
             is_logged: true,
             role: "admin"
           });
-          this.setProfile(profileObj);
-          this.$router.push("/");
+          if (this.group.toLowerCase() === profileObj.group.toLowerCase()) {
+            this.setProfile(profileObj);
+            this.$router.push("/");
+          } else {
+            throw new Error("You have no access to this Group");
+          }
         } catch (error) {
-          this.error = "Invalid Username/Password";
+          if (error.response && error.response.status === 400) {
+            this.error =
+              "Invalid Username / Password for the role " + this.role;
+          } else {
+            this.error = error;
+          }
         }
       }
 
@@ -109,10 +135,20 @@ export default {
             is_logged: true,
             role: "user"
           });
-          this.setProfile(profileObj);
-          this.$router.push("/user/" + user_id);
+
+          if (this.group.toLowerCase() === profileObj.group.toLowerCase()) {
+            this.setProfile(profileObj);
+            this.$router.push("/user/" + user_id);
+          } else {
+            throw new Error("You have no access to this Group");
+          }
         } catch (error) {
-          this.error = "Invalid Username/Password";
+          if (error.response && error.response.status === 400) {
+            this.error =
+              "Invalid Username / Password for the role " + this.role;
+          } else {
+            this.error = error;
+          }
         }
       }
     }

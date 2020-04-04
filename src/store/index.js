@@ -6,6 +6,7 @@ Vue.use(Vuex);
 
 let store = new Vuex.Store({
   state: {
+    URL: null,
     user: {
       is_logged: false,
       role: null
@@ -41,6 +42,9 @@ let store = new Vuex.Store({
     questionMarks: []
   },
   getters: {
+    getURL: state => {
+      return state.URL;
+    },
     getVideoObject: state => {
       return state.video;
     },
@@ -70,6 +74,9 @@ let store = new Vuex.Store({
     }
   },
   mutations: {
+    setURL: (state, payload) => {
+      state.URL = payload;
+    },
     setVideoObject: (state, payload) => {
       state.video.id = payload.id;
       state.video.title = payload.title;

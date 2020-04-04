@@ -270,6 +270,7 @@ export default {
   },
   async mounted() {
     try {
+      console.log(this.API_URL);
       let videos = await axios.get(
         this.API_URL + "/api/videos?group=" + this.getProfile().group
       );
