@@ -15,7 +15,7 @@
           </v-flex>
         </v-layout>
       </v-app-bar>
-      <v-card tile height="81vh">
+      <v-card tile height="81vh" v-if="src != null">
         <iframe
           ref="frame"
           allowfullscreen
@@ -36,12 +36,12 @@ export default {
   methods: {
     close() {
       this.$emit("closePlayer", true);
-    }
+    },
   },
   computed: {
     playerHeight() {
       return this.$refs.frame.getBoundingClientRect().height;
-    }
-  }
+    },
+  },
 };
 </script>
