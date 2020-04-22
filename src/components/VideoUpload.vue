@@ -47,50 +47,15 @@
         :rules="rules.videoTitle"
       ></v-text-field>
 
-      <v-autocomplete
-        prepend-icon="fa fa-feather-alt"
-        :hide-selected="true"
+      <v-combobox
         v-model="authors"
-        :items="people"
-        chips
-        color="blue-grey lighten-2"
+        prepend-icon="fa fa-feather-alt"
         :label="$t('Author')"
-        item-text="name"
-        item-value="name"
-        :rules="rules.author"
         multiple
-      >
-        <template v-slot:selection="data">
-          <v-chip
-            v-bind="data.attrs"
-            :input-value="data.selected"
-            close
-            @click="data.select"
-            @click:close="remove(authors, data.item)"
-          >
-            <v-avatar left>
-              <v-img :src="data.item.avatar"></v-img>
-            </v-avatar>
-            {{ data.item.name }}
-          </v-chip>
-        </template>
-        <template v-slot:item="data">
-          <template v-if="typeof data.item !== 'object'">
-            <v-list-item-content v-text="data.item"></v-list-item-content>
-          </template>
-          <template v-else>
-            <v-list-item-avatar>
-              <img :src="data.item.avatar" />
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title v-html="data.item.name"></v-list-item-title>
-              <v-list-item-subtitle
-                v-html="data.item.team"
-              ></v-list-item-subtitle>
-            </v-list-item-content>
-          </template>
-        </template>
-      </v-autocomplete>
+        persistent-hint
+        chips
+        :rules="rules.author"
+      ></v-combobox>
 
       <v-combobox
         prepend-icon="fa fa-tag"
@@ -142,54 +107,33 @@ import axios from "axios";
 
 export default {
   data() {
-    const srcs = {
-      1: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-      2: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-      3: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      4: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-      5: "https://cdn.vuetifyjs.com/images/lists/5.jpg"
-    };
     return {
       autoUpdate: true,
       authors: [],
       tags: [],
       tagList: ["C#", "Java", "Python"],
-      people: [
-        { header: "DIPS" },
-        { name: "Janaka Peiris", team: "DIPS", avatar: srcs[1] },
-        { name: "Kugathasan Shanjeeva", team: "DIPS", avatar: srcs[2] },
-        { name: "Lahiru Amarathunga", team: "DIPS", avatar: srcs[2] },
-        { name: "Anushka Eranga", team: "DIPS", avatar: srcs[2] },
-        { name: "Sajini Danusha", team: "DIPS", avatar: srcs[3] },
-        { name: "Madhavi Liyanapathirana", team: "DIPS", avatar: srcs[4] },
-        { divider: true },
-        { header: "Layup" },
-        { name: "Dino Corera", team: "Layup", avatar: srcs[1] },
-        { name: "Jane Smith ", team: "Layup", avatar: srcs[5] },
-        { name: "Sandra Williams", team: "Layup", avatar: srcs[3] }
-      ],
       snackbarMessage: null,
       snackbar: false,
       feedback: null,
       overlay: false,
       video: {
         title: null,
-        file: null
+        file: null,
       },
       uploaded: false,
       rules: {
         videoTitle: [
-          value =>
+          (value) =>
             (value && value.length > 0) ||
-            this.$t("Video Title can not be empty")
+            this.$t("Video Title can not be empty"),
         ],
         author: [
           () =>
-            this.authors.length > 0 || this.$t("Author Name can not be empty")
+            this.authors.length > 0 || this.$t("Author Name can not be empty"),
         ],
         tags: [() => this.tags.length > 0 || this.$t("Tags can not be empty")],
         videoData: [
-          value => {
+          (value) => {
             if (value && value.name) {
               return (
                 ["mp4", "avi"].includes(value.name.split(".")[1]) ||
@@ -198,19 +142,19 @@ export default {
             }
             return false;
           },
-          value =>
+          (value) =>
             !value ||
             value.size < 2000000 * 512 || //2MB * 512
-            this.$t("Video size should be less than 1 GB!")
-        ]
-      }
+            this.$t("Video size should be less than 1 GB!"),
+        ],
+      },
     };
   },
   methods: {
     ...mapMutations([
       "setVideoObject",
       "setSplashScreenObject",
-      "setVideoDefault"
+      "setVideoDefault",
     ]),
     ...mapGetters(["getVideoObject", "getChapterMarks", "getProfile"]),
     uploadVideo(file) {
@@ -232,7 +176,7 @@ export default {
           ...this.getVideoObject(),
           title: this.video.title,
           authors: this.authors,
-          tags: this.tags
+          tags: this.tags,
         };
         this.setVideoObject(video);
         this.$emit("uploaded", true);
@@ -246,15 +190,15 @@ export default {
           title: this.video.title,
           authors: this.authors,
           tags: this.tags,
-          group: this.getProfile().group
+          group: this.getProfile().group,
         });
 
         const formData = new FormData();
         formData.append("videoFile", this.video.file);
         await axios.post(this.API_URL + "/api/video/file", formData, {
           params: {
-            id: res.data.id
-          }
+            id: res.data.id,
+          },
         });
 
         let videoURL = this.API_URL + "/api/video/file?id=" + res.data.id;
@@ -264,7 +208,7 @@ export default {
           title: res.data.title,
           file: videoURL,
           authors: res.data.authors,
-          tags: res.data.tags
+          tags: res.data.tags,
         };
         this.setVideoObject(video);
         this.overlay = false;
@@ -289,7 +233,7 @@ export default {
     remove(arr, item) {
       const index = arr.indexOf(item.name);
       if (index >= 0) arr.splice(index, 1);
-    }
+    },
   },
   mounted() {
     if (!this.$route.params.is_edit) {
@@ -306,6 +250,6 @@ export default {
         this.tags = this.getVideoObject().tags;
       }
     }
-  }
+  },
 };
 </script>
