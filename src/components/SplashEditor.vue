@@ -377,7 +377,7 @@ import { mapMutations, mapGetters } from "vuex";
 export default {
   components: {
     Moveable,
-    TemplateBuilder
+    TemplateBuilder,
   },
   props: ["skip"],
   data: () => ({
@@ -394,36 +394,36 @@ export default {
     fontFamilies: [
       {
         id: 1,
-        name: "Lato"
+        name: "Lato",
       },
       {
         id: 2,
-        name: "Lora"
+        name: "Lora",
       },
       {
         id: 3,
-        name: "Montserrat Alternates"
+        name: "Montserrat Alternates",
       },
       {
         id: 4,
-        name: "Oswald"
+        name: "Oswald",
       },
       {
         id: 5,
-        name: "Open Sans"
+        name: "Open Sans",
       },
       {
         id: 6,
-        name: "PT Sans"
+        name: "PT Sans",
       },
       {
         id: 7,
-        name: "Raleway"
+        name: "Raleway",
       },
       {
         id: 8,
-        name: "Slabo 27px"
-      }
+        name: "Slabo 27px",
+      },
     ],
     imageFile: null,
     logofile: null,
@@ -432,7 +432,7 @@ export default {
       opacity: 100,
       width: 100,
       widthRatio: 1,
-      position: null
+      position: null,
     },
     aspectRatio: null,
     selectedElement: "bg",
@@ -449,7 +449,7 @@ export default {
     //
     rules: {
       logo: [
-        value => {
+        (value) => {
           if (value && value.name) {
             return (
               ["jpg", "jpeg", "png"].includes(value.name.split(".")[1]) ||
@@ -458,21 +458,21 @@ export default {
           }
           return false;
         },
-        value =>
+        (value) =>
           !value ||
           value.size < 2000000 ||
-          this.$t("Logo size should be less than 2 MB!")
-      ]
+          this.$t("Logo size should be less than 2 MB!"),
+      ],
     },
     moveable: {
       draggable: true,
       throttleDrag: 1,
       resizable: false,
       throttleResize: 1,
-      keepRatio: false
+      keepRatio: false,
     },
     canvasData: null,
-    duration: 0
+    duration: 0,
   }),
   computed: {
     selectedColor: {
@@ -481,7 +481,7 @@ export default {
       },
       set(v) {
         this[this.type] = v;
-      }
+      },
     },
     selectedElementText() {
       let text = "None";
@@ -489,14 +489,14 @@ export default {
         text = "Background";
       } else {
         let el = this.titleList.filter(
-          title => title.id == this.selectedElement
+          (title) => title.id == this.selectedElement
         );
         if (el[0] != null) {
           text = el[0].text;
         }
       }
       return text;
-    }
+    },
   },
   methods: {
     ...mapMutations(["setSplashScreenObject", "setWatermark"]),
@@ -518,7 +518,7 @@ export default {
         return;
       }
       this.titleList = [];
-      template.forEach(text => {
+      template.forEach((text) => {
         let id = this.create_UUID();
         let title = {
           id: id,
@@ -527,9 +527,9 @@ export default {
           font: text.font,
           align: {
             value: null,
-            style: null
+            style: null,
           },
-          edit: false
+          edit: false,
         };
         this.titleList.push(title);
       });
@@ -576,13 +576,13 @@ export default {
         size: "H1",
         font: {
           id: 1,
-          name: "Open Sans"
+          name: "Open Sans",
         },
         align: {
           value: "left",
-          style: null
+          style: null,
         },
-        edit: false
+        edit: false,
       };
       this.titleList.push(title);
     },
@@ -627,6 +627,16 @@ export default {
         let bottom = (canvasHeight - elHeight) / 2;
         textItem.align.style = textItem.align.style + "top:" + bottom + "px;";
       }
+      if (alignY == "center50") {
+        let bottom = (canvasHeight - elHeight) / 2;
+        textItem.align.style =
+          textItem.align.style + "top:" + (parseInt(bottom) + 50) + "px;";
+      }
+      if (alignY == "center-50") {
+        let bottom = (canvasHeight - elHeight) / 2;
+        textItem.align.style =
+          textItem.align.style + "top:" + (parseInt(bottom) - 50) + "px;";
+      }
     },
     changeTitle(title) {
       if (title.text == null) {
@@ -638,7 +648,7 @@ export default {
       this.selectedElement = id;
     },
     deleteTitle(id) {
-      this.titleList = this.titleList.filter(title => title.id != id);
+      this.titleList = this.titleList.filter((title) => title.id != id);
     },
     addNewImage(event) {
       let file = event.srcElement.files[0];
@@ -650,14 +660,14 @@ export default {
         let img = {
           id: this.create_UUID(),
           data: URL.createObjectURL(file),
-          edit: false
+          edit: false,
         };
         this.imageList.push(img);
         this.$refs.file.value = "";
       }
     },
     deleteImage(id) {
-      this.imageList = this.imageList.filter(image => image.id != id);
+      this.imageList = this.imageList.filter((image) => image.id != id);
     },
     selectLogo(file) {
       if (
@@ -703,17 +713,17 @@ export default {
       let widthRatio = objWidth / canvasWidth;
       let position = {
         leftRatio: leftRatio,
-        topRatio: topRatio
+        topRatio: topRatio,
       };
       return {
         position: position,
-        widthRatio: widthRatio
+        widthRatio: widthRatio,
       };
     },
     async canvasToData() {
       const canvas = this.$refs.canvas;
       const options = {
-        type: "dataURL"
+        type: "dataURL",
       };
       this.canvasData = await this.$html2canvas(canvas, options);
     },
@@ -733,13 +743,13 @@ export default {
       await this.canvasToData();
       this.setSplashScreenObject({
         data: this.canvasData,
-        duration: this.duration
+        duration: this.duration,
       });
       if (this.logo.file) {
         let logo = {
           ...this.logo,
           position: watermarkPosition,
-          widthRatio: watermarkWidthRatio
+          widthRatio: watermarkWidthRatio,
         };
         this.setWatermark(logo);
       } else {
@@ -747,7 +757,7 @@ export default {
       }
 
       return true;
-    }
+    },
   },
 
   watch: {
@@ -769,7 +779,7 @@ export default {
           }
         }
       }
-    }
+    },
   },
   mounted() {
     this.$frame = new Frame();
@@ -780,7 +790,7 @@ export default {
       this.splash =
         this.API_URL + "/api/video/splash?id=" + this.getVideoObject().id;
     }
-  }
+  },
 };
 </script>
 

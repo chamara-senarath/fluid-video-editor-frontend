@@ -81,21 +81,21 @@ export default {
       templates: [
         {
           name: "Template 1",
-          src: "/template1.png"
+          src: "/template1.png",
         },
         {
           name: "Template 2",
-          src: "/template2.png"
+          src: "/template2.png",
         },
         {
           name: "Template 3",
-          src: "/template1.png"
+          src: "/template3.png",
         },
         {
           name: "Template 4",
-          src: "/template1.png"
-        }
-      ]
+          src: "/template4.png",
+        },
+      ],
     };
   },
   methods: {
@@ -112,71 +112,152 @@ export default {
           text: this.getVideoObject().title,
           position: {
             x: "center",
-            y: "top"
+            y: "top",
           },
           font: {
             id: 1,
-            name: "Open Sans"
+            name: "Open Sans",
           },
-          size: "H4"
+          size: "H4",
         };
         let text2 = {
-          text: "Authors: " + this.getVideoObject().authors.toString(),
+          text: this.getVideoObject().authors.join(" , "),
           position: {
             x: "center",
-            y: "bottom"
+            y: "bottom",
           },
           font: {
             id: 1,
-            name: "Open Sans"
+            name: "Open Sans",
           },
-          size: "H6"
+          size: "H6",
         };
 
         template = [text1, text2];
       }
+
       if (this.selectedTemplate == 1) {
         let text1 = {
           text: this.getVideoObject().title,
           position: {
             x: "center",
-            y: "top"
+            y: "top",
           },
           font: {
             id: 1,
-            name: "Open Sans"
+            name: "Open Sans",
           },
-          size: "H4"
+          size: "H3",
         };
         let text2 = {
           text: this.getVideoObject().tags.toString(),
           position: {
             x: "center",
-            y: "center"
+            y: "center",
           },
           font: {
             id: 1,
-            name: "Open Sans"
+            name: "Open Sans",
           },
-          size: "H4"
+          size: "H4",
         };
         let text3 = {
-          text: "Authors: " + this.getVideoObject().authors.toString(),
+          text: this.getVideoObject().authors.toString(),
           position: {
             x: "center",
-            y: "bottom"
+            y: "bottom",
           },
           font: {
             id: 1,
-            name: "Open Sans"
+            name: "Open Sans",
           },
-          size: "H6"
+          size: "H6",
+        };
+
+        template = [text1, text2, text3];
+      }
+      if (this.selectedTemplate == 2) {
+        let text1 = {
+          text: this.getVideoObject().title,
+          position: {
+            x: "center",
+            y: "center-50",
+          },
+          font: {
+            id: 1,
+            name: "Open Sans",
+          },
+          size: "H3",
+        };
+        let text2 = {
+          text: this.getVideoObject().authors.toString(),
+          position: {
+            x: "center",
+            y: "bottom",
+          },
+          font: {
+            id: 1,
+            name: "Open Sans",
+          },
+          size: "H4",
+        };
+        let text3 = {
+          text: this.getVideoObject().tags.toString(),
+          position: {
+            x: "center",
+            y: "center",
+          },
+          font: {
+            id: 1,
+            name: "Open Sans",
+          },
+          size: "H6",
+        };
+
+        template = [text1, text2, text3];
+      }
+      if (this.selectedTemplate == 3) {
+        let text1 = {
+          text: this.getVideoObject().title,
+          position: {
+            x: "center",
+            y: "center-50",
+          },
+          font: {
+            id: 1,
+            name: "Open Sans",
+          },
+          size: "H3",
+        };
+        let text2 = {
+          text: this.getVideoObject().authors.toString(),
+          position: {
+            x: "center",
+            y: "center50",
+          },
+          font: {
+            id: 1,
+            name: "Open Sans",
+          },
+          size: "H4",
+        };
+        let text3 = {
+          text: this.getVideoObject().tags.toString(),
+          position: {
+            x: "center",
+            y: "center",
+          },
+          font: {
+            id: 1,
+            name: "Open Sans",
+          },
+          size: "H6",
         };
 
         template = [text1, text2, text3];
       }
       this.$emit("setTemplate", template);
-    }
-  }
+    },
+  },
 };
 </script>
