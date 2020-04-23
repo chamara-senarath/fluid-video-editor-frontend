@@ -5,6 +5,7 @@
       style="position: relative;"
       @mousewheel="changeOpacity"
       @keydown.enter="toggleFullscreen"
+      @keydown="toglleEvent"
       @dblclick="toggleFullscreen"
       ref="playerView"
     >
@@ -106,7 +107,10 @@
             <v-divider vertical></v-divider>
           </div>
         </transition>
-        <div v-if="!is_intro" style="position:absolute;right:0px;z-index:100">
+        <div
+          v-if="!is_intro && showLayers"
+          style="position:absolute;right:0px;z-index:100"
+        >
           <v-btn
             @click="expandRightPanelHandler"
             :color="`rgba(0,0,0,${panelOpacity})`"
@@ -156,7 +160,9 @@
           />
         </div>
         <v-btn
-          v-if="this.chapterList.length != 0 && !drawer && !is_intro"
+          v-if="
+            this.chapterList.length != 0 && !drawer && !is_intro && showLayers
+          "
           @click.stop="drawer = !drawer"
           :color="`rgba(0,0,0,${panelOpacity})`"
           depressed
@@ -281,7 +287,7 @@ export default {
     normalScreenWidth: null,
     is_intro: true,
     is_set_duration: false,
-
+    showLayers: true,
     showComments: false,
     expandRightPanel: false
   }),
@@ -497,6 +503,19 @@ export default {
     showRating() {
       this.ratingOverlay = true;
       this.expandRightPanel = false;
+    },
+    toglleEvent(e) {
+      if (e.key.toLowerCase() == "h") {
+        this.showLayers = !this.showLayers;
+        this.drawer = false;
+        this.expandRightPanel = false;
+      }
+      if (e.key.toLowerCase() == "b") {
+        this.drawer = !this.drawer;
+      }
+      if (e.key.toLowerCase() == "p") {
+        this.expandRightPanel = !this.expandRightPanel;
+      }
     }
   },
   watch: {
