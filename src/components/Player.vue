@@ -123,7 +123,7 @@
         </div>
 
         <div
-          v-if="this.watermarkStyle != null"
+          v-if="this.watermarkStyle != null && !is_intro && duration > 0"
           :style="
             `position:absolute;top:${watermarkStyle.top}px;left:${watermarkStyle.left}px;`
           "

@@ -765,6 +765,7 @@ export default {
       }
 
       this.selectedElement = null;
+
       let watermarkPosition = null;
       let watermarkWidthRatio = null;
       if (this.logo.file) {
