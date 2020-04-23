@@ -43,7 +43,7 @@
             <router-link
               :to="{
                 name: 'Comments',
-                params: { vid: thumbnail.id }
+                params: { vid: thumbnail.id },
               }"
             >
               <span class="grey--text ml-4 caption">
@@ -80,7 +80,7 @@ import { mapGetters } from "vuex";
 export default {
   components: {
     Navbar,
-    MiniPlayer
+    MiniPlayer,
   },
   data() {
     return {
@@ -90,7 +90,7 @@ export default {
       videoSource: null,
       videoTitle: null,
       percentagesList: [],
-      error: null
+      error: null,
     };
   },
   methods: {
@@ -119,17 +119,27 @@ export default {
       }
     },
     pushData(videos) {
-      videos.forEach(video => {
+      const modifiedVideos = videos.map((video) => {
+        if (!video.rating) {
+          video.rtn = 0;
+          video.rts = 0;
+        } else {
+          video.rtn =
+            video.rating.rating && video.rating.users
+              ? video.rating.rating / video.rating.users
+              : 0;
+          video.rts = video.rating.users;
+        }
+        return video;
+      });
+      modifiedVideos.forEach((video) => {
         let obj = {
           id: video._id,
           title: video.title,
           img: this.API_URL + "/api/video/splash?id=" + video._id,
-          rating:
-            video.rating.users == 0
-              ? 0
-              : video.rating.rating / video.rating.users,
-          rates: video.rating.users,
-          completed: this.findPercentage(video._id)
+          rating: video.rtn,
+          rates: video.rts,
+          completed: this.findPercentage(video._id),
         };
         this.thumbnailList.push(obj);
       });
@@ -155,13 +165,13 @@ export default {
       }
     },
     findPercentage(id) {
-      let item = this.percentagesList.find(ele => ele.video == id);
+      let item = this.percentagesList.find((ele) => ele.video == id);
       if (item) {
         return item.percentage;
       } else {
         return 0;
       }
-    }
+    },
   },
 
   async mounted() {
@@ -189,7 +199,7 @@ export default {
     } catch (error) {
       console.log(error);
     }
-  }
+  },
 };
 </script>
 
