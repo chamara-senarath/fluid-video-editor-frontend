@@ -43,7 +43,13 @@
                   @drag="handleDrag"
                 >
                   <span
-                    @dblclick="title.edit = true"
+                    @dblclick="
+                      () => {
+                        title.edit = true;
+                        selectedText = title;
+                        selectedTextIndex = titleIndex;
+                      }
+                    "
                     @click="changeTitleColor(title.id)"
                     :class="convertSize(title.size)"
                     :style="`color:${title.color};`"
@@ -60,145 +66,6 @@
                       >{{ title.text }}</span
                     ></span
                   >
-
-                  <v-layout
-                    mt-3
-                    column
-                    v-show="title.edit"
-                    @mouseleave="hideEdit(title)"
-                    @mouseover="disableTimer"
-                  >
-                    <v-layout style="z-index:2147483638;">
-                      <v-text-field
-                        v-model="title.text"
-                        clearable
-                        autofocus
-                        outlined
-                        @focus="
-                          title.text == 'Enter your text here'
-                            ? (title.text = '')
-                            : (title.text = title.text)
-                        "
-                        @keypress.enter="changeTitle(title)"
-                      ></v-text-field>
-                    </v-layout>
-
-                    <v-layout style="z-index:2147483638;">
-                      <v-menu offset-x>
-                        <template v-slot:activator="{ on }">
-                          <v-btn
-                            class="mx-2"
-                            depressed
-                            dark
-                            small
-                            block
-                            color="primary"
-                            v-on="on"
-                          >
-                            <v-icon left>mdi-format-size</v-icon
-                            >{{ title.size }}</v-btn
-                          >
-                        </template>
-                        <v-list>
-                          <v-list-item
-                            v-for="(item, index) in fontSizes"
-                            :key="index"
-                            @click="title.size = item"
-                            @mouseover="title.size = item"
-                            :style="
-                              title.size == item
-                                ? 'background-color:rgba(13, 71, 161,0.8)'
-                                : ''
-                            "
-                          >
-                            <v-list-item-title>{{ item }}</v-list-item-title>
-                          </v-list-item>
-                        </v-list>
-                      </v-menu>
-                    </v-layout>
-
-                    <v-layout mt-1 style="z-index:2147483638;">
-                      <v-menu offset-x>
-                        <template v-slot:activator="{ on }">
-                          <v-btn
-                            block
-                            class="mx-2"
-                            depressed
-                            dark
-                            small
-                            color="primary"
-                            v-on="on"
-                          >
-                            <v-icon left>fa fa-font</v-icon
-                            >{{ title.font.name }}</v-btn
-                          >
-                        </template>
-                        <v-list>
-                          <v-list-item
-                            v-for="(font, index) in fontFamilies"
-                            :key="index"
-                            @click="title.font = font"
-                            @mouseover="title.font = font"
-                            :style="
-                              title.font == font
-                                ? 'background-color:rgba(13, 71, 161,0.8)'
-                                : ''
-                            "
-                          >
-                            <v-list-item-title>{{
-                              font.name
-                            }}</v-list-item-title>
-                          </v-list-item>
-                        </v-list>
-                      </v-menu>
-                    </v-layout>
-
-                    <v-layout mt-1 style="z-index:2147483638;">
-                      <v-menu offset-x>
-                        <template v-slot:activator="{ on }">
-                          <v-btn
-                            class="mx-2"
-                            depressed
-                            dark
-                            small
-                            block
-                            color="primary"
-                            v-on="on"
-                          >
-                            <v-icon left
-                              >fa fa-align-{{ title.align.value }}</v-icon
-                            >{{ title.align.value }}</v-btn
-                          >
-                        </template>
-                        <v-list>
-                          <v-list-item
-                            v-for="(item, index) in alignments"
-                            :key="index"
-                            @click="setTextAlignment(titleIndex, item, null)"
-                            :style="
-                              title.align.value == item
-                                ? 'background-color:rgba(13, 71, 161,0.8)'
-                                : ''
-                            "
-                          >
-                            <v-list-item-title>{{ item }}</v-list-item-title>
-                          </v-list-item>
-                        </v-list>
-                      </v-menu>
-                    </v-layout>
-
-                    <v-layout mt-1 style="z-index:2147483638;">
-                      <v-btn
-                        block
-                        @click="deleteTitle(title.id)"
-                        dark
-                        color="red darken-3"
-                        class="mx-2"
-                        small
-                        ><v-icon small dark>fa fa-trash-alt</v-icon></v-btn
-                      >
-                    </v-layout>
-                  </v-layout>
                 </Moveable>
                 <Moveable
                   v-for="(image, index) in imageList"
@@ -249,122 +116,284 @@
         </div>
       </v-flex>
       <v-flex md2>
-        <v-layout column justify-center wrap>
-          <v-layout row justify-start>
-            <v-flex xs2>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <v-btn
-                    v-on="on"
-                    depressed
-                    small
-                    fab
-                    dark
-                    color="blue darken-3"
-                    @click="addNewTitle"
-                    ><v-icon small>fa fa-heading</v-icon></v-btn
-                  >
-                </template>
-                <span>{{ $t("Add new title") }}</span>
-              </v-tooltip>
-            </v-flex>
-
-            <v-flex xs2>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <input
-                    type="file"
-                    ref="file"
-                    accept=".png,.jpg,.jpeg/image"
-                    style="display: none"
-                    @change="addNewImage"
-                  />
-                  <v-btn
-                    v-on="on"
-                    small
-                    depressed
-                    fab
-                    dark
-                    color="blue darken-3"
-                    @click="$refs.file.click()"
-                    ><v-icon small>fa fa-image</v-icon></v-btn
-                  >
-                </template>
-                <span>{{ $t("Add new image") }}</span>
-              </v-tooltip>
-            </v-flex>
-            <v-flex xs2>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <v-btn
-                    v-on="on"
-                    depressed
-                    small
-                    fab
-                    dark
-                    color="blue darken-3"
-                    @click="chooseTemplate = true"
-                    ><v-icon small>fa fa-film</v-icon></v-btn
-                  >
-                </template>
-                <span>{{ $t("Choose a Template") }}</span>
-              </v-tooltip>
-            </v-flex>
-          </v-layout>
-          <v-layout mt-4>
-            <v-file-input
-              ref="logoSelect"
-              clearable
-              color="blue darken-3"
-              :rules="rules.logo"
-              accept="image/png, image/jpeg"
-              :placeholder="$t('Select a Watermark')"
-              prepend-icon="mdi-camera"
-              :label="$t('Watermark (Optional)')"
-              @change="selectLogo"
-              v-model="logofile"
-            ></v-file-input>
-          </v-layout>
-          <v-layout>
-            <v-slider
-              v-if="this.logo.file != null"
-              v-model="logo.opacity"
-              prepend-icon="fa fa-adjust"
-            ></v-slider>
-          </v-layout>
-          <v-layout>
+        <!-- text edit panel -->
+        <v-scroll-x-reverse-transition>
+          <v-layout
+            v-if="selectedText != null && selectedText.edit"
+            column
+            justify-center
+            wrap
+          >
             <v-text-field
-              :label="$t('Duration')"
-              :suffix="$t('seconds')"
-              v-model="duration"
-              type="number"
-              min="1"
+              v-model="selectedText.text"
+              clearable
+              autofocus
+              outlined
+              @focus="
+                selectedText.text == 'Enter your text here'
+                  ? (selectedText.text = '')
+                  : (selectedText.text = selectedText.text)
+              "
+              @keypress.enter="changeTitle(selectedText)"
             ></v-text-field>
-          </v-layout>
-          <v-layout row justify-center>
-            <v-chip label class="mt-1" color="indigo" text-color="white">
-              <v-avatar left>
-                <v-icon small>fa fa-pencil-alt</v-icon>
-              </v-avatar>
-              <span
-                style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"
+
+            <v-layout>
+              <v-menu offset-x>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="mx-2"
+                    depressed
+                    dark
+                    small
+                    block
+                    color="primary"
+                    v-on="on"
+                  >
+                    <v-icon left>mdi-format-size</v-icon
+                    >{{ selectedText.size }}</v-btn
+                  >
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(item, index) in fontSizes"
+                    :key="index"
+                    @click="selectedText.size = item"
+                    @mouseover="selectedText.size = item"
+                    :style="
+                      selectedText.size == item
+                        ? 'background-color:rgba(13, 71, 161,0.8)'
+                        : ''
+                    "
+                  >
+                    <v-list-item-title>{{ item }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-layout>
+
+            <v-layout mt-1>
+              <v-menu offset-x>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    block
+                    class="mx-2"
+                    depressed
+                    dark
+                    small
+                    color="primary"
+                    v-on="on"
+                  >
+                    <v-icon left>fa fa-font</v-icon
+                    >{{ selectedText.font.name }}</v-btn
+                  >
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(font, index) in fontFamilies"
+                    :key="index"
+                    @click="selectedText.font = font"
+                    @mouseover="selectedText.font = font"
+                    :style="
+                      selectedText.font == font
+                        ? 'background-color:rgba(13, 71, 161,0.8)'
+                        : ''
+                    "
+                  >
+                    <v-list-item-title>{{ font.name }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-layout>
+
+            <v-layout mt-1>
+              <v-menu offset-x>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="mx-2"
+                    depressed
+                    dark
+                    small
+                    block
+                    color="primary"
+                    v-on="on"
+                  >
+                    <v-icon left
+                      >fa fa-align-{{ selectedText.align.value }}</v-icon
+                    >{{ selectedText.align.value }}</v-btn
+                  >
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(item, index) in alignments"
+                    :key="index"
+                    @click="setTextAlignment(selectedTextIndex, item, null)"
+                    @mouseover="setTextAlignment(selectedTextIndex, item, null)"
+                    :style="
+                      selectedText.align.value == item
+                        ? 'background-color:rgba(13, 71, 161,0.8)'
+                        : ''
+                    "
+                  >
+                    <v-list-item-title>{{ item }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-layout>
+
+            <v-layout mt-1>
+              <v-btn
+                block
+                @click="
+                  () => {
+                    changeTitle(selectedText);
+                    deleteTitle(selectedText.id);
+                  }
+                "
+                dark
+                color="red darken-3"
+                class="mx-2"
+                small
+                ><v-icon small dark>fa fa-trash-alt</v-icon></v-btn
               >
-                {{ $t("Selected Element") }} :
-                {{ selectedElementText | truncate(20, "...") }}
-              </span>
-            </v-chip>
-          </v-layout>
-          <v-layout mt-3>
-            <v-layout column>
-              <span class="caption">{{ $t("Color Picker") }}</span>
-              <v-color-picker
-                hide-mode-switch
-                hide-inputs
-                v-model="selectedColor"
-              ></v-color-picker>
+            </v-layout>
+            <v-layout mt-1>
+              <v-btn
+                block
+                @click="changeTitle(selectedText)"
+                dark
+                color="green darken-3"
+                class="mx-2"
+                small
+                ><v-icon small dark>fa fa-check</v-icon></v-btn
+              >
             </v-layout>
           </v-layout>
-        </v-layout>
+        </v-scroll-x-reverse-transition>
+
+        <!-- default panel -->
+        <v-scroll-x-reverse-transition>
+          <v-layout
+            v-if="selectedText == null || !selectedText.edit"
+            column
+            justify-center
+            wrap
+          >
+            <v-layout row justify-start>
+              <v-flex xs2>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      v-on="on"
+                      depressed
+                      small
+                      fab
+                      dark
+                      color="blue darken-3"
+                      @click="addNewTitle"
+                      ><v-icon small>fa fa-heading</v-icon></v-btn
+                    >
+                  </template>
+                  <span>{{ $t("Add new title") }}</span>
+                </v-tooltip>
+              </v-flex>
+
+              <v-flex xs2>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <input
+                      type="file"
+                      ref="file"
+                      accept=".png,.jpg,.jpeg/image"
+                      style="display: none"
+                      @change="addNewImage"
+                    />
+                    <v-btn
+                      v-on="on"
+                      small
+                      depressed
+                      fab
+                      dark
+                      color="blue darken-3"
+                      @click="$refs.file.click()"
+                      ><v-icon small>fa fa-image</v-icon></v-btn
+                    >
+                  </template>
+                  <span>{{ $t("Add new image") }}</span>
+                </v-tooltip>
+              </v-flex>
+              <v-flex xs2>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      v-on="on"
+                      depressed
+                      small
+                      fab
+                      dark
+                      color="blue darken-3"
+                      @click="chooseTemplate = true"
+                      ><v-icon small>fa fa-film</v-icon></v-btn
+                    >
+                  </template>
+                  <span>{{ $t("Choose a Template") }}</span>
+                </v-tooltip>
+              </v-flex>
+            </v-layout>
+            <v-layout mt-4>
+              <v-file-input
+                ref="logoSelect"
+                clearable
+                color="blue darken-3"
+                :rules="rules.logo"
+                accept="image/png, image/jpeg"
+                :placeholder="$t('Select a Watermark')"
+                prepend-icon="mdi-camera"
+                :label="$t('Watermark (Optional)')"
+                @change="selectLogo"
+                v-model="logofile"
+              ></v-file-input>
+            </v-layout>
+            <v-layout>
+              <v-slider
+                v-if="this.logo.file != null"
+                v-model="logo.opacity"
+                prepend-icon="fa fa-adjust"
+              ></v-slider>
+            </v-layout>
+            <v-layout>
+              <v-text-field
+                :label="$t('Duration')"
+                :suffix="$t('seconds')"
+                v-model="duration"
+                type="number"
+                min="1"
+              ></v-text-field>
+            </v-layout>
+            <v-layout row justify-center>
+              <v-chip label class="mt-1" color="indigo" text-color="white">
+                <v-avatar left>
+                  <v-icon small>fa fa-pencil-alt</v-icon>
+                </v-avatar>
+                <span
+                  style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"
+                >
+                  {{ $t("Selected Element") }} :
+                  {{ selectedElementText | truncate(20, "...") }}
+                </span>
+              </v-chip>
+            </v-layout>
+            <v-layout mt-3>
+              <v-layout column>
+                <span class="caption">{{ $t("Color Picker") }}</span>
+                <v-color-picker
+                  hide-mode-switch
+                  hide-inputs
+                  v-model="selectedColor"
+                ></v-color-picker>
+              </v-layout>
+            </v-layout>
+          </v-layout>
+        </v-scroll-x-reverse-transition>
       </v-flex>
     </v-layout>
   </v-container>
@@ -387,6 +416,8 @@ export default {
     fontSize: "display-2",
     fontFamiy: "font2",
     text: null,
+    selectedText: null,
+    selectedTextIndex: null,
     titleList: [],
     imageList: [],
     alignments: ["left", "center", "right"],
