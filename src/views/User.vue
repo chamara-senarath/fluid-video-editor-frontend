@@ -43,7 +43,7 @@
             <router-link
               :to="{
                 name: 'Comments',
-                params: { vid: thumbnail.id },
+                params: { vid: thumbnail.id }
               }"
             >
               <span class="grey--text ml-4 caption">
@@ -80,7 +80,7 @@ import { mapGetters } from "vuex";
 export default {
   components: {
     Navbar,
-    MiniPlayer,
+    MiniPlayer
   },
   data() {
     return {
@@ -90,7 +90,7 @@ export default {
       videoSource: null,
       videoTitle: null,
       percentagesList: [],
-      error: null,
+      error: null
     };
   },
   methods: {
@@ -119,7 +119,7 @@ export default {
       }
     },
     pushData(videos) {
-      videos.forEach((video) => {
+      videos.forEach(video => {
         let obj = {
           id: video._id,
           title: video.title,
@@ -129,7 +129,7 @@ export default {
               ? 0
               : video.rating.rating / video.rating.users,
           rates: video.rating.users,
-          completed: this.findPercentage(video._id),
+          completed: this.findPercentage(video._id)
         };
         this.thumbnailList.push(obj);
       });
@@ -155,13 +155,13 @@ export default {
       }
     },
     findPercentage(id) {
-      let item = this.percentagesList.find((ele) => ele.video == id);
+      let item = this.percentagesList.find(ele => ele.video == id);
       if (item) {
         return item.percentage;
       } else {
         return 0;
       }
-    },
+    }
   },
 
   async mounted() {
@@ -189,7 +189,7 @@ export default {
     } catch (error) {
       console.log(error);
     }
-  },
+  }
 };
 </script>
 

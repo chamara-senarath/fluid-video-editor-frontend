@@ -5,7 +5,7 @@
       <router-view></router-view>
     </v-content>
     <v-footer v-if="$route.name != 'Embed'" color="blue-grey darken-4" app>
-      <span class="white--text mx-auto">Last Modified Date: 2020/04/22</span>
+      <span class="white--text mx-auto">Last Modified Date: 2020/04/23</span>
       <span class="white--text ">© DIPS</span>
     </v-footer>
   </v-app>
@@ -16,13 +16,13 @@ import Navbar from "@/components/Navbar";
 import { mapGetters } from "vuex";
 export default {
   components: {
-    Navbar,
+    Navbar
   },
   methods: {
-    ...mapGetters(["getLanguage"]),
+    ...mapGetters(["getLanguage"])
   },
   mounted() {
     this.$i18n.locale = this.getLanguage();
-  },
+  }
 };
 </script>

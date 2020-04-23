@@ -36,12 +36,12 @@ export default {
   methods: {
     close() {
       this.$emit("closePlayer", true);
-    },
+    }
   },
   computed: {
     playerHeight() {
       return this.$refs.frame.getBoundingClientRect().height;
-    },
-  },
+    }
+  }
 };
 </script>
