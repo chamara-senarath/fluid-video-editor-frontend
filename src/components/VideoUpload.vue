@@ -136,7 +136,7 @@ export default {
           (value) => {
             if (value && value.name) {
               return (
-                ["mp4", "avi"].includes(value.name.split(".")[1]) ||
+                ["mp4", "webm"].includes(value.name.split(".").reverse()[0]) ||
                 this.$t("Invalid File Type")
               );
             }
@@ -161,9 +161,11 @@ export default {
       if (
         file &&
         file.name &&
-        ["mp4", "avi"].includes(file.name.split(".")[1])
+        ["mp4", "webm"].includes(file.name.split(".").reverse()[0])
       ) {
-        this.video.title = file.name.split(".")[0];
+        let fileName = file.name.split(".");
+        fileName.pop();
+        this.video.title = fileName.join("");
         this.video.file = file;
       }
     },
