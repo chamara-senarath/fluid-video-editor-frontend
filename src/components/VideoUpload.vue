@@ -15,7 +15,17 @@
     <v-overlay :value="overlay">
       <v-layout column align-center>
         <v-card>
-          <v-img src="/uploading.gif"></v-img>
+          <v-col class="subtitle-1 text-center" cols="12">
+            {{ $t("Uploading your files") }}
+          </v-col>
+          <v-col cols="12">
+            <v-progress-linear
+              color="green accent-4"
+              indeterminate
+              rounded
+              height="12"
+            ></v-progress-linear>
+          </v-col>
 
           <v-card-text
             ><v-layout column align-center
