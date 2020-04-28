@@ -137,7 +137,37 @@
               @keypress.enter="changeTitle(selectedText)"
             ></v-text-field>
 
-            <v-layout>
+            <v-card>
+              <v-card-title>Suggestions</v-card-title>
+              <v-card-text>
+                <v-layout row>
+                  <v-chip
+                    @click="selectedText.text = getVideoObject().title"
+                    class="ma-2"
+                  >
+                    {{ getVideoObject().title }}
+                  </v-chip>
+                  <v-chip
+                    @click="
+                      selectedText.text = getVideoObject().authors.toString()
+                    "
+                    class="ma-2"
+                  >
+                    {{ getVideoObject().authors.toString() }}
+                  </v-chip>
+                  <v-chip
+                    @click="
+                      selectedText.text = getVideoObject().tags.toString()
+                    "
+                    class="ma-2"
+                  >
+                    {{ getVideoObject().tags.toString() }}
+                  </v-chip>
+                </v-layout>
+              </v-card-text>
+            </v-card>
+
+            <v-layout mt-4>
               <v-menu offset-x>
                 <template v-slot:activator="{ on }">
                   <v-btn
