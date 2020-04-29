@@ -196,7 +196,12 @@ export default {
           icon: "fa fa-upload",
           path: { name: "upload", params: { is_edit: false } }
         },
-        { title: "Insight", icon: "fa fa-chart-line", path: "/report" }
+        { title: "Insight", icon: "fa fa-chart-line", path: "/report" },
+        {
+          title: "User Mangement",
+          icon: "fa fa-group",
+          path: "/userManagement"
+        }
       ],
       searchOptions: [
         { text: "All", color: "light-green" },

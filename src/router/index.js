@@ -6,6 +6,7 @@ import User from "../views/User.vue";
 import Embed from "../views/Embed.vue";
 import Test from "../views/Test.vue";
 import Insight from "../views/Insight.vue";
+import UserManagement from "../views/UserManagement.vue";
 import Report from "../views/Report.vue";
 import Login from "../views/Login.vue";
 import NotFound from "../views/NotFound.vue";
@@ -62,6 +63,14 @@ const routes = [
     path: "/insight",
     name: "Insight",
     component: Insight,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/userManagement",
+    name: "UserManagement",
+    component: UserManagement,
     meta: {
       requiresAuth: true
     }

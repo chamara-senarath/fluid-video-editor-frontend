@@ -5,8 +5,7 @@
       <router-view></router-view>
     </v-content>
     <v-footer v-if="$route.name != 'Embed'" color="blue-grey darken-4" app>
-      <span class="white--text mx-auto">Last Modified Date: 2020/04/28</span>
-      <span class="white--text ">© DIPS</span>
+      <span class="white--text mx-auto">© DIPS. 2020</span>
     </v-footer>
   </v-app>
 </template>
