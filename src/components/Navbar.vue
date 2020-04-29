@@ -6,7 +6,7 @@
         @click.stop="drawer = !drawer"
       ></v-app-bar-nav-icon>
       <v-toolbar-title>
-        Training Catalog <strong class="red--text">|</strong> Video Editor
+        <img src="../../public/logo.png" width="120vw" />
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
