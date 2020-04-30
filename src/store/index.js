@@ -13,6 +13,7 @@ let store = new Vuex.Store({
     },
     language: "en",
     profile: {
+      id: null,
       name: null,
       avatar: null,
       group: null

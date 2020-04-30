@@ -108,7 +108,8 @@ export default {
       "getSplashScreenObject",
       "getVideoObject",
       "getQuestionMarks",
-      "getWatermark"
+      "getWatermark",
+      "getProfile"
     ]),
     downloadEmbedCode() {
       this.showCopied = false;
@@ -121,8 +122,9 @@ export default {
       this.embedDialog = true;
     },
     preview() {
+      let uid = this.getProfile().id;
       window.open(
-        this.API_URL + "/embed/" + this.getVideoObject().id + "/test",
+        this.API_URL + "/embed/" + this.getVideoObject().id + "/" + uid,
         "_blank"
       );
     },

@@ -165,7 +165,8 @@ export default {
           "If you delete the video, this video will be deleted from your uploaded video list. Are you sure?",
         yes: "Yes, I am sure",
         no: "No, Do not delete"
-      }
+      },
+      uid: null
     };
   },
   methods: {
@@ -180,7 +181,7 @@ export default {
     gotoVideo(thumbnail) {
       let id = thumbnail.id;
       this.videoTitle = thumbnail.title;
-      this.videoSource = this.API_URL + "/embed/" + id + "/test";
+      this.videoSource = this.API_URL + "/embed/" + id + "/" + this.uid;
       this.showPlayer = true;
     },
     edit(id) {
@@ -280,6 +281,7 @@ export default {
     }
   },
   async mounted() {
+    this.uid = this.getProfile().id;
     try {
       console.log(this.API_URL);
       let videos = await axios.get(

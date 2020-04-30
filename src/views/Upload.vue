@@ -97,21 +97,6 @@
               <v-icon>fa fa-angle-left</v-icon>
             </v-btn>
           </v-layout>
-          <v-layout justify-end>
-            <v-btn
-              depressed
-              fab
-              small
-              color="primary"
-              @click="
-                () => {
-                  $router.go();
-                }
-              "
-            >
-              <v-icon small>fa fa-upload</v-icon>
-            </v-btn>
-          </v-layout>
         </v-layout>
         <Publish v-if="stepperCount == 5" ref="publish"></Publish>
       </v-stepper-content>

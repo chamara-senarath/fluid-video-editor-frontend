@@ -131,35 +131,32 @@ export default {
     //set route params
     this.vid = this.$route.params.vid;
     this.uid = this.$route.params.uid;
-    let is_test = this.uid == "test" ? true : false;
 
     //forward to 404 when no user found
-    if (!is_test) {
-      let res = await axios.get(this.API_URL + "/api/user?id=" + this.uid);
-      if (res.status == 204 || res.status == 400 || res.status == 404) {
-        this.$router.push("/404");
-        return;
-      }
-      //assign user if exist
-      this.user = res.data;
+
+    let res = await axios.get(this.API_URL + "/api/user?id=" + this.uid);
+    if (res.status == 204 || res.status == 400 || res.status == 404) {
+      this.$router.push("/404");
+      return;
     }
+    //assign user if exist
+    this.user = res.data;
+    this.user.name =
+      this.user.role === "admin" ? this.user.name + " 🔑 " : this.user.name;
 
     //set video title and chapter list
     let video = await axios.get(this.API_URL + "/api/video?id=" + this.vid);
     this.title = video.data.title;
     this.chapterList = video.data.chapterMarks;
-    //set questions list
-    if (!is_test) {
-      let result = await axios.get(
-        this.API_URL + "/api/insight/user?uid=" + this.uid + "&vid=" + this.vid
-      );
 
-      this.questionList = result.data.questions;
-      this.watchPercentage = result.data.percentage;
-    } else {
-      this.questionList = video.data.questions;
-      this.watchPercentage = 0;
-    }
+    //set questions list
+
+    let result = await axios.get(
+      this.API_URL + "/api/insight/user?uid=" + this.uid + "&vid=" + this.vid
+    );
+
+    this.questionList = result.data.questions;
+    this.watchPercentage = result.data.percentage;
 
     //set comments
     this.fetchComment(this.vid);
@@ -185,26 +182,23 @@ export default {
     this.src = this.API_URL + "/api/video/file?id=" + this.vid;
     this.thumbnail = this.API_URL + "/api/video/splash?id=" + this.vid;
 
-    let result = await axios.get(
+    let result_watermark = await axios.get(
       this.API_URL + "/api/video/watermark?id=" + this.vid
     );
 
-    if (result) {
+    if (result_watermark) {
       this.watermark.file =
         this.API_URL + "/api/video/watermark?id=" + this.vid;
     }
     // post video insight to increment view count
-    if (!is_test) {
-      await axios.post(this.API_URL + "/api/insight/video", {
-        vid: this.vid,
-        uid: this.uid
-      });
-    }
+    await axios.post(this.API_URL + "/api/insight/video", {
+      vid: this.vid,
+      uid: this.uid
+    });
 
     //set timer to log periodically
-    if (!is_test) {
-      this.timer = setInterval(this.saveLog, 1000);
-    }
+
+    this.timer = setInterval(this.saveLog, 1000);
 
     //unset loader
     this.is_loading = false;

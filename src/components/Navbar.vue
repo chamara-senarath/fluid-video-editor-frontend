@@ -13,7 +13,7 @@
       <v-text-field
         outlined
         dense
-        v-if="$route.name == 'Search' || $route.name == 'User'"
+        v-if="$route.name == 'Search'"
         :placeholder="`${$t('Search')}...`"
         single-line
         append-icon="fa fa-search"
@@ -100,11 +100,7 @@
       </v-tooltip>
     </v-app-bar>
 
-    <v-navigation-drawer
-      v-if="profile.role == 'Administrator'"
-      v-model="drawer"
-      app
-    >
+    <v-navigation-drawer v-model="drawer" app>
       <v-list-item>
         <v-layout column align-center>
           <v-flex mt-4 mb-3>
@@ -141,11 +137,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-layout
-      column
-      align-end
-      v-if="$route.name == 'Search' || $route.name == 'User'"
-    >
+    <v-layout column align-end v-if="$route.name == 'Search'">
       <v-layout row>
         <v-flex align-self-center>
           <span class="subtitle">{{ $t("Search By") }}</span>
@@ -187,8 +179,6 @@ export default {
       },
       submitLoading: false,
       drawer: false,
-      bg:
-        "https://images.wallpaperscraft.com/image/corn_field_summer_124670_3840x2400.jpg",
       items: [
         { title: "Search", icon: "fa fa-search", path: "/" },
         {
@@ -221,19 +211,16 @@ export default {
     ...mapMutations(["removeToken", "setLanguage"]),
     ...mapGetters(["getToken", "getUser", "getProfile"]),
     async logout() {
-      let { role } = this.getUser();
-      if (role == "user") {
-        await axios.post(
-          this.API_URL + "/api/user/logout",
-          {},
-          {
-            headers: { "x-auth": this.getToken() }
-          }
-        );
-      }
+      await axios.post(
+        this.API_URL + "/api/user/logout",
+        {},
+        {
+          headers: { "x-auth": this.getToken() }
+        }
+      );
+
       this.removeToken();
       this.isLogged = false;
-
       this.$router.push("/login");
     },
     search(e) {

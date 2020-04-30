@@ -15,12 +15,6 @@
             <v-form>
               <v-select
                 prepend-icon="fa fa-user-tag"
-                :items="roles"
-                :label="$t('Role')"
-                v-model="role"
-              ></v-select>
-              <v-select
-                prepend-icon="fa fa-user-tag"
                 :items="groups"
                 :label="$t('Group')"
                 v-model="group"
@@ -63,10 +57,9 @@ export default {
     return {
       username: null,
       password: null,
-      role: "Admin",
+
       group: "DIPS",
       error: null,
-      roles: ["Admin", "User"],
       groups: ["DIPS", "LayUp"]
     };
   },
@@ -84,71 +77,41 @@ export default {
 
       let username = this.username;
       let password = this.password;
-      if (this.role == "Admin") {
-        try {
-          let result = await axios.post(this.API_URL + "/api/admin/login", {
-            username,
-            password
-          });
-          let token = result.data.token;
-          let profileObj = {
-            name: result.data.name,
-            avatar: result.data.avatar,
-            group: result.data.group
-          };
-          this.setToken(token);
-          this.setUser({
-            is_logged: true,
-            role: "admin"
-          });
-          if (this.group.toLowerCase() === profileObj.group.toLowerCase()) {
-            this.setProfile(profileObj);
-            this.$router.push("/");
-          } else {
-            throw new Error("You have no access to this Group");
-          }
-        } catch (error) {
-          if (error.response && error.response.status === 400) {
-            this.error =
-              "Invalid Username / Password for the role " + this.role;
-          } else {
-            this.error = error;
-          }
+
+      try {
+        let result = await axios.post(this.API_URL + "/api/user/login", {
+          username,
+          password
+        });
+
+        let token = result.data.token;
+        let user_id = result.data.user_id;
+
+        let profileObj = {
+          id: user_id,
+          name: result.data.name,
+          avatar: null,
+          group: result.data.group
+        };
+        console.log(profileObj);
+        this.setToken(token);
+
+        this.setUser({
+          is_logged: true,
+          role: result.data.role == "admin" ? "admin" : "user"
+        });
+
+        if (this.group.toLowerCase() === profileObj.group.toLowerCase()) {
+          this.setProfile(profileObj);
+          this.$router.push("/");
+        } else {
+          throw new Error("You have no access to this Group");
         }
-      }
-
-      if (this.role == "User") {
-        try {
-          let result = await axios.post(this.API_URL + "/api/user/login", {
-            username,
-            password
-          });
-          let token = result.data.token;
-          let user_id = result.data.user_id;
-          let profileObj = {
-            name: result.data.name,
-            avatar: result.data.avatar,
-            group: result.data.group
-          };
-          this.setToken(token);
-          this.setUser({
-            is_logged: true,
-            role: "user"
-          });
-
-          if (this.group.toLowerCase() === profileObj.group.toLowerCase()) {
-            this.setProfile(profileObj);
-            this.$router.push("/user/" + user_id);
-          } else {
-            throw new Error("You have no access to this Group");
-          }
-        } catch (error) {
-          if (error.response && error.response.status === 400) {
-            this.error =
-              "Invalid Username / Password for the role " + this.role;
-          } else {
-            this.error = error;
-          }
+      } catch (error) {
+        if (error.response && error.response.status === 400) {
+          this.error = "Invalid Username / Password for the role " + this.role;
+        } else {
+          this.error = error;
         }
       }
     }

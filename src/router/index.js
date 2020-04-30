@@ -2,7 +2,6 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Upload from "../views/Upload.vue";
 import Search from "../views/Search.vue";
-import User from "../views/User.vue";
 import Embed from "../views/Embed.vue";
 import Test from "../views/Test.vue";
 import Insight from "../views/Insight.vue";
@@ -22,14 +21,6 @@ const routes = [
     component: Search,
     meta: {
       requiresAuth: true
-    }
-  },
-  {
-    path: "/user/:uid",
-    name: "User",
-    component: User,
-    meta: {
-      requiresUserAuth: true
     }
   },
   {
@@ -109,13 +100,13 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   let { is_logged, role } = store.getters.getUser;
 
-  if (to.matched.some(record => record.meta.hasAuth)) {
-    if (is_logged) {
-      next("/");
-      return;
-    }
-    next();
-  }
+  // if (to.matched.some((record) => record.meta.hasAuth)) {
+  //   if (is_logged) {
+  //     next();
+  //     return;
+  //   }
+  //   next();
+  // }
 
   if (to.matched.some(record => record.meta.requiresUserAuth)) {
     if (is_logged && role == "user") {
