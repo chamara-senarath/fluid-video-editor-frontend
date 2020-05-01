@@ -7,7 +7,9 @@ import VueHtml2Canvas from "vue-html2canvas";
 import VuePlyr from "vue-plyr";
 import i18n from "./i18n";
 import FlagIcon from "vue-flag-icon";
+import VueTreeList from "vue-tree-list";
 
+Vue.use(VueTreeList);
 Vue.use(FlagIcon);
 Vue.use(VueHtml2Canvas);
 Vue.use(VuePlyr);
@@ -40,9 +42,9 @@ Vue.filter("secondToHHMMSS", secondToHHMMSS);
 Vue.mixin({
   data: function() {
     return {
-      API_URL: store.state.URL
+      API_URL: store.state.URL,
     };
-  }
+  },
 });
 
 new Vue({
@@ -50,5 +52,5 @@ new Vue({
   store,
   vuetify,
   i18n,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount("#app");
