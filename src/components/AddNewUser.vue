@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid pa-10>
+  <v-container fluid px-10 py-5>
     <v-form ref="form_add">
       <v-text-field
         :rules="rules.username"
@@ -34,6 +34,13 @@
         :items="genderList"
         label="Gender"
       ></v-select>
+      <v-layout row align-center>
+        <v-switch color="red" v-model="is_admin" label="Make Admin"></v-switch>
+        <v-spacer></v-spacer>
+        <span v-if="is_admin" class="subtitle red--text"
+          >*This user is now an admin</span
+        >
+      </v-layout>
       <v-btn @click="submit" block dark elevation="0" color="green darken-2"
         >Add user</v-btn
       >
@@ -56,19 +63,26 @@ export default {
       gender: null,
       genderList: ["Male", "Female"],
       positionList: positionList,
-      teamList: teamList
+      teamList: teamList,
+      is_admin: false
     };
   },
   methods: {
     submit() {
-      this.submitUser(this.$refs.form_add, "add", {
-        username: this.username,
-        displayName: this.displayName,
-        defaultPassword: this.defaultPassword,
-        team: this.team,
-        position: this.position,
-        gender: this.gender
-      });
+      this.submitUser(
+        this.$refs.form_add,
+        "add",
+        {
+          username: this.username,
+          displayName: this.displayName,
+          defaultPassword: this.defaultPassword,
+          team: this.team,
+          position: this.position,
+          gender: this.gender,
+          role: this.is_admin ? "admin" : "user"
+        },
+        null
+      );
     }
   }
 };

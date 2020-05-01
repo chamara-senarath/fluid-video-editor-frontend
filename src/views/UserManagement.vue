@@ -62,8 +62,10 @@
 </template>
 
 <script>
+import axios from "axios";
 import AddNewUser from "../components/AddNewUser";
 import EditUser from "../components/EditUser";
+import { mapGetters } from "vuex";
 export default {
   components: {
     AddNewUser,
@@ -99,14 +101,62 @@ export default {
     };
   },
   methods: {
+    ...mapGetters(["getProfile"]),
     validateForm(form) {
       return form.validate();
     },
-    submitUser(form, type, user) {
+    success(form) {
+      this.is_updated = true;
+      setTimeout(() => {
+        this.dialog = false;
+        form.reset();
+      }, 500);
+    },
+    async submitUser(form, type, user, cb) {
       if (!this.validateForm(form)) {
         return;
       }
-      console.log(user);
+      this.is_updated = false;
+      this.dialog = true;
+      let userObj = {
+        username: user.username,
+        password: user.defaultPassword,
+        name: user.displayName,
+        role: user.role,
+        group: this.getProfile().group,
+        team: user.team,
+        gender: user.gender,
+        position: user.position
+      };
+
+      if (type === "add") {
+        try {
+          await axios.post(this.API_URL + "/api/user", userObj);
+          this.success(form);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      if (type === "edit") {
+        try {
+          await axios.patch(this.API_URL + "/api/user/update", userObj);
+          this.success(form);
+          cb();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      if (type === "delete") {
+        try {
+          await axios.delete(
+            this.API_URL + "/api/user/delete?username=" + userObj.username
+          );
+          this.success(form);
+          cb();
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
   }
 };

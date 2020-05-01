@@ -188,8 +188,8 @@ export default {
         },
         { title: "Insight", icon: "fa fa-chart-line", path: "/report" },
         {
-          title: "User Mangement",
-          icon: "fa fa-group",
+          title: "User Management",
+          icon: "fa fa-users-cog",
           path: "/userManagement"
         }
       ],
