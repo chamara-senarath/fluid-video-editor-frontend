@@ -21,29 +21,30 @@ const routes = [
     name: "Search",
     component: Search,
     meta: {
-      onlyAdmin: false
-    }
+      hasAuth: true,
+    },
   },
   {
     path: "/upload",
     name: "upload",
     component: Upload,
     meta: {
-      onlyAdmin: true
-    }
+      hasAuth: true,
+      onlyAdmin: true,
+    },
   },
   {
     path: "/comments/:vid",
     name: "Comments",
     component: Comments,
     meta: {
-      onlyAdmin: false
-    }
+      hasAuth: true,
+    },
   },
   {
     path: "/embed/:vid/:uid",
     name: "Embed",
-    component: Embed
+    component: Embed,
   },
   // {
   //   path: "/embed",
@@ -56,60 +57,61 @@ const routes = [
     name: "Insight",
     component: Insight,
     meta: {
-      onlyAdmin: false
-    }
+      hasAuth: true,
+    },
   },
   {
     path: "/userManagement",
     name: "UserManagement",
     component: UserManagement,
     meta: {
-      onlyAdmin: true
-    }
+      hasAuth: true,
+      onlyAdmin: true,
+    },
   },
   {
     path: "/report",
     name: "Report",
     component: Report,
     meta: {
-      onlyAdmin: false
-    }
+      hasAuth: true,
+    },
   },
   {
     path: "/profile",
     name: "Profile",
     component: Profile,
     meta: {
-      onlyAdmin: false
-    }
+      hasAuth: true,
+    },
   },
   {
     path: "/login",
     name: "Login",
     component: Login,
     meta: {
-      hasAuth: true
-    }
+      alreadyLogged: true,
+    },
   },
   {
     path: "/test",
     name: "Test",
-    component: Test
+    component: Test,
   },
   { path: "/404", component: NotFound },
-  { path: "*", redirect: "/404" }
+  { path: "*", redirect: "/404" },
 ];
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  routes
+  routes,
 });
 
 router.beforeEach((to, from, next) => {
   let { is_logged, role } = store.getters.getUser;
 
-  if (to.matched.some(record => record.meta.hasAuth)) {
+  if (to.matched.some((record) => record.meta.alreadyLogged)) {
     if (is_logged) {
       next("/");
       return;
@@ -117,7 +119,15 @@ router.beforeEach((to, from, next) => {
     next();
   }
 
-  if (to.matched.some(record => record.meta.onlyAdmin)) {
+  if (to.matched.some((record) => record.meta.hasAuth)) {
+    if (!is_logged) {
+      next("/login");
+      return;
+    }
+    next();
+  }
+
+  if (to.matched.some((record) => record.meta.onlyAdmin)) {
     if (is_logged && role == "admin") {
       next();
       return;

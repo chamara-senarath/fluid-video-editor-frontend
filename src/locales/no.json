@@ -118,5 +118,15 @@
   "Group": "Gruppe",
   "Uploading your files": "Laste opp filene dine",
   "User Management": "User Management",
-  "Profile": "Profile"
+  "Profile": "Profile",
+  "Delete User": "Delete User",
+  "Do you really want to delete this user?": "Do you really want to delete this user?",
+  "Do you really want to delete this user?": "Do you really want to delete this user?",
+  "Yes, Delete this": "Yes, Delete this",
+  "No, Do not delete this": "No, Do not delete this",
+  "If you delete a user, all the records of the user is deleted. Do you really want to delete this user?": "If you delete a user, all the records of the user is deleted. Do you really want to delete this user?",
+  "Reset Password": "Reset Password",
+  "Do you really need to reset your password?": "Do you really need to reset your password?",
+  "No, Do not reset": "No, Do not reset",
+  "Yes, Reset my password": "Yes, Reset my password"
 }
