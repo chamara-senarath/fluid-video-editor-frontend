@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Upload from "../views/Upload.vue";
 import Search from "../views/Search.vue";
+import Profile from "../views/Profile.vue";
 import Embed from "../views/Embed.vue";
 import Test from "../views/Test.vue";
 import Insight from "../views/Insight.vue";
@@ -55,7 +56,7 @@ const routes = [
     name: "Insight",
     component: Insight,
     meta: {
-      onlyAdmin: true
+      onlyAdmin: false
     }
   },
   {
@@ -71,7 +72,15 @@ const routes = [
     name: "Report",
     component: Report,
     meta: {
-      onlyAdmin: true
+      onlyAdmin: false
+    }
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
+    meta: {
+      onlyAdmin: false
     }
   },
   {

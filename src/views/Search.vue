@@ -48,7 +48,7 @@
                   >
                     <v-container>
                       <v-layout row justify-space-between px-2>
-                        <v-flex px-1 xs4>
+                        <v-flex px-1>
                           <v-btn
                             x-small
                             block
@@ -60,13 +60,13 @@
                             >{{ $t("Insights") }}</v-btn
                           >
                         </v-flex>
-                        <v-flex px-1 xs4>
+                        <v-flex px-1 v-if="getUser().role === 'admin'">
                           <v-btn x-small @click="edit(thumbnail.id)" block
                             ><v-icon small left>fa fa-edit</v-icon
                             >{{ $t("Edit") }}</v-btn
                           >
                         </v-flex>
-                        <v-flex px-1 xs4>
+                        <v-flex px-1 v-if="getUser().role === 'admin'">
                           <v-btn
                             block
                             x-small
@@ -177,7 +177,7 @@ export default {
       "setQuestionMarks",
       "setWatermark"
     ]),
-    ...mapGetters(["getProfile"]),
+    ...mapGetters(["getProfile", "getUser"]),
     gotoVideo(thumbnail) {
       let id = thumbnail.id;
       this.videoTitle = thumbnail.title;
@@ -283,13 +283,11 @@ export default {
   async mounted() {
     this.uid = this.getProfile().id;
     try {
-      console.log(this.API_URL);
       let videos = await axios.get(
         this.API_URL + "/api/videos?group=" + this.getProfile().group
       );
 
       if (videos.data) {
-        console.log(videos.data);
         this.pushData(videos.data);
       }
     } catch (error) {

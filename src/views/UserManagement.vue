@@ -73,7 +73,7 @@ export default {
   },
   data() {
     return {
-      tab: null,
+      tab: "tab-1",
       dialog: false,
       is_updated: false,
       rules: {

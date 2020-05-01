@@ -1,10 +1,7 @@
 <template>
   <nav v-if="$route.name != 'Embed'">
     <v-app-bar app elevation="0">
-      <v-app-bar-nav-icon
-        v-if="profile.role == 'Administrator'"
-        @click.stop="drawer = !drawer"
-      ></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>
         <img src="../../public/logo.png" width="120vw" />
       </v-toolbar-title>
@@ -127,6 +124,7 @@
           link
           router
           :to="item.path"
+          v-show="item.access === 'both' || item.access === getUser().role"
         >
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
@@ -180,17 +178,30 @@ export default {
       submitLoading: false,
       drawer: false,
       items: [
-        { title: "Search", icon: "fa fa-search", path: "/" },
+        { title: "Search", icon: "fa fa-search", path: "/", access: "both" },
         {
           title: "Upload",
           icon: "fa fa-upload",
-          path: { name: "upload", params: { is_edit: false } }
+          path: { name: "upload", params: { is_edit: false } },
+          access: "admin"
         },
-        { title: "Insight", icon: "fa fa-chart-line", path: "/report" },
+        {
+          title: "Insight",
+          icon: "fa fa-chart-line",
+          path: "/report",
+          access: "both"
+        },
         {
           title: "User Management",
           icon: "fa fa-users-cog",
-          path: "/userManagement"
+          path: "/userManagement",
+          access: "admin"
+        },
+        {
+          title: "Profile",
+          icon: "fa fa-user-edit",
+          path: "/profile",
+          access: "user"
         }
       ],
       searchOptions: [
