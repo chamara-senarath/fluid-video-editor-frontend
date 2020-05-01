@@ -54,7 +54,7 @@
                             block
                             :to="{
                               name: 'Insight',
-                              params: { vid: thumbnail.id }
+                              params: { vid: thumbnail.id },
                             }"
                             ><v-icon small left>fa fa-chart-line</v-icon
                             >{{ $t("Insights") }}</v-btn
@@ -104,7 +104,7 @@
                         <router-link
                           :to="{
                             name: 'Comments',
-                            params: { vid: thumbnail.id }
+                            params: { vid: thumbnail.id },
                           }"
                         >
                           <span class="grey--text ml-4 caption">
@@ -148,7 +148,7 @@ export default {
   components: {
     AreYouSure,
     Navbar,
-    MiniPlayer
+    MiniPlayer,
   },
   data() {
     return {
@@ -164,9 +164,9 @@ export default {
         content:
           "If you delete the video, this video will be deleted from your uploaded video list. Are you sure?",
         yes: "Yes, I am sure",
-        no: "No, Do not delete"
+        no: "No, Do not delete",
       },
-      uid: null
+      uid: null,
     };
   },
   methods: {
@@ -175,7 +175,7 @@ export default {
       "setSplashScreenObject",
       "setChapterMarks",
       "setQuestionMarks",
-      "setWatermark"
+      "setWatermark",
     ]),
     ...mapGetters(["getProfile", "getUser"]),
     gotoVideo(thumbnail) {
@@ -187,23 +187,23 @@ export default {
     edit(id) {
       let videoURL = this.API_URL + "/api/video/file?id=" + id;
       let watermarkURL = this.API_URL + "/api/video/watermark?id=" + id;
-      axios.get(this.API_URL + "/api/video?id=" + id).then(video => {
+      axios.get(this.API_URL + "/api/video?id=" + id).then((video) => {
         this.setVideoObject({
           id: video.data._id,
           title: video.data.title,
           file: videoURL,
           authors: video.data.authors,
-          tags: video.data.tags
+          tags: video.data.tags,
         });
         this.setSplashScreenObject({
           data: "edit",
-          duration: video.data.splashDuration
+          duration: video.data.splashDuration,
         });
         this.setChapterMarks(video.data.chapterMarks);
         this.setQuestionMarks(video.data.questions);
         this.setWatermark({
           ...video.data.watermark,
-          file: watermarkURL
+          file: watermarkURL,
         });
         this.$router.push({ name: "upload", params: { is_edit: true } });
       });
@@ -215,7 +215,7 @@ export default {
             this.API_URL + "/api/video/file?id=" + this.selectedID
           );
           this.thumbnailList = this.thumbnailList.filter(
-            item => item.id != this.selectedID
+            (item) => item.id != this.selectedID
           );
           this.error = false;
           if (this.thumbnailList.length == 0) {
@@ -228,7 +228,7 @@ export default {
       this.showConfirmation = false;
     },
     pushData(videos) {
-      const modifiedVideos = videos.map(video => {
+      const modifiedVideos = videos.map((video) => {
         if (!video.rating) {
           video.rtn = 0;
           video.rts = 0;
@@ -241,13 +241,13 @@ export default {
         }
         return video;
       });
-      modifiedVideos.forEach(video => {
+      modifiedVideos.forEach((video) => {
         let obj = {
           id: video._id,
           title: video.title,
           img: this.API_URL + "/api/video/splash?id=" + video._id,
           rating: video.rtn,
-          rates: video.rts
+          rates: video.rts,
         };
         this.thumbnailList.push(obj);
       });
@@ -278,7 +278,7 @@ export default {
       } catch (error) {
         this.error = error;
       }
-    }
+    },
   },
   async mounted() {
     this.uid = this.getProfile().id;
@@ -293,7 +293,7 @@ export default {
     } catch (error) {
       this.error = error;
     }
-  }
+  },
 };
 </script>
 

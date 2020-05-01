@@ -4,7 +4,7 @@
       <v-app-bar dark dense>
         <v-layout row px-2>
           <v-flex xs10>
-            <span class=" title">{{ title }}</span>
+            <span class="caption">{{ title }}</span>
           </v-flex>
           <v-flex>
             <v-layout column align-end>
@@ -36,12 +36,12 @@ export default {
   methods: {
     close() {
       this.$emit("closePlayer", true);
-    }
+    },
   },
   computed: {
     playerHeight() {
       return this.$refs.frame.getBoundingClientRect().height;
-    }
-  }
+    },
+  },
 };
 </script>
