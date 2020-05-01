@@ -20,29 +20,29 @@ const routes = [
     name: "Search",
     component: Search,
     meta: {
-      requiresAuth: true
-    }
+      onlyAdmin: false,
+    },
   },
   {
     path: "/upload",
     name: "upload",
     component: Upload,
     meta: {
-      requiresAuth: true
-    }
+      onlyAdmin: true,
+    },
   },
   {
     path: "/comments/:vid",
     name: "Comments",
     component: Comments,
     meta: {
-      requiresAuth: true
-    }
+      onlyAdmin: false,
+    },
   },
   {
     path: "/embed/:vid/:uid",
     name: "Embed",
-    component: Embed
+    component: Embed,
   },
   // {
   //   path: "/embed",
@@ -55,73 +55,65 @@ const routes = [
     name: "Insight",
     component: Insight,
     meta: {
-      requiresAuth: true
-    }
+      onlyAdmin: true,
+    },
   },
   {
     path: "/userManagement",
     name: "UserManagement",
     component: UserManagement,
     meta: {
-      requiresAuth: true
-    }
+      onlyAdmin: true,
+    },
   },
   {
     path: "/report",
     name: "Report",
     component: Report,
     meta: {
-      requiresAuth: true
-    }
+      onlyAdmin: true,
+    },
   },
   {
     path: "/login",
     name: "Login",
     component: Login,
     meta: {
-      hasAuth: true
-    }
+      hasAuth: true,
+    },
   },
   {
     path: "/test",
     name: "Test",
-    component: Test
+    component: Test,
   },
   { path: "/404", component: NotFound },
-  { path: "*", redirect: "/404" }
+  { path: "*", redirect: "/404" },
 ];
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  routes
+  routes,
 });
 
 router.beforeEach((to, from, next) => {
   let { is_logged, role } = store.getters.getUser;
 
-  // if (to.matched.some((record) => record.meta.hasAuth)) {
-  //   if (is_logged) {
-  //     next();
-  //     return;
-  //   }
-  //   next();
-  // }
-
-  if (to.matched.some(record => record.meta.requiresUserAuth)) {
-    if (is_logged && role == "user") {
-      next();
+  if (to.matched.some((record) => record.meta.hasAuth)) {
+    if (is_logged) {
+      next("/");
       return;
     }
-    next("/login");
+    next();
   }
 
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (is_logged) {
+  if (to.matched.some((record) => record.meta.onlyAdmin)) {
+    if (is_logged && role == "admin") {
       next();
       return;
     }
-    next("/login");
+    next("/");
   } else {
     next();
   }
