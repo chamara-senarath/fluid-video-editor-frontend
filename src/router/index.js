@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Upload from "../views/Upload.vue";
 import Search from "../views/Search.vue";
+import TOC from "../views/TOC.vue";
 import Profile from "../views/Profile.vue";
 import Embed from "../views/Embed.vue";
 import Test from "../views/Test.vue";
@@ -20,6 +21,14 @@ const routes = [
     path: "/",
     name: "Search",
     component: Search,
+    meta: {
+      hasAuth: true,
+    },
+  },
+  {
+    path: "/toc",
+    name: "TOC",
+    component: TOC,
     meta: {
       hasAuth: true,
     },
