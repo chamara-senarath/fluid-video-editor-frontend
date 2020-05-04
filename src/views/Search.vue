@@ -125,6 +125,11 @@
                           >
                         </v-layout>
                       </v-row>
+                      <div class="mt-4"></div>
+                      <v-progress-linear
+                        :value="thumbnail.completed"
+                        color="red"
+                      ></v-progress-linear>
                     </v-layout>
                   </v-flex>
                 </v-layout>
@@ -158,6 +163,7 @@ export default {
       videoTitle: null,
       selectedID: null,
       thumbnailList: [],
+      percentagesList: [],
       showConfirmation: false,
       confirmationMessage: {
         title: "Are you sure you want to Delete this video",
@@ -248,6 +254,7 @@ export default {
           img: this.API_URL + "/api/video/splash?id=" + video._id,
           rating: video.rtn,
           rates: video.rts,
+          completed: this.findPercentage(video._id),
         };
         this.thumbnailList.push(obj);
       });
@@ -279,6 +286,14 @@ export default {
         this.error = error;
       }
     },
+    findPercentage(id) {
+      let item = this.percentagesList.find((ele) => ele.video == id);
+      if (item) {
+        return item.percentage;
+      } else {
+        return 0;
+      }
+    },
   },
   async mounted() {
     this.uid = this.getProfile().id;
@@ -288,6 +303,12 @@ export default {
       );
 
       if (videos.data) {
+        let percentageListResult = await axios.get(
+          this.API_URL + "/api/insight/user/all?uid=" + this.uid
+        );
+        if (percentageListResult.data) {
+          this.percentagesList = percentageListResult.data;
+        }
         this.pushData(videos.data);
       }
     } catch (error) {
