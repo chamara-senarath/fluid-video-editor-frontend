@@ -71,7 +71,6 @@
         prepend-icon="fa fa-tag"
         :hide-selected="true"
         v-model="tags"
-        :items="tagList"
         :label="$t('Tag')"
         multiple
         chips
@@ -121,29 +120,28 @@ export default {
       autoUpdate: true,
       authors: [],
       tags: [],
-      tagList: ["C#", "Java", "Python"],
       snackbarMessage: null,
       snackbar: false,
       feedback: null,
       overlay: false,
       video: {
         title: null,
-        file: null
+        file: null,
       },
       uploaded: false,
       rules: {
         videoTitle: [
-          value =>
+          (value) =>
             (value && value.length > 0) ||
-            this.$t("Video Title can not be empty")
+            this.$t("Video Title can not be empty"),
         ],
         author: [
           () =>
-            this.authors.length > 0 || this.$t("Author Name can not be empty")
+            this.authors.length > 0 || this.$t("Author Name can not be empty"),
         ],
         tags: [() => this.tags.length > 0 || this.$t("Tags can not be empty")],
         videoData: [
-          value => {
+          (value) => {
             if (value && value.name) {
               return (
                 ["mp4", "webm"].includes(value.name.split(".").reverse()[0]) ||
@@ -152,19 +150,19 @@ export default {
             }
             return false;
           },
-          value =>
+          (value) =>
             !value ||
             value.size < 2000000 * 512 || //2MB * 512
-            this.$t("Video size should be less than 1 GB!")
-        ]
-      }
+            this.$t("Video size should be less than 1 GB!"),
+        ],
+      },
     };
   },
   methods: {
     ...mapMutations([
       "setVideoObject",
       "setSplashScreenObject",
-      "setVideoDefault"
+      "setVideoDefault",
     ]),
     ...mapGetters(["getVideoObject", "getChapterMarks", "getProfile"]),
     uploadVideo(file) {
@@ -188,7 +186,7 @@ export default {
           ...this.getVideoObject(),
           title: this.video.title,
           authors: this.authors,
-          tags: this.tags
+          tags: this.tags,
         };
         this.setVideoObject(video);
         this.$emit("uploaded", true);
@@ -202,15 +200,15 @@ export default {
           title: this.video.title,
           authors: this.authors,
           tags: this.tags,
-          group: this.getProfile().group
+          group: this.getProfile().group,
         });
 
         const formData = new FormData();
         formData.append("videoFile", this.video.file);
         await axios.post(this.API_URL + "/api/video/file", formData, {
           params: {
-            id: res.data.id
-          }
+            id: res.data.id,
+          },
         });
 
         let videoURL = this.API_URL + "/api/video/file?id=" + res.data.id;
@@ -220,7 +218,7 @@ export default {
           title: res.data.title,
           file: videoURL,
           authors: res.data.authors,
-          tags: res.data.tags
+          tags: res.data.tags,
         };
         this.setVideoObject(video);
         this.overlay = false;
@@ -245,7 +243,7 @@ export default {
     remove(arr, item) {
       const index = arr.indexOf(item.name);
       if (index >= 0) arr.splice(index, 1);
-    }
+    },
   },
   mounted() {
     if (!this.$route.params.is_edit) {
@@ -262,6 +260,6 @@ export default {
         this.tags = this.getVideoObject().tags;
       }
     }
-  }
+  },
 };
 </script>
