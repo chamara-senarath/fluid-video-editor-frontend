@@ -172,7 +172,10 @@
         >
           <v-icon left dark color="white">fa fa-list-ul</v-icon>
           <span v-if="this.chapterList.length != 0" color="primary" dark>
-            {{ title }} <strong class="blue--text">|</strong>
+            {{ title }}
+            <strong class="blue--text"
+              ><v-icon>fa fa-angle-double-right</v-icon></strong
+            >
             {{ chapterList[playingChapter].text }}
           </span>
         </v-btn>
@@ -256,7 +259,7 @@ export default {
     AnswerOverlay,
     QuestionGroup,
     CommentSection,
-    Rating
+    Rating,
   },
   props: [
     "title",
@@ -269,7 +272,7 @@ export default {
     "commentList",
     "rating",
     "seek",
-    "user"
+    "user",
   ],
   data: () => ({
     controlVisibility: true,
@@ -289,7 +292,7 @@ export default {
     is_set_duration: false,
     showLayers: true,
     showComments: false,
-    expandRightPanel: false
+    expandRightPanel: false,
   }),
   methods: {
     genarateWatermarkStyle({ leftRatio, topRatio }, widthRatio) {
@@ -301,7 +304,7 @@ export default {
       return {
         left: left,
         top: top,
-        width: width
+        width: width,
       };
     },
     playChapter(index) {
@@ -432,7 +435,7 @@ export default {
     sendComment(userComment) {
       let comment = {
         comment: userComment,
-        time: this.duration
+        time: this.duration,
       };
       this.$emit("sendComment", comment);
     },
@@ -456,7 +459,7 @@ export default {
         type: "dataURL",
         allowTaint: true,
         useCORS: true,
-        foreignObjectRendering: true
+        foreignObjectRendering: true,
       };
       let canvasData = await this.$html2canvas(canvas, options);
       var byteString = atob(canvasData.split(",")[1]);
@@ -516,7 +519,7 @@ export default {
       if (e.key.toLowerCase() == "p") {
         this.expandRightPanel = !this.expandRightPanel;
       }
-    }
+    },
   },
   watch: {
     duration(value) {
@@ -538,7 +541,7 @@ export default {
           this.displayQuestion(i);
         }
       }
-    }
+    },
   },
   created() {
     window.addEventListener("resize", this.handleResize);
@@ -553,14 +556,14 @@ export default {
     this.$refs.player.player.config.fullscreen = {
       enabled: false,
       fallback: false,
-      iosNative: false
+      iosNative: false,
     };
     this.player = this.$refs.player.player;
     this.onPlayVideo();
   },
   destroyed() {
     window.removeEventListener("resize", this.handleResize);
-  }
+  },
 };
 </script>
 
