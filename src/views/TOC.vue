@@ -198,16 +198,8 @@ export default {
       try {
         let result = await Axios.get(this.API_URL + "/api/toc");
         let newNodes = cj.parse(result.data.toc.nodes);
-        let modifiedNodeList = newNodes.map((node) => {
-          node.remove = this.is_admin ? node.remove : this.noAccess;
-          node.changeName = this.is_admin ? node.changeName : this.noAccess;
-          node.addChildren = this.is_admin ? node.addChildren : this.noAccess;
-          node.moveInto = this.is_admin ? node.moveInto : this.noAccess;
-          node.insertBefore = this.is_admin ? node.insertBefore : this.noAccess;
-          node.insertAfter = this.is_admin ? node.insertAfter : this.noAccess;
-          return node;
-        });
-        this.nodeList = [...modifiedNodeList];
+
+        this.nodeList = [...newNodes];
         this.data = new Tree([...newNodes]);
       } catch (error) {
         console.log(error);
