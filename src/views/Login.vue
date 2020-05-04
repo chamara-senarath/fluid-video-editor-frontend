@@ -60,7 +60,7 @@ export default {
 
       group: "DIPS",
       error: null,
-      groups: ["DIPS", "LayUp"]
+      groups: ["DIPS", "LayUp"],
     };
   },
   methods: {
@@ -81,7 +81,7 @@ export default {
       try {
         let result = await axios.post(this.API_URL + "/api/user/login", {
           username,
-          password
+          password,
         });
 
         let token = result.data.token;
@@ -91,14 +91,13 @@ export default {
           id: user_id,
           name: result.data.name,
           avatar: null,
-          group: result.data.group
+          group: result.data.group,
         };
-        console.log(profileObj);
         this.setToken(token);
 
         this.setUser({
           is_logged: true,
-          role: result.data.role == "admin" ? "admin" : "user"
+          role: result.data.role == "admin" ? "admin" : "user",
         });
 
         if (this.group.toLowerCase() === profileObj.group.toLowerCase()) {
@@ -114,8 +113,8 @@ export default {
           this.error = error;
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
