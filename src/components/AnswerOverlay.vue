@@ -10,19 +10,19 @@
             <v-flex
               pa-2
               xs6
-              v-for="(option, index) in question.options"
+              v-for="option in question.options"
               :key="option.id"
             >
               <v-responsive>
                 <v-card
-                  :color="colors[index]"
+                  color="blue-grey blue-grey darken-2"
                   min-height="30"
                   @click="selectedOption = option.text"
                 >
                   <v-card-title>
                     <v-layout column align-end>
                       <v-icon
-                        color="black"
+                        color="green"
                         small
                         v-if="selectedOption == option.text"
                         >fa fa-bullseye</v-icon
@@ -72,19 +72,9 @@ export default {
   props: ["overlay", "question"],
   data() {
     return {
-      colors: [
-        "pink lighten-1",
-        "purple lighten-1",
-        "red lighten-1",
-        "blue lighten-1",
-        "indigo lighten-1",
-        "deep-purple lighten-1",
-        "teal lighten-1",
-        "cyan lighten-1"
-      ],
       selectedOption: null,
       timerValue: null,
-      interval: null
+      interval: null,
     };
   },
   methods: {
@@ -112,7 +102,7 @@ export default {
       this.interval = setInterval(() => {
         this.timerValue += 100 / (duration * 10);
       }, 100);
-    }
+    },
   },
   watch: {
     timerValue(val) {
@@ -133,10 +123,10 @@ export default {
         this.timerValue = 0;
         this.timer();
       }
-    }
+    },
   },
   mounted() {
     this.timer();
-  }
+  },
 };
 </script>
