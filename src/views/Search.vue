@@ -266,6 +266,7 @@ export default {
     closePlayer() {
       this.videoSource = null;
       this.showPlayer = false;
+      this.thumbnailList = [];
       this.fetchData();
     },
     async loadData({ key, option }) {
@@ -294,26 +295,29 @@ export default {
         return 0;
       }
     },
+    async fetchData() {
+      try {
+        let videos = await axios.get(
+          this.API_URL + "/api/videos?group=" + this.getProfile().group
+        );
+
+        if (videos.data) {
+          let percentageListResult = await axios.get(
+            this.API_URL + "/api/insight/user/all?uid=" + this.uid
+          );
+          if (percentageListResult.data) {
+            this.percentagesList = percentageListResult.data;
+          }
+          this.pushData(videos.data);
+        }
+      } catch (error) {
+        this.error = error;
+      }
+    },
   },
   async mounted() {
     this.uid = this.getProfile().id;
-    try {
-      let videos = await axios.get(
-        this.API_URL + "/api/videos?group=" + this.getProfile().group
-      );
-
-      if (videos.data) {
-        let percentageListResult = await axios.get(
-          this.API_URL + "/api/insight/user/all?uid=" + this.uid
-        );
-        if (percentageListResult.data) {
-          this.percentagesList = percentageListResult.data;
-        }
-        this.pushData(videos.data);
-      }
-    } catch (error) {
-      this.error = error;
-    }
+    this.fetchData();
   },
 };
 </script>
