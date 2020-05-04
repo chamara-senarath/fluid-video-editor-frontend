@@ -65,7 +65,10 @@
           label="Password"
           v-model="defaultPassword"
           :readonly="protectPassword"
-        />
+          :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="show1 ? 'text' : 'password'"
+          @click:append="show1 = !show1"
+        ></v-text-field>
 
         <v-combobox
           :rules="rules.team"
@@ -123,7 +126,7 @@ import { positionList, teamList } from "../lib/dataList";
 export default {
   props: ["rules", "submitUser"],
   components: {
-    AreYouSure
+    AreYouSure,
   },
   data() {
     return {
@@ -133,7 +136,7 @@ export default {
         content:
           "If you delete a user, all the records of the user is deleted. Do you really want to delete this user?",
         yes: "Yes, Delete this",
-        no: "No, Do not delete this"
+        no: "No, Do not delete this",
       },
       username: null,
       displayName: null,
@@ -151,7 +154,8 @@ export default {
       users: [],
       usersObj: [],
       protectPassword: true,
-      is_same_user: false
+      is_same_user: false,
+      show1: false,
     };
   },
   watch: {
@@ -161,7 +165,7 @@ export default {
       if (val == null) {
         return;
       }
-      let user = this.usersObj.find(user => user.username === val);
+      let user = this.usersObj.find((user) => user.username === val);
       if (user._id === this.getProfile().id) {
         this.is_same_user = true;
       }
@@ -172,7 +176,7 @@ export default {
       this.position = user.position;
       this.gender = user.gender;
       this.is_admin = user.role === "admin" ? true : false;
-    }
+    },
   },
   methods: {
     ...mapGetters(["getProfile"]),
@@ -186,7 +190,7 @@ export default {
           this.$refs.form_update,
           "delete",
           {
-            username: this.username
+            username: this.username,
           },
           this.fetchUsers
         );
@@ -212,7 +216,7 @@ export default {
           team: this.team,
           position: this.position,
           gender: this.gender,
-          role: this.is_admin ? "admin" : "user"
+          role: this.is_admin ? "admin" : "user",
         },
         this.fetchUsers
       );
@@ -221,16 +225,16 @@ export default {
       try {
         let result = await axios.get(this.API_URL + "/api/user/search");
         this.usersObj = result.data;
-        this.users = result.data.map(user => {
+        this.users = result.data.map((user) => {
           return { id: user._id, name: user.name, username: user.username };
         });
       } catch (error) {
         console.log(error);
       }
-    }
+    },
   },
   mounted() {
     this.fetchUsers();
-  }
+  },
 };
 </script>

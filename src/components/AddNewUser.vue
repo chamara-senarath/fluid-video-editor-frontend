@@ -11,11 +11,16 @@
         label="Display Name"
         v-model="displayName"
       />
+
       <v-text-field
         :rules="rules.defaultPassword"
         label="Default Password"
         v-model="defaultPassword"
-      />
+        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+        :type="show1 ? 'text' : 'password'"
+        name="input-10-1"
+        @click:append="show1 = !show1"
+      ></v-text-field>
       <v-combobox
         :rules="rules.team"
         v-model="team"
@@ -64,7 +69,8 @@ export default {
       genderList: ["Male", "Female"],
       positionList: positionList,
       teamList: teamList,
-      is_admin: false
+      is_admin: false,
+      show1: false,
     };
   },
   methods: {
@@ -79,11 +85,11 @@ export default {
           team: this.team,
           position: this.position,
           gender: this.gender,
-          role: this.is_admin ? "admin" : "user"
+          role: this.is_admin ? "admin" : "user",
         },
         null
       );
-    }
-  }
+    },
+  },
 };
 </script>

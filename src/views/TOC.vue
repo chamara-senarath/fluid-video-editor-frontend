@@ -104,22 +104,6 @@ export default {
 
   methods: {
     ...mapGetters(["getUser", "getProfile"]),
-    simpleStringify(object) {
-      var simpleObject = {};
-      for (var prop in object) {
-        if (!object.hasOwnProperty(prop)) {
-          continue;
-        }
-        if (typeof object[prop] == "object") {
-          continue;
-        }
-        if (typeof object[prop] == "function") {
-          continue;
-        }
-        simpleObject[prop] = object[prop];
-      }
-      return JSON.stringify(simpleObject); // returns cleaned up JSON
-    },
     closePlayer() {
       this.videoSource = null;
       this.showPlayer = false;
@@ -164,26 +148,20 @@ export default {
       this.node = new TreeNode({
         name: "new chapter",
         isLeaf: false,
-        editNodeDisabled: !this.is_admin,
-        delNodeDisabled: !this.is_admin,
-        addTreeNodeDisabled: !this.is_admin,
-        addLeafNodeDisabled: !this.is_admin,
-        dragDisabled: !this.is_admin,
       });
-      if (!this.data.children) this.data.children = [];
-      this.data.addChildren(this.node);
+      if (!this.data.children) {
+        this.data.children = [];
+      }
       this.nodeList.push(this.node);
+      this.data.addChildren(this.node);
     },
-    noAccess() {
-      console.log("you have no access");
-    },
+
     async saveTOC() {
       this.is_saving = true;
       var nodes = [];
       if (this.nodeList.length != 0) {
         nodes = cj.stringify(this.nodeList);
       }
-
       try {
         await Axios.post(this.API_URL + "/api/toc/new", {
           nodes,
@@ -198,9 +176,8 @@ export default {
       try {
         let result = await Axios.get(this.API_URL + "/api/toc");
         let newNodes = cj.parse(result.data.toc.nodes);
-
-        this.nodeList = [...newNodes];
-        this.data = new Tree([...newNodes]);
+        this.nodeList = newNodes;
+        this.data = new Tree(newNodes);
       } catch (error) {
         console.log(error);
       }
