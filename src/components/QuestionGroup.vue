@@ -5,6 +5,7 @@
     </v-layout>
     <v-layout row>
       <v-chip
+        dark
         v-for="(question, index) in questions"
         :key="index"
         class="ma-2"
@@ -17,7 +18,10 @@
       >
         Q{{ index + 1 }}
         <v-avatar right v-if="question.is_correct">
-          <v-icon>mdi-checkbox-marked-circle</v-icon>
+          <v-icon color="green lighten-1">fa fa-check</v-icon>
+        </v-avatar>
+        <v-avatar right v-if="question.is_answered && !question.is_correct">
+          <v-icon color="red lighten-1">fa fa-times</v-icon>
         </v-avatar>
       </v-chip>
     </v-layout>
@@ -26,6 +30,6 @@
 
 <script>
 export default {
-  props: ["questions", "opacity"]
+  props: ["questions", "opacity"],
 };
 </script>
