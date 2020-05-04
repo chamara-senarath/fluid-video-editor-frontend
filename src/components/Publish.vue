@@ -73,6 +73,20 @@
               <v-icon right>fa fa-download</v-icon></v-btn
             >
           </v-layout>
+          <v-layout mt-2>
+            <v-btn
+              block
+              dark
+              color="yellow darken-3"
+              @click="
+                () => {
+                  this.$router.go('/upload');
+                }
+              "
+              >{{ $t("Upload New Video") }}
+              <v-icon right>fa fa-upload</v-icon></v-btn
+            >
+          </v-layout>
         </v-layout>
       </v-flex>
     </v-layout>
@@ -99,7 +113,7 @@ export default {
       watermark: null,
       chapterList: [],
       questionList: [],
-      is_published: true
+      is_published: true,
     };
   },
   methods: {
@@ -109,7 +123,7 @@ export default {
       "getVideoObject",
       "getQuestionMarks",
       "getWatermark",
-      "getProfile"
+      "getProfile",
     ]),
     downloadEmbedCode() {
       this.showCopied = false;
@@ -176,7 +190,7 @@ export default {
       } catch (err) {
         console.error("Failed to copy: ", err);
       }
-    }
+    },
   },
 
   async mounted() {
@@ -198,16 +212,16 @@ export default {
       tags: this.tags,
       rating: {
         rating: 0,
-        users: 0
+        users: 0,
       },
       splashDuration: this.getSplashScreenObject().duration,
       watermark: {
         opacity: this.watermark.opacity,
         widthRatio: this.watermark.widthRatio,
-        position: this.watermark.position
+        position: this.watermark.position,
       },
       chapterMarks: this.chapterList,
-      questions: this.questionList
+      questions: this.questionList,
     };
 
     this.is_published = true;
@@ -223,13 +237,13 @@ export default {
       formDataSplash.append("splash", thumbnailBlob);
       await axios.post(this.API_URL + "/api/video/splash", formDataSplash, {
         params: {
-          id: id
-        }
+          id: id,
+        },
       });
 
       //post watermark
       if (this.watermark != null) {
-        var watermarkBlob = await fetch(this.watermark.file).then(r =>
+        var watermarkBlob = await fetch(this.watermark.file).then((r) =>
           r.blob()
         );
         const formDataWatermark = new FormData();
@@ -239,14 +253,14 @@ export default {
           formDataWatermark,
           {
             params: {
-              id: id
-            }
+              id: id,
+            },
           }
         );
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  },
 };
 </script>
