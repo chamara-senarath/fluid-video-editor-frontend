@@ -1,4 +1,4 @@
-**Installation Guide - Training Catalog | Video Editor**
+**Installation Guide - Creative Training Catalog**
 
 **Download Source Codes**
 	
