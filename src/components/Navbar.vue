@@ -164,110 +164,116 @@
 </template>
 
 <script>
-import axios from "axios";
-import { mapMutations, mapGetters } from "vuex";
-export default {
-  data() {
-    return {
-      isLogged: true,
-      profile: {
-        role: null,
-        avatar: null,
-        name: null,
-      },
-      submitLoading: false,
-      drawer: false,
-      items: [
-        { title: "Search", icon: "fa fa-search", path: "/", access: "both" },
-        {
-          title: "TOC",
-          icon: "fa fa-clipboard-list",
-          path: "/toc",
-          access: "both",
+  import axios from "axios";
+  import { mapMutations, mapGetters } from "vuex";
+  export default {
+    data() {
+      return {
+        isLogged: true,
+        profile: {
+          role: null,
+          avatar: null,
+          name: null,
         },
-        {
-          title: "Upload",
-          icon: "fa fa-upload",
-          path: { name: "upload", params: { is_edit: false } },
-          access: "admin",
-        },
-        {
-          title: "Insight",
-          icon: "fa fa-chart-line",
-          path: "/report",
-          access: "both",
-        },
-        {
-          title: "User Management",
-          icon: "fa fa-users-cog",
-          path: "/userManagement",
-          access: "admin",
-        },
-        {
-          title: "Profile",
-          icon: "fa fa-user-edit",
-          path: "/profile",
-          access: "user",
-        },
-      ],
-      searchOptions: [
-        { text: "All", color: "light-green" },
-        { text: "Title", color: "light-blue" },
-        { text: "Author", color: "lime" },
-        { text: "Tag", color: "cyan" },
-      ],
-      searchOption: "All",
-      searchKey: "",
-      languages: [
-        { country: "us", language: "en" },
-        { country: "no", language: "no" },
-      ],
-    };
-  },
-  methods: {
-    ...mapMutations(["removeToken", "setLanguage"]),
-    ...mapGetters(["getToken", "getUser", "getProfile"]),
-    async logout() {
-      await axios.post(
-        this.API_URL + "/api/user/logout",
-        {},
-        {
-          headers: { "x-auth": this.getToken() },
-        }
-      );
+        submitLoading: false,
+        drawer: false,
+        items: [
+          { title: "Search", icon: "fa fa-search", path: "/", access: "both" },
+          {
+            title: "TOC",
+            icon: "fa fa-clipboard-list",
+            path: "/toc",
+            access: "both",
+          },
+          {
+            title: "Upload",
+            icon: "fa fa-upload",
+            path: { name: "upload", params: { is_edit: false } },
+            access: "admin",
+          },
+          {
+            title: "Insight",
+            icon: "fa fa-chart-line",
+            path: "/report",
+            access: "both",
+          },
+          {
+            title: "User Management",
+            icon: "fa fa-cog",
+            path: "/userManagement",
+            access: "admin",
+          },
+          {
+            title: "Profile",
+            icon: "fa fa-user-edit",
+            path: "/profile",
+            access: "user",
+          },
+        ],
+        searchOptions: [
+          { text: "All", color: "light-green" },
+          { text: "Title", color: "light-blue" },
+          { text: "Author", color: "lime" },
+          { text: "Tag", color: "cyan" },
+        ],
+        searchOption: "All",
+        searchKey: "",
+        languages: [
+          { country: "us", language: "en" },
+          { country: "no", language: "no" },
+        ],
+      };
+    },
+    methods: {
+      ...mapMutations(["removeToken", "setLanguage"]),
+      ...mapGetters(["getToken", "getUser", "getProfile"]),
+      async logout() {
+        await axios.post(
+          this.API_URL + "/api/user/logout",
+          {},
+          {
+            headers: { "x-auth": this.getToken() },
+          }
+        );
 
-      this.removeToken();
-      this.isLogged = false;
-      this.$router.push("/login");
+        this.removeToken();
+        this.isLogged = false;
+        this.$router.push("/login");
+      },
+      search(e) {
+        this.searchKey = e.target.value;
+        this.$emit("search", {
+          key: this.searchKey,
+          option: this.searchOption,
+        });
+      },
+      searchBy(text) {
+        this.searchOption = text;
+        this.$emit("search", {
+          key: this.searchKey,
+          option: this.searchOption,
+        });
+      },
+      changeLanguage(item) {
+        this.setLanguage(item.language);
+        this.$i18n.locale = item.language;
+      },
     },
-    search(e) {
-      this.searchKey = e.target.value;
-      this.$emit("search", { key: this.searchKey, option: this.searchOption });
+    computed: {
+      countryFlag() {
+        let item = this.languages.filter(
+          (item) => item.language == this.$i18n.locale
+        );
+        return item[0].country;
+      },
     },
-    searchBy(text) {
-      this.searchOption = text;
-      this.$emit("search", { key: this.searchKey, option: this.searchOption });
+    mounted() {
+      let profileObject = {
+        name: this.getProfile().name,
+        avatar: this.getProfile().avatar,
+        role: this.getUser().role == "admin" ? "Administrator" : "User",
+      };
+      this.profile = profileObject;
     },
-    changeLanguage(item) {
-      this.setLanguage(item.language);
-      this.$i18n.locale = item.language;
-    },
-  },
-  computed: {
-    countryFlag() {
-      let item = this.languages.filter(
-        (item) => item.language == this.$i18n.locale
-      );
-      return item[0].country;
-    },
-  },
-  mounted() {
-    let profileObject = {
-      name: this.getProfile().name,
-      avatar: this.getProfile().avatar,
-      role: this.getUser().role == "admin" ? "Administrator" : "User",
-    };
-    this.profile = profileObject;
-  },
-};
+  };
 </script>

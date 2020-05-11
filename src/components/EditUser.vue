@@ -119,122 +119,123 @@
 </template>
 
 <script>
-import AreYouSure from "../components/AreYouSure";
-import { mapGetters } from "vuex";
-import axios from "axios";
-import { positionList, teamList } from "../lib/dataList";
-export default {
-  props: ["rules", "submitUser"],
-  components: {
-    AreYouSure,
-  },
-  data() {
-    return {
-      showConfirmation: false,
-      deleteOptions: {
-        title: "Delete User",
-        content:
-          "If you delete a user, all the records of the user is deleted. Do you really want to delete this user?",
-        yes: "Yes, Delete this",
-        no: "No, Do not delete this",
+  import AreYouSure from "../components/AreYouSure";
+  import { mapGetters } from "vuex";
+  import axios from "axios";
+  import { positionList, teamList } from "../lib/dataList";
+  export default {
+    props: ["rules", "submitUser"],
+    components: {
+      AreYouSure,
+    },
+    data() {
+      return {
+        showConfirmation: false,
+        deleteOptions: {
+          title: "Delete User",
+          content:
+            "If you delete a user, all the records of the user is deleted. Do you really want to delete this user?",
+          yes: "Yes, Delete this",
+          no: "No, Do not delete this",
+        },
+        username: null,
+        displayName: null,
+        is_admin: false,
+        defaultPassword: null,
+        team: null,
+        position: null,
+        gender: null,
+        genderList: ["Male", "Female"],
+        positionList: positionList,
+        teamList: teamList,
+        loading: false,
+        items: [],
+        select: null,
+        users: [],
+        usersObj: [],
+        protectPassword: true,
+        is_same_user: false,
+        show1: false,
+      };
+    },
+    watch: {
+      select(val) {
+        this.is_same_user = false;
+        this.protectPassword = true;
+        if (val == null) {
+          return;
+        }
+        let user = this.usersObj.find((user) => user.username === val);
+        if (user._id === this.getProfile().id) {
+          this.is_same_user = true;
+        }
+        this.username = user.username;
+        this.displayName = user.name;
+        this.defaultPassword = "******";
+        this.team = user.team;
+        this.position = user.position;
+        this.gender = user.gender;
+        this.is_admin = user.role === "admin" ? true : false;
       },
-      username: null,
-      displayName: null,
-      is_admin: false,
-      defaultPassword: null,
-      team: null,
-      position: null,
-      gender: null,
-      genderList: ["Male", "Female"],
-      positionList: positionList,
-      teamList: teamList,
-      loading: false,
-      items: [],
-      select: null,
-      users: [],
-      usersObj: [],
-      protectPassword: true,
-      is_same_user: false,
-      show1: false,
-    };
-  },
-  watch: {
-    select(val) {
-      this.is_same_user = false;
-      this.protectPassword = true;
-      if (val == null) {
-        return;
-      }
-      let user = this.usersObj.find((user) => user.username === val);
-      if (user._id === this.getProfile().id) {
-        this.is_same_user = true;
-      }
-      this.username = user.username;
-      this.displayName = user.name;
-      this.defaultPassword = "******";
-      this.team = user.team;
-      this.position = user.position;
-      this.gender = user.gender;
-      this.is_admin = user.role === "admin" ? true : false;
     },
-  },
-  methods: {
-    ...mapGetters(["getProfile"]),
-    unprotect() {
-      this.protectPassword = false;
-      this.defaultPassword = "";
-    },
-    userAnswer(ans) {
-      if (ans === "yes") {
+    methods: {
+      ...mapGetters(["getProfile"]),
+      unprotect() {
+        this.protectPassword = false;
+        this.defaultPassword = "";
+      },
+      userAnswer(ans) {
+        if (ans === "yes") {
+          this.submitUser(
+            this.$refs.form_update,
+            "delete",
+            {
+              username: this.username,
+            },
+            this.fetchUsers
+          );
+          this.showConfirmation = false;
+        }
+        if (ans === "no") {
+          this.showConfirmation = false;
+        }
+      },
+      deleteUser() {
+        this.showConfirmation = true;
+      },
+      submit() {
         this.submitUser(
           this.$refs.form_update,
-          "delete",
+          "edit",
           {
             username: this.username,
+            displayName: this.displayName,
+            defaultPassword:
+              this.defaultPassword === "******" || ""
+                ? null
+                : this.defaultPassword,
+            team: this.team,
+            position: this.position,
+            gender: this.gender,
+            role: this.is_admin ? "admin" : "user",
           },
           this.fetchUsers
         );
-      }
-      if (ans === "no") {
-        this.showConfirmation = false;
-      }
+      },
+      async fetchUsers() {
+        try {
+          let result = await axios.get(this.API_URL + "/api/user/search");
+          this.usersObj = result.data;
+          this.users = result.data.map((user) => {
+            return { id: user._id, name: user.name, username: user.username };
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      },
     },
-    deleteUser() {
-      this.showConfirmation = true;
+    mounted() {
+      this.fetchUsers();
     },
-    submit() {
-      this.submitUser(
-        this.$refs.form_update,
-        "edit",
-        {
-          username: this.username,
-          displayName: this.displayName,
-          defaultPassword:
-            this.defaultPassword === "******" || ""
-              ? null
-              : this.defaultPassword,
-          team: this.team,
-          position: this.position,
-          gender: this.gender,
-          role: this.is_admin ? "admin" : "user",
-        },
-        this.fetchUsers
-      );
-    },
-    async fetchUsers() {
-      try {
-        let result = await axios.get(this.API_URL + "/api/user/search");
-        this.usersObj = result.data;
-        this.users = result.data.map((user) => {
-          return { id: user._id, name: user.name, username: user.username };
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  },
-  mounted() {
-    this.fetchUsers();
-  },
-};
+  };
 </script>
