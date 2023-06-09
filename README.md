@@ -215,7 +215,7 @@ http {
 - Deploy Node.js + MongoDB Back-end API
 - Clone the Node.js + MongoDB API project into the /opt/back-end directory with the command
 
-    `sudo git clone https://github.com/janaka44/CreativeTrainingCatalog /opt/`
+    `sudo git clone https://github.com/chamara-senarath/fluid-video-editor-backend /opt/`
 
 - Navigate into the back-end directory and install all required npm packages with the command 
 
