@@ -1,15 +1,36 @@
-**Installation Guide - Creative Training Catalog**
+## Web based Training Catalog
+A dynamic web application that allows content creators to upload videos with overlays and generate an embedded code to display the video player on any authenticated website. It provides various features to enhance the viewing experience and engage the audience. 
+
+## Features
+
+1. **Video Upload**: Content creators can upload their videos to the platform. The application supports various video formats and ensures smooth playback.
+
+2. **Overlays**: Creators can add overlays to their videos, such as chapter marks, to help viewers track their progress. These overlays appear at specific timestamps during the video playback.
+
+3. **Intro Screen Editor**: The application includes an intro screen editor, enabling creators to design customized intro screens for their videos. The intro screen is also set as the default thumbnail of the video, improving its visual representation.
+
+4. **Intro Screen Templates**: To assist content creators, the application provides a collection of pre-designed intro screen templates. Creators can choose from these templates and customize them according to their preferences.
+
+5. **MCQ Questions**: Creators can generate multiple-choice questions (MCQs) that appear to viewers at specified times during video playback. These questions help engage the audience and test their understanding. User answers to the MCQs are saved in the database for further analysis.
+
+6. **User Insights**: The application includes a dedicated section to view user insights. Content creators can access valuable analytics and data related to user interactions, video views, and MCQ responses. These insights aid in evaluating the performance and effectiveness of the videos.
+
+## Installation
+
+To set up the web application locally, follow these steps:
 
 **Download Source Codes**
 	
-Clone application from the URL given below using git
-https://github.com/janaka44/CreativeTrainingCatalog
+Clone the repositories
+
+https://github.com/chamara-senarath/fluid-video-editor-frontend.git  
+https://github.com/chamara-senarath/fluid-video-editor-backend.git
 
 There are two methods to run the applications.
 - Using Docker Image
 - Setting up own environment (Manual Setup)
 
-Since there are two instances on DIPS server and LayUp server, Server URL’s are needed to input on the runtime. There are two environment variables to set on runtime. They are,
+The application was originally built to support two servers called DIPS and Layup. You can point these two varibles to your own servers.( assigning second server is optional )
 
 ```javascript
 VUE_APP_DIPS_SERVER
@@ -31,7 +52,7 @@ Follow one of the methods given below to run the applications
 
 - Open frontend folder (fluid-video-editor-frontend)
 - Open command prompt in the current location.
-- Replace <DIPS_SERVER_URL> with the URL for the DIPS server API and <LAYUP_SERVER_URL> with the URL for the LayUp server API
+- Replace <DIPS_SERVER_URL> with the URL for the first server API and <LAYUP_SERVER_URL> with the URL for the second server API. ( assigning second server is optional )
 
 
 
@@ -42,7 +63,7 @@ Follow one of the methods given below to run the applications
 - Run the following command,
 
 ```dockerfile    
-docker build -t chamzjay/fluid-video-editor-frontend .
+docker build -t chamara-senarath/fluid-video-editor-frontend .
 docker run -it -p 8080:80 -e VUE_APP_DIPS_SERVER=<DIPS_SERVER_URL> VUE_APP_LAYUP_SERVER=<LAYUP_SERVER_URL> --rm --name fluid-video-editor-frontend-app chamzjay/fluid-video-editor-frontend
 ```
 
@@ -268,7 +289,8 @@ http {
     
     ```bash
     cd /opt/
-    sudo git pull https://github.com/janaka44/CreativeTrainingCatalog
+    sudo git pull https://github.com/chamara-senarath/fluid-video-editor-frontend-frontend
+    sudo git pull https://github.com/chamara-senarath/fluid-video-editor-frontend-backend
     ```
     
 
